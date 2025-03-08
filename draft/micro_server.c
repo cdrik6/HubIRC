@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 02:49:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/06 03:58:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/08 03:08:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	main(void)
 	char ip6[INET6_ADDRSTRLEN]; // space to hold the IPv6 string
 	while (1)
 	{
+		// error on addr_size to be initialized
 		client_socket = accept(server_socket, (struct sockaddr *)(&client_addr), &addr_size);
 		if (client_socket == -1)
 		{
