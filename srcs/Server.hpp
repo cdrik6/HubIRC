@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/10 01:42:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/11 00:52:17 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,20 @@
 # define SERVER_HPP
 
 # include <iostream>
+# include <vector>
 // # include <sstream>
 //
 # include <netdb.h>
 # include <arpa/inet.h>
 # include <sys/socket.h>
 # include <sys/types.h>
-# include <poll.h>
+# include <sys/poll.h>
+# include <fcntl.h>
 //
 # include <cerrno>
 # include <cstdlib>
-// #include <string.h>
-#include <cstdio>
+# include <cstring>
+# include <cstdio>
 // #include <unistd.h>
 
 # define OK 0
@@ -38,19 +40,23 @@
 class Server
 {
 	private:
-		int _srv_skt;
+		int _srv_skt;		
+		std::string _password;
+		std::vector<struct pollfd> _pfds;
+		//
 		Server();
-
-	public:		
-		Server(char *port, std::string password);
 		Server& operator=(const Server& other);
-        Server(const Server& other);        
+        Server(const Server& other);
+		
+	public:		
+		Server(char *port, std::string password);		
 		~Server();
 		//
 		int get_srv_skt(void) const;		
         //
-		int	init_srv_skt(char *port, std::string password);	
-		//
+		int	create_srv_skt(char *port);
+		void polling(void);
+		
 		// class InitException : public std::exception
         // {
         //     public :
