@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/06 23:20:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/09 01:31:05 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/11 21:12:33 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ int	main(void)
 					{
 						for (int j = 1; j < fd_count; j++)
 						{
+							// error below ? send when i == j ?
 							if (j != i && send(pfds[j].fd, buff, nbytes, 0) == - 1)
 								perror("send");							
 						}						

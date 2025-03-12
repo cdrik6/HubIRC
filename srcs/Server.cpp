@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/11 00:56:17 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/12 01:29:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ Server::Server(char *port, std::string password)
 	_password = password;
 	_srv_skt = create_srv_skt(port);
 	std::cout << "Server constructed on socket: " << _srv_skt << std::endl;
-	_pfds[0].fd = _srv_skt;
-	_pfds[0].events = POLLIN; // Tell me when ready to read
+	add_pfds(_pfds, _srv_skt, POLLIN);
+	// _pfds[0].fd = _srv_skt;
+	// _pfds[0].events = POLLIN;
 	std::cout << "Server: waiting for connections...\n";		
 }
 
@@ -40,7 +41,13 @@ Server::Server(char *port, std::string password)
 
 Server::~Server()
 {
-	
+	/***** draft****** */
+	close (_srv_skt);
+	for (int i = 1; i < _pfds.size(); i++)
+	{
+		close (_pfds.at(i).fd);
+	}
+	/************** */
 }
 
 //
@@ -59,11 +66,13 @@ int	Server::create_srv_skt(char *port)
 	int 			status;
 	int				yes = 1;
 
+	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 	// addrinfo
-	if (status = getaddrinfo(NULL, port, &hints, &res) != 0)
+	status = getaddrinfo(NULL, port, &hints, &res);
+	if (status != 0)
 	{
 		std::cerr << "getaddrinfo error: " << gai_strerror(status) << std::endl;
 		exit (KO); // res not allocated in case of error, no need to free
@@ -76,7 +85,7 @@ int	Server::create_srv_skt(char *port)
 			continue;
 		if (setsockopt(srv_skt, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
 			(perror("setsockopt"), freeaddrinfo(res), exit (KO));				
-		if (fcntl(_srv_skt, F_SETFL, O_NONBLOCK) == -1)		
+		if (fcntl(srv_skt, F_SETFL, O_NONBLOCK) == -1)		
 			(perror("fcntl"), freeaddrinfo(res), exit (KO));				  
 		if (bind(srv_skt, (*p).ai_addr, (*p).ai_addrlen) < 0)
 			continue;
@@ -99,13 +108,121 @@ int	Server::create_srv_skt(char *port)
 
 void Server::polling(void)
 {
-	// poll returns the number of elements in the array that have had an event occur
-	int event_count = poll(_pfds.data(), _pfds.size(), -1); // -1 = wait forever
-	if ( event_count == -1) 		
-		throw (std::runtime_error("poll: " + std::string(strerror(errno))));
-		
+	// int clt_skt;
+	// struct sockaddr_storage clt_addr;
+    // socklen_t addr_size;		
+	char buff[BUFFER_SIZE];
+	// struct pollfd new_clt = {0};
+	
+	while (1)
+	{
+		// poll returns the number of elements in the array that have had an event occur
+		int event_count = poll(_pfds.data(), _pfds.size(), -1); // -1 = wait forever
+		if (event_count == -1)
+			throw (std::runtime_error("poll: " + std::string(strerror(errno))));
+		if (event_count == 0)
+			continue;
+		// if server get sthg to read (--> new connection)	
+		if (_pfds.at(0).revents & POLLIN)
+		{
+			try
+			{
+				client_connect();
+			}
+			catch (const std::exception& e) { throw; }
+		}
+		// ckeck revents of clients 
+		for (int i = 1; i < _pfds.size(); i++)
+		{
+			if (_pfds.at(i).revents & (POLLIN | POLLHUP)) // if got one ready to read
+			{
+				int nbytes = recv(_pfds.at(i).fd, buff, sizeof(buff), 0);
+				if (nbytes <= 0) // issues
+				{
+					if (nbytes == 0)
+					{
+						std::cout <<  "Socket " << _pfds.at(i).fd << " closed the connection\n";
+						close (_pfds.at(i).fd);					
+						_pfds.erase(_pfds.begin() + i);					
+					}						
+					if (nbytes < 0)
+						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
+				}
+				else // got some data from a client --> to send the others (not srv not sender)
+				{
+					for (int j = 1; j < _pfds.size(); j++)
+					{
+						if (j != i && send(_pfds[j].fd, buff, nbytes, 0) == - 1)
+							throw (std::runtime_error("send: " + std::string(strerror(errno))));
+					}						
+				}
+			}
+		} // clients		
+	} // loop
 }
 
+void Server::client_connect(void)
+{
+	int clt_skt;
+	struct sockaddr_storage clt_addr;
+    socklen_t addr_size = sizeof (clt_addr);
+	
+	clt_skt = accept(_srv_skt, (struct sockaddr *)(&clt_addr), &addr_size);
+	if (clt_skt == -1)
+		throw (std::runtime_error("accept: " + std::string(strerror(errno))));
+	add_pfds(_pfds, clt_skt, POLLIN | POLLHUP);
+	try
+	{
+		printable_ip(clt_addr, clt_skt);
+	}
+	catch (const std::exception& e) { throw; }	
+}
+
+/********* check inet_ntop authorised ***********/
+void Server::printable_ip(struct sockaddr_storage client_addr, int clt_skt)
+{
+	char ip4[INET_ADDRSTRLEN];  // space to hold the IPv4 string	
+	char ip6[INET6_ADDRSTRLEN]; // space to hold the IPv6 string
+	
+	if (client_addr.ss_family == AF_INET) // IPv4
+	{
+		struct sockaddr_in *ipv4 = (struct sockaddr_in *)((struct sockaddr *)(&client_addr));
+		inet_ntop(AF_INET, &((*ipv4).sin_addr), ip4, INET_ADDRSTRLEN);			
+		// throw error ***********
+		std::cout << "New connection from " << ip4 << " on";		
+	}
+	else
+	{
+		struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)((struct sockaddr *)(&client_addr));
+		inet_ntop(AF_INET6, &((*ipv6).sin6_addr), ip6, INET6_ADDRSTRLEN);			
+		// throw error ***********
+		std::cout << "New connection from " << ip6 << " on";
+	}
+	std::cout << " socket: " << clt_skt << std::endl;
+}
+
+void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
+{
+	struct pollfd new_skt;
+	
+	new_skt.fd = fd;
+	new_skt.events = events;  // POLLIN = Tell me when ready to read
+	new_skt.revents = 0;
+	pfds.push_back(new_skt);	
+}
+// struct pollfd {
+//     int fd;         // the socket descriptor
+//     short events;   // bitmap of events we're interested in
+//     short revents;  // when poll() returns, bitmap of events that occurred
+// };
+// events :
+// POLLIN 	Alert me when data is ready to recv() on this socket.
+// POLLOUT 	Alert me when I can send() data to this socket without blocking.
+// POLLHUP 	Alert me when the remote closed the connection.
+
+
+
+/**** draft ****/
 
 // throw(Bureaucrat::GradeTooHighException()); /*************** */
 // exception

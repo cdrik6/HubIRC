@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/11 00:32:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/12 00:54:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ int main(int argc, char **argv)
     {   
         Server irc(argv[1], std::string(argv[2]));        
         try
-        {
-            while (1)
-                irc.polling();
+        {           
+            irc.polling();
         }
         catch (std::exception &e)
         {
@@ -37,7 +36,7 @@ int check_port(char* port)
     char *endval = NULL;     
     errno = 0;    
     long num = std::strtol(port, &endval, 10);
-    if (endval)
+    if (*endval)
         return (std::cerr << "Invalid port: not a number\n", KO);
     if (errno == ERANGE) // overflow-underflow
         return (std::cerr << "Invalid port: overflow-underflow error\n", KO);    
