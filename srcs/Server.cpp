@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/12 01:29:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/13 04:23:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 Server::Server(char *port, std::string password)
 {
+	add_pfds(_pfds, STDIN_FILENO, POLLIN); // add std_in en 0
 	_password = password;
-	_srv_skt = create_srv_skt(port);
-	std::cout << "Server constructed on socket: " << _srv_skt << std::endl;
-	add_pfds(_pfds, _srv_skt, POLLIN);
+	_srv_skt = create_srv_skt(port); 
+	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
+	add_pfds(_pfds, _srv_skt, POLLIN); // server en 1
 	// _pfds[0].fd = _srv_skt;
 	// _pfds[0].events = POLLIN;
-	std::cout << "Server: waiting for connections...\n";		
+	std::cout << "Server: waiting for connections...\n";
+	std::cout << "Server: \"stop\" to stop it\n";
 }
 
 // Server& Server::operator=(const Server& other)
@@ -42,7 +44,7 @@ Server::Server(char *port, std::string password)
 Server::~Server()
 {
 	/***** draft****** */
-	close (_srv_skt);
+	// close (_srv_skt);
 	for (int i = 1; i < _pfds.size(); i++)
 	{
 		close (_pfds.at(i).fd);
@@ -104,26 +106,41 @@ int	Server::create_srv_skt(char *port)
 		exit (KO);
 	}					
 	return (srv_skt);
-}	
+}
+// Note 
+// SOCK_STREAM uses TCP
+// when using SOCK_STREAM, set the protocol to 0, and it’ll use the proper protocol automatically
 
 void Server::polling(void)
 {
 	// int clt_skt;
 	// struct sockaddr_storage clt_addr;
     // socklen_t addr_size;		
-	char buff[BUFFER_SIZE];
 	// struct pollfd new_clt = {0};
+	char buff[BUFFER_SIZE];	
 	
 	while (1)
 	{
-		// poll returns the number of elements in the array that have had an event occur
 		int event_count = poll(_pfds.data(), _pfds.size(), -1); // -1 = wait forever
+
+		// poll returns the number of elements in the array that have had an event occur
 		if (event_count == -1)
 			throw (std::runtime_error("poll: " + std::string(strerror(errno))));
 		if (event_count == 0)
 			continue;
-		// if server get sthg to read (--> new connection)	
+		
+		// if STD_IN got data to read
 		if (_pfds.at(0).revents & POLLIN)
+		{	
+			int nbytes = read(STDIN_FILENO, buff, sizeof(buff));
+			if (nbytes == -1)
+				throw (std::runtime_error("read: " + std::string(strerror(errno))));
+			if (nbytes == 0 || std::string(buff, nbytes) == "stop\n")
+				break;	
+		}		
+		
+		// if server get sthg to read (--> new connection)	
+		if (_pfds.at(1).revents & POLLIN)
 		{
 			try
 			{
@@ -131,8 +148,9 @@ void Server::polling(void)
 			}
 			catch (const std::exception& e) { throw; }
 		}
+		
 		// ckeck revents of clients 
-		for (int i = 1; i < _pfds.size(); i++)
+		for (int i = 2; i < _pfds.size(); i++)
 		{
 			if (_pfds.at(i).revents & (POLLIN | POLLHUP)) // if got one ready to read
 			{
@@ -145,7 +163,7 @@ void Server::polling(void)
 						close (_pfds.at(i).fd);					
 						_pfds.erase(_pfds.begin() + i);					
 					}						
-					if (nbytes < 0)
+					if (nbytes == -1)
 						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
