@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/13 04:23:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/14 22:47:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,8 @@ void Server::polling(void)
 			if (_pfds.at(i).revents & (POLLIN | POLLHUP)) // if got one ready to read
 			{
 				int nbytes = recv(_pfds.at(i).fd, buff, sizeof(buff), 0);
+				std::cout << "recvbuff: " << buff << std::endl;
+				std::cout << "nbytes: " << nbytes << std::endl;
 				if (nbytes <= 0) // issues
 				{
 					if (nbytes == 0)
@@ -168,10 +170,11 @@ void Server::polling(void)
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{
-					for (int j = 1; j < _pfds.size(); j++)
+					for (int j = 2; j < _pfds.size(); j++)
 					{
 						if (j != i && send(_pfds[j].fd, buff, nbytes, 0) == - 1)
 							throw (std::runtime_error("send: " + std::string(strerror(errno))));
+						std::cout << "sendbuff: " << buff << std::endl;
 					}						
 				}
 			}
@@ -179,6 +182,7 @@ void Server::polling(void)
 	} // loop
 }
 
+/*******PASSWORD Authanticate *****/
 void Server::client_connect(void)
 {
 	int clt_skt;
@@ -216,7 +220,7 @@ void Server::printable_ip(struct sockaddr_storage client_addr, int clt_skt)
 		// throw error ***********
 		std::cout << "New connection from " << ip6 << " on";
 	}
-	std::cout << " socket: " << clt_skt << std::endl;
+	std::cout << " socket " << clt_skt << std::endl;
 }
 
 void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
