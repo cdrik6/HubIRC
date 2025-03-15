@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/13 03:56:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/15 23:35:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include <cstdlib>
 # include <cstring>
 # include <cstdio>
-
+# include <csignal>
 
 # define OK 0
 # define KO 1
@@ -45,6 +45,7 @@ class Server
 		int _srv_skt;		
 		std::string _password;
 		std::vector<struct pollfd> _pfds;
+		bool _signal;
 		//
 		Server();
 		Server& operator=(const Server& other);

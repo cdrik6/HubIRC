@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/14 22:47:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/15 23:36:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 Server::Server(char *port, std::string password)
 {
 	add_pfds(_pfds, STDIN_FILENO, POLLIN); // add std_in en 0
+	_signal = false;
 	_password = password;
 	_srv_skt = create_srv_skt(port); 
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
-	add_pfds(_pfds, _srv_skt, POLLIN); // server en 1
-	// _pfds[0].fd = _srv_skt;
-	// _pfds[0].events = POLLIN;
+	add_pfds(_pfds, _srv_skt, POLLIN); // server en 1	
 	std::cout << "Server: waiting for connections...\n";
 	std::cout << "Server: \"stop\" to stop it\n";
 }
@@ -113,10 +112,6 @@ int	Server::create_srv_skt(char *port)
 
 void Server::polling(void)
 {
-	// int clt_skt;
-	// struct sockaddr_storage clt_addr;
-    // socklen_t addr_size;		
-	// struct pollfd new_clt = {0};
 	char buff[BUFFER_SIZE];	
 	
 	while (1)
@@ -172,7 +167,7 @@ void Server::polling(void)
 				{
 					for (int j = 2; j < _pfds.size(); j++)
 					{
-						if (j != i && send(_pfds[j].fd, buff, nbytes, 0) == - 1)
+						if (j != i && send(_pfds[j].fd, buff, nbytes, MSG_NOSIGNAL) == - 1)
 							throw (std::runtime_error("send: " + std::string(strerror(errno))));
 						std::cout << "sendbuff: " << buff << std::endl;
 					}						
@@ -181,6 +176,9 @@ void Server::polling(void)
 		} // clients		
 	} // loop
 }
+// Note: flag in send ()
+// if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
+// Unless send() was called with the MSG_NOSIGNAL flag.
 
 /*******PASSWORD Authanticate *****/
 void Server::client_connect(void)

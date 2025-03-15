@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/12 00:54:56 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/15 23:31:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
         return(std::cerr << "Usage: ./ircserv <port> <password>" << std::endl, OK);       
-	if (check_port(argv[1]) == OK)
-    {   
-        Server irc(argv[1], std::string(argv[2]));        
+	if (check_port(argv[1]) == OK && strlen(argv[2]) > 0)
+    {           
+        signal(SIGINT, &handle_signal);
+        signal(SIGQUIT, &handle_signal);
+        Server irc(argv[1], std::string(argv[2]));
         try
-        {           
+        {            
             irc.polling();
         }
         catch (std::exception &e)
@@ -60,3 +62,15 @@ int check_port(char* port)
 // {
 //     std::istringstream iss2(std::string(argv2));
 // }
+
+/**
+ * SIGINT = ctrl+c
+ * SIGQUIT = ctrl+\
+ * ctrl+d = not a signal
+**/ 
+void	handle_signal(int signal)
+{
+    (void)signal;
+    
+    
+}
