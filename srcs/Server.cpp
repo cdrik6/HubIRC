@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/15 23:36:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:16:24 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,11 @@ int Server::get_srv_skt(void) const
 {
 	return (_srv_skt);
 }
+
+// void Server::set_signal(bool signal)
+// {
+// 	_signal = signal;
+// }
 
 //
 int	Server::create_srv_skt(char *port)
@@ -114,7 +119,7 @@ void Server::polling(void)
 {
 	char buff[BUFFER_SIZE];	
 	
-	while (1)
+	while (_signal == false)
 	{
 		int event_count = poll(_pfds.data(), _pfds.size(), -1); // -1 = wait forever
 
@@ -240,7 +245,11 @@ void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
 // POLLOUT 	Alert me when I can send() data to this socket without blocking.
 // POLLHUP 	Alert me when the remote closed the connection.
 
-
+void	Server::handle_signal(int signal)
+{
+    (void)signal;
+    _signal = true;
+}
 
 /**** draft ****/
 

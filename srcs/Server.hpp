@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/15 23:35:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:16:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ class Server
 		Server(char *port, std::string password);		
 		~Server();
 		//
-		int get_srv_skt(void) const;		
+		int get_srv_skt(void) const;
+		// void set_signal(bool signal);
         //
 		int	create_srv_skt(char *port);
 		void polling(void);		
@@ -66,9 +67,11 @@ class Server
         // {
         //     public :
         //         virtual const char* what() const throw();                             
-        // };    
+        // };
+		void	handle_signal(int signal);
 };
 
 #endif
 
-int check_port(char* port);
+int	check_port(char* port);
+// void	handle_signal(int signal, Server server);
