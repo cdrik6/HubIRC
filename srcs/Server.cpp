@@ -6,16 +6,24 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/16 03:16:24 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/18 02:56:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
+bool Server::_signal = false; // Definition and initialization here for a static
+
+void Server::handle_signal(int signal)
+{
+    // (void)signal;
+	std::cout << "Signal received: " << signal << std::endl;
+    _signal = true;
+}
+
 Server::Server(char *port, std::string password)
 {
-	add_pfds(_pfds, STDIN_FILENO, POLLIN); // add std_in en 0
-	_signal = false;
+	add_pfds(_pfds, STDIN_FILENO, POLLIN); // add std_in en 0	
 	_password = password;
 	_srv_skt = create_srv_skt(port); 
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
@@ -43,13 +51,14 @@ Server::Server(char *port, std::string password)
 Server::~Server()
 {
 	/***** draft****** */
+	std::cout << "destructor called\n";
 	// close (_srv_skt);
 	for (int i = 1; i < _pfds.size(); i++)
 	{
 		close (_pfds.at(i).fd);
 	}
 	/************** */
-}
+}	
 
 //
 int Server::get_srv_skt(void) const
@@ -245,11 +254,7 @@ void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
 // POLLOUT 	Alert me when I can send() data to this socket without blocking.
 // POLLHUP 	Alert me when the remote closed the connection.
 
-void	Server::handle_signal(int signal)
-{
-    (void)signal;
-    _signal = true;
-}
+
 
 /**** draft ****/
 

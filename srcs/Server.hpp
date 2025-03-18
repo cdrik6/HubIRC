@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/16 03:16:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/18 02:46:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class Server
 		int _srv_skt;		
 		std::string _password;
 		std::vector<struct pollfd> _pfds;
-		bool _signal;
+		static bool _signal; //static makes _signal shared across all instances
 		//
 		Server();
 		Server& operator=(const Server& other);
@@ -68,7 +68,7 @@ class Server
         //     public :
         //         virtual const char* what() const throw();                             
         // };
-		void	handle_signal(int signal);
+		static void	handle_signal(int signal);
 };
 
 #endif
