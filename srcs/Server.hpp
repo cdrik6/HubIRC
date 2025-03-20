@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/18 02:46:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/20 03:05:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 # include <cstdio>
 # include <csignal>
 
+# include "Client.hpp"
+
 # define OK 0
 # define KO 1
 
@@ -44,7 +46,9 @@ class Server
 	private:
 		int _srv_skt;		
 		std::string _password;
+		std::vector<Client> _clients;
 		std::vector<struct pollfd> _pfds;
+		//
 		static bool _signal; //static makes _signal shared across all instances
 		//
 		Server();
@@ -55,23 +59,25 @@ class Server
 		Server(char *port, std::string password);		
 		~Server();
 		//
-		int get_srv_skt(void) const;
-		// void set_signal(bool signal);
+		int get_srv_skt(void) const;		
         //
 		int	create_srv_skt(char *port);
 		void polling(void);		
-		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
 		void client_connect(void);
-		void printable_ip(struct sockaddr_storage client_addr, int clt_skt);
-		// class InitException : public std::exception
-        // {
-        //     public :
-        //         virtual const char* what() const throw();                             
-        // };
+		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
+		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
+		void add_clients(std::vector<Client>& clients, int clt_skt, std::string ip);
+		//
 		static void	handle_signal(int signal);
 };
 
 #endif
 
 int	check_port(char* port);
-// void	handle_signal(int signal, Server server);
+
+/** draft **/
+// class InitException : public std::exception
+// {
+//     public :
+//         virtual const char* what() const throw();                             
+// };

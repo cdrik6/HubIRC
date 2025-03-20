@@ -6,13 +6,13 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/03/12 00:53:06 by caguillo         ###   ########.fr        #
+#    Updated: 2025/03/20 03:06:57 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	ircserv
 
-SRCS		=	srcs/main.cpp srcs/Server.cpp
+SRCS		=	srcs/main.cpp srcs/Server.cpp srcs/Client.cpp
 
 CC			=	c++
 

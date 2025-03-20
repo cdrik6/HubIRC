@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/18 02:48:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/20 02:00:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,18 @@ int main(int argc, char **argv)
     {           
         signal(SIGINT, Server::handle_signal);
         signal(SIGQUIT, Server::handle_signal);
-        Server irc(argv[1], std::string(argv[2]));
+        Server irc(argv[1], std::string(argv[2])); //srv_skt here if ok, exit() if not
         try
         {            
             irc.polling();
         }
         catch (std::exception &e)
         {
-            return (std::cerr << e.what() << std::endl, KO);
-        }
-    }    
+            // **** destructor called (otherwise would need to close fds) *** /
+            return (std::cerr << "main exception: " << e.what() << std::endl, KO); // destructor
+        }        
+    }
+    // destructor
     return (OK);
 }
 
@@ -42,10 +44,10 @@ int check_port(char* port)
         return (std::cerr << "Invalid port: not a number\n", KO);
     if (errno == ERANGE) // overflow-underflow
         return (std::cerr << "Invalid port: overflow-underflow error\n", KO);    
-    if (num <= 1024)
-        return (std::cerr << "Invalid port (port available > 1024)\n", KO);
-    if (num >= 10000)
-        return (std::cerr << "Invalid port (port available < 10000\n", KO);    
+    if (num < 1024)
+        return (std::cerr << "Invalid port (port available >= 1024)\n", KO);
+    if (num > 49151)
+        return (std::cerr << "Invalid port (port available <= 49151\n", KO);    
     return (OK);
 }
 

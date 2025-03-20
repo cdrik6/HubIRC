@@ -6,20 +6,11 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/18 02:56:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/20 03:05:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-
-bool Server::_signal = false; // Definition and initialization here for a static
-
-void Server::handle_signal(int signal)
-{
-    // (void)signal;
-	std::cout << "Signal received: " << signal << std::endl;
-    _signal = true;
-}
 
 Server::Server(char *port, std::string password)
 {
@@ -52,7 +43,7 @@ Server::~Server()
 {
 	/***** draft****** */
 	std::cout << "destructor called\n";
-	// close (_srv_skt);
+	// close (_srv_skt); // i = 1
 	for (int i = 1; i < _pfds.size(); i++)
 	{
 		close (_pfds.at(i).fd);
@@ -65,11 +56,6 @@ int Server::get_srv_skt(void) const
 {
 	return (_srv_skt);
 }
-
-// void Server::set_signal(bool signal)
-// {
-// 	_signal = signal;
-// }
 
 //
 int	Server::create_srv_skt(char *port)
@@ -100,8 +86,8 @@ int	Server::create_srv_skt(char *port)
 			continue;
 		if (setsockopt(srv_skt, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
 			(perror("setsockopt"), freeaddrinfo(res), exit (KO));				
-		if (fcntl(srv_skt, F_SETFL, O_NONBLOCK) == -1)		
-			(perror("fcntl"), freeaddrinfo(res), exit (KO));				  
+		if (fcntl(srv_skt, F_SETFL, O_NONBLOCK) == -1)
+			(perror("fcntl"), freeaddrinfo(res), exit (KO));
 		if (bind(srv_skt, (*p).ai_addr, (*p).ai_addrlen) < 0)
 			continue;
 		break;
@@ -125,23 +111,22 @@ int	Server::create_srv_skt(char *port)
 // when using SOCK_STREAM, set the protocol to 0, and it’ll use the proper protocol automatically
 
 void Server::polling(void)
-{
-	char buff[BUFFER_SIZE];	
-	
+{	
 	while (_signal == false)
 	{
 		int event_count = poll(_pfds.data(), _pfds.size(), -1); // -1 = wait forever
 
 		// poll returns the number of elements in the array that have had an event occur
-		if (event_count == -1)
+		if (event_count == -1 && _signal == false)
 			throw (std::runtime_error("poll: " + std::string(strerror(errno))));
 		if (event_count == 0)
 			continue;
 		
 		// if STD_IN got data to read
 		if (_pfds.at(0).revents & POLLIN)
-		{	
-			int nbytes = read(STDIN_FILENO, buff, sizeof(buff));
+		{				
+			char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
+			int nbytes = read(STDIN_FILENO, buff, BUFFER_SIZE);
 			if (nbytes == -1)
 				throw (std::runtime_error("read: " + std::string(strerror(errno))));
 			if (nbytes == 0 || std::string(buff, nbytes) == "stop\n")
@@ -157,28 +142,32 @@ void Server::polling(void)
 			}
 			catch (const std::exception& e) { throw; }
 		}
-		
+				
 		// ckeck revents of clients 
 		for (int i = 2; i < _pfds.size(); i++)
 		{
 			if (_pfds.at(i).revents & (POLLIN | POLLHUP)) // if got one ready to read
 			{
-				int nbytes = recv(_pfds.at(i).fd, buff, sizeof(buff), 0);
+				char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
+				int nbytes = recv(_pfds.at(i).fd, buff, BUFFER_SIZE, 0);
 				std::cout << "recvbuff: " << buff << std::endl;
 				std::cout << "nbytes: " << nbytes << std::endl;
-				if (nbytes <= 0) // issues
+				if (nbytes <= 0) // closed or issues
 				{
 					if (nbytes == 0)
 					{
-						std::cout <<  "Socket " << _pfds.at(i).fd << " closed the connection\n";
+						/*************** close everything with the client *********************/						
+						std::cout << "Socket " << _pfds.at(i).fd << " closed the connection\n";
 						close (_pfds.at(i).fd);					
-						_pfds.erase(_pfds.begin() + i);					
-					}						
-					if (nbytes == -1)
+						_pfds.erase(_pfds.begin() + i);	
+						/**********************************************************************/				
+					}					
+					if (nbytes == -1) //***** everything MUST be closed at main level then *****/
 						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{
+					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					for (int j = 2; j < _pfds.size(); j++)
 					{
 						if (j != i && send(_pfds[j].fd, buff, nbytes, MSG_NOSIGNAL) == - 1)
@@ -188,13 +177,13 @@ void Server::polling(void)
 				}
 			}
 		} // clients		
-	} // loop
-}
+	} // loop	
+} // close fds in destructor here
 // Note: flag in send ()
 // if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
 // Unless send() was called with the MSG_NOSIGNAL flag.
 
-/*******PASSWORD Authanticate *****/
+/******* PASSWORD Authanticate *****/
 void Server::client_connect(void)
 {
 	int clt_skt;
@@ -203,17 +192,19 @@ void Server::client_connect(void)
 	
 	clt_skt = accept(_srv_skt, (struct sockaddr *)(&clt_addr), &addr_size);
 	if (clt_skt == -1)
-		throw (std::runtime_error("accept: " + std::string(strerror(errno))));
+		throw (std::runtime_error("accept: " + std::string(strerror(errno))));	
+	if (fcntl(clt_skt, F_SETFL, O_NONBLOCK) == -1)
+		throw (std::runtime_error("fcntl: " + std::string(strerror(errno))));		
 	add_pfds(_pfds, clt_skt, POLLIN | POLLHUP);
 	try
 	{
-		printable_ip(clt_addr, clt_skt);
+		add_clients(_clients, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));
 	}
 	catch (const std::exception& e) { throw; }	
 }
 
 /********* check inet_ntop authorised ***********/
-void Server::printable_ip(struct sockaddr_storage client_addr, int clt_skt)
+std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_skt)
 {
 	char ip4[INET_ADDRSTRLEN];  // space to hold the IPv4 string	
 	char ip6[INET6_ADDRSTRLEN]; // space to hold the IPv6 string
@@ -221,18 +212,29 @@ void Server::printable_ip(struct sockaddr_storage client_addr, int clt_skt)
 	if (client_addr.ss_family == AF_INET) // IPv4
 	{
 		struct sockaddr_in *ipv4 = (struct sockaddr_in *)((struct sockaddr *)(&client_addr));
-		inet_ntop(AF_INET, &((*ipv4).sin_addr), ip4, INET_ADDRSTRLEN);			
-		// throw error ***********
-		std::cout << "New connection from " << ip4 << " on";		
+		if (!inet_ntop(AF_INET, &((*ipv4).sin_addr), ip4, INET_ADDRSTRLEN))			
+			throw (std::runtime_error("inet_ntop (ipv4): " + std::string(strerror(errno))));	
+		std::cout << "New connection from " << ip4 << " on socket " << clt_skt << std::endl;
+		return(std::string(ip4));
 	}
 	else
 	{
 		struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)((struct sockaddr *)(&client_addr));
-		inet_ntop(AF_INET6, &((*ipv6).sin6_addr), ip6, INET6_ADDRSTRLEN);			
-		// throw error ***********
-		std::cout << "New connection from " << ip6 << " on";
+		if (!inet_ntop(AF_INET6, &((*ipv6).sin6_addr), ip6, INET6_ADDRSTRLEN))
+			throw (std::runtime_error("inet_ntop (ipv6): " + std::string(strerror(errno))));	
+		std::cout << "New connection from " << ip6 << " on socket " << clt_skt << std::endl;
+		return(std::string(ip6));
 	}
-	std::cout << " socket " << clt_skt << std::endl;
+	
+}
+
+void Server::add_clients(std::vector<Client>& clients, int clt_skt, std::string ip)
+{
+	Client new_clt;
+	
+	new_clt.set_clt_skt(clt_skt);
+	new_clt.set_hostname(ip);
+	clients.push_back(new_clt);	
 }
 
 void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
@@ -254,7 +256,14 @@ void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
 // POLLOUT 	Alert me when I can send() data to this socket without blocking.
 // POLLHUP 	Alert me when the remote closed the connection.
 
+bool Server::_signal = false; // Definition and initialization here for a static
 
+void Server::handle_signal(int signal)
+{
+    // (void)signal;
+	std::cout << "\nSignal " << signal << " received" << std::endl;
+    _signal = true;
+}
 
 /**** draft ****/
 
