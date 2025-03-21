@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/20 03:05:52 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/21 03:15:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ void Server::polling(void)
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{
+					build_message(std::string(buff), _pfds.at(i).fd);
+					is_command(std::string(buff), _pfds.at(i).fd);
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					for (int j = 2; j < _pfds.size(); j++)
 					{
@@ -182,6 +184,61 @@ void Server::polling(void)
 // Note: flag in send ()
 // if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
 // Unless send() was called with the MSG_NOSIGNAL flag.
+
+void Server::build_message(std::string buffer, int clt_skt)
+{
+	int i = client_idx(clt_skt);
+	if ( i != -1)	
+		_clients.at(i).set_msg(buffer);
+}
+
+void Server::is_command(std::string buffer, int clt_skt)
+{	
+	std::vector<std::string> tab_msg;
+	int i = client_idx(clt_skt);
+	if ( i != -1 && buffer.find("\r\n") != std::string::npos)
+	{	
+		tab_msg = split(_clients.at(i).get_msg());
+		for (int i = 0; i < tab_msg.size(); i++)
+		{
+			check_command(tab_msg[i], i);
+		}		
+		_clients.at(i).clear_msg();
+	}
+}
+
+void Server::check_command(std::string cmd, int i)
+{
+	if (cmd == "NICK" || cmd == "nick")
+		nickname(i);
+	else if (cmd == "PASS" || cmd == "pass")
+		authenticate(i);
+	else if (cmd == "USER" || cmd == "user")
+		username(i);
+	else if (cmd == "JOIN" || cmd == "join")
+		join(i);
+	else if (cmd == "PRIVMSG" || cmd == "privmsg")
+		privmsg(i);
+	else if (cmd == "KICK" || cmd == "kick")
+		kick(i);	
+}
+
+
+int Server::client_idx(int clt_skt)
+{
+	int k = -1;	// disconnected in between or error ?
+	
+	for (int i = 0; i < _clients.size(); i++)
+	{		
+		if (_clients.at(i).get_clt_skt() == clt_skt)
+		{	
+			k = i;
+			break;
+		}
+	}	
+	return (k);
+}
+
 
 /******* PASSWORD Authanticate *****/
 void Server::client_connect(void)

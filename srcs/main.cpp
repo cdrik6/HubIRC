@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/20 02:00:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/21 02:56:30 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,18 @@ int check_port(char* port)
     if (num > 49151)
         return (std::cerr << "Invalid port (port available <= 49151\n", KO);    
     return (OK);
+}
+
+/*****be carefull delete all spaces "H   W" = ["H","W"] **********/
+std::vector<std::string> split(std::string str)
+{
+    std::vector<std::string> tab;
+    std::istringstream iss(str);
+    std::string token;
+    
+    while (iss >> token)    
+        tab.push_back(token);
+    return (tab);
 }
 
 // int check_input(char *argv1, char *argv2)

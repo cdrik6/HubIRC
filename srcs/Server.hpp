@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/20 03:05:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/21 03:05:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <iostream>
 # include <vector>
-// # include <sstream>
+# include <sstream>
 //
 # include <netdb.h>
 # include <arpa/inet.h>
@@ -38,7 +38,7 @@
 
 // # define PORT "6667"
 # define BACKLOG 10
-# define BUFFER_SIZE 512 //510
+# define BUFFER_SIZE 1024 //512 //510
 
 
 class Server
@@ -67,6 +67,11 @@ class Server
 		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
 		void add_clients(std::vector<Client>& clients, int clt_skt, std::string ip);
+		int client_idx(int clt_skt);
+		void build_message(std::string buffer, int clt_skt);
+		void is_command(std::string buffer, int clt_skt);
+		void Server::check_command(std::string cmd, int client_idx);
+		
 		//
 		static void	handle_signal(int signal);
 };
@@ -74,6 +79,7 @@ class Server
 #endif
 
 int	check_port(char* port);
+std::vector<std::string> split(std::string str);
 
 /** draft **/
 // class InitException : public std::exception
