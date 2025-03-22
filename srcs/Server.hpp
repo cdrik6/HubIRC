@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/21 03:05:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/22 01:22:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,18 @@ class Server
 		void add_clients(std::vector<Client>& clients, int clt_skt, std::string ip);
 		int client_idx(int clt_skt);
 		void build_message(std::string buffer, int clt_skt);
-		void is_command(std::string buffer, int clt_skt);
-		void Server::check_command(std::string cmd, int client_idx);
-		
+		void parse_message(std::string buffer, int clt_skt);
+		void check_command(std::string cmd, int client_idx);
+		void reply(std::string RPL_ERR, int client_idx);
+		// commands
+		void nickname(int client_idx);
 		//
 		static void	handle_signal(int signal);
 };
 
 #endif
 
+// tools
 int	check_port(char* port);
 std::vector<std::string> split(std::string str);
 

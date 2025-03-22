@@ -6,10 +6,11 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/21 03:15:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/22 01:45:17 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//Relais pour la causette Internet 
 #include "Server.hpp"
 
 Server::Server(char *port, std::string password)
@@ -168,14 +169,14 @@ void Server::polling(void)
 				else // got some data from a client --> to send the others (not srv not sender)
 				{
 					build_message(std::string(buff), _pfds.at(i).fd);
-					is_command(std::string(buff), _pfds.at(i).fd);
+					parse_message(std::string(buff), _pfds.at(i).fd);
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
-					for (int j = 2; j < _pfds.size(); j++)
-					{
-						if (j != i && send(_pfds[j].fd, buff, nbytes, MSG_NOSIGNAL) == - 1)
-							throw (std::runtime_error("send: " + std::string(strerror(errno))));
-						std::cout << "sendbuff: " << buff << std::endl;
-					}						
+					// for (int j = 2; j < _pfds.size(); j++)
+					// {
+					// 	if (j != i && send(_pfds[j].fd, buff, nbytes, MSG_NOSIGNAL) == - 1)
+					// 		throw (std::runtime_error("send: " + std::string(strerror(errno))));
+					// 	std::cout << "sendbuff: " << buff << std::endl;
+					// }						
 				}
 			}
 		} // clients		
@@ -187,40 +188,43 @@ void Server::polling(void)
 
 void Server::build_message(std::string buffer, int clt_skt)
 {
-	int i = client_idx(clt_skt);
-	if ( i != -1)	
-		_clients.at(i).set_msg(buffer);
+	int k = client_idx(clt_skt);
+	
+	if (k != -1)	
+		_clients.at(k).set_msg(buffer);
 }
 
-void Server::is_command(std::string buffer, int clt_skt)
+// RFC 2812: message    =  [ ":" prefix SPACE ] command [ params ] CRLF
+void Server::parse_message(std::string buffer, int clt_skt)
 {	
-	std::vector<std::string> tab_msg;
-	int i = client_idx(clt_skt);
-	if ( i != -1 && buffer.find("\r\n") != std::string::npos)
+	std::vector<std::string> tab_msg;	
+	int k = client_idx(clt_skt);
+	
+	if (k != -1 && buffer.find("\r\n") != std::string::npos)
 	{	
-		tab_msg = split(_clients.at(i).get_msg());
+		tab_msg = split(_clients.at(k).get_msg());
 		for (int i = 0; i < tab_msg.size(); i++)
 		{
-			check_command(tab_msg[i], i);
+			check_command(tab_msg[i], k);
 		}		
-		_clients.at(i).clear_msg();
+		_clients.at(k).clear_msg();
 	}
 }
 
-void Server::check_command(std::string cmd, int i)
+void Server::check_command(std::string cmd, int k)
 {
 	if (cmd == "NICK" || cmd == "nick")
-		nickname(i);
-	else if (cmd == "PASS" || cmd == "pass")
-		authenticate(i);
-	else if (cmd == "USER" || cmd == "user")
-		username(i);
-	else if (cmd == "JOIN" || cmd == "join")
-		join(i);
-	else if (cmd == "PRIVMSG" || cmd == "privmsg")
-		privmsg(i);
-	else if (cmd == "KICK" || cmd == "kick")
-		kick(i);	
+		nickname(k);
+	// else if (cmd == "PASS" || cmd == "pass")
+	// 	authenticate(k);
+	// else if (cmd == "USER" || cmd == "user")
+	// 	username(k);
+	// else if (cmd == "JOIN" || cmd == "join")
+	// 	join(k);
+	// else if (cmd == "PRIVMSG" || cmd == "privmsg")
+	// 	privmsg(k);
+	// else if (cmd == "KICK" || cmd == "kick")
+	// 	kick(k);
 }
 
 
@@ -281,8 +285,7 @@ std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_sk
 			throw (std::runtime_error("inet_ntop (ipv6): " + std::string(strerror(errno))));	
 		std::cout << "New connection from " << ip6 << " on socket " << clt_skt << std::endl;
 		return(std::string(ip6));
-	}
-	
+	}	
 }
 
 void Server::add_clients(std::vector<Client>& clients, int clt_skt, std::string ip)

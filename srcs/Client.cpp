@@ -6,11 +6,26 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/21 02:39:26 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/22 02:08:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+
+Client::Client() :
+_clt_skt(-1),
+_nickname("unregistered"),
+_username("unregistered"),
+_hostname(""),
+_msg(""),
+_registered(false)
+{    
+}
+
+Client::~Client()
+{        
+}
+
 
 int Client::get_clt_skt(void) const
 {
