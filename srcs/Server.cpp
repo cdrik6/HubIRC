@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/22 01:45:17 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/23 02:39:12 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,9 @@ void Server::polling(void)
 						std::cout << "Socket " << _pfds.at(i).fd << " closed the connection\n";
 						close (_pfds.at(i).fd);					
 						_pfds.erase(_pfds.begin() + i);	
-						/**********************************************************************/				
+						/**********************************************************************/
+						// int k = client_idx(_pfds.at(i).fd);
+						
 					}					
 					if (nbytes == -1) //***** everything MUST be closed at main level then *****/
 						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
@@ -199,12 +201,15 @@ void Server::parse_message(std::string buffer, int clt_skt)
 {	
 	std::vector<std::string> tab_msg;	
 	int k = client_idx(clt_skt);
-	
-	if (k != -1 && buffer.find("\r\n") != std::string::npos)
+	// std::cout << "client idx = " << k << std::endl;
+	// std::cout << "client fd = " << _clients.at(k).get_clt_skt() << std::endl;
+		
+	if (k != -1 && buffer.find("\n") != std::string::npos) // \n for nc \r\n for irssi
 	{	
 		tab_msg = split(_clients.at(k).get_msg());
 		for (int i = 0; i < tab_msg.size(); i++)
 		{
+			std::cout << i << " = " << tab_msg[i] << std::endl;
 			check_command(tab_msg[i], k);
 		}		
 		_clients.at(k).clear_msg();
@@ -215,6 +220,8 @@ void Server::check_command(std::string cmd, int k)
 {
 	if (cmd == "NICK" || cmd == "nick")
 		nickname(k);
+	// else if (cmd == "CAP" || cmd == "cap")
+	//  	cap(k);	
 	// else if (cmd == "PASS" || cmd == "pass")
 	// 	authenticate(k);
 	// else if (cmd == "USER" || cmd == "user")

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/21 02:56:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/23 02:02:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,12 @@ std::vector<std::string> split(std::string str)
     std::istringstream iss(str);
     std::string token;
     
-    while (iss >> token)    
+    while (iss >> token)
+    {
         tab.push_back(token);
+        // std::cout << "token =" << token << std::endl;
+        
+    }       
     return (tab);
 }
 
