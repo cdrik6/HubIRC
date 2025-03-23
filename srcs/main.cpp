@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/23 02:02:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/23 20:15:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,16 @@ std::vector<std::string> split(std::string str)
         
     }       
     return (tab);
+}
+
+// Copy inside the function is better because it avoids unnecessary work 
+// when calling the function, making it more efficient for large strings.
+std::string toUpper(const std::string& str)
+{
+    std::string UpStr = str;
+    for (size_t i = 0; i < UpStr.length(); i++)    
+        UpStr[i] = toupper(UpStr[i]);
+    return (UpStr);
 }
 
 // int check_input(char *argv1, char *argv2)

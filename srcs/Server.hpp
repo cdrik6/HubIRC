@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/22 01:22:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/23 21:38:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <cstring>
 # include <cstdio>
 # include <csignal>
+# include <cctype>
 
 # include "Client.hpp"
 
@@ -68,12 +69,13 @@ class Server
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
 		void add_clients(std::vector<Client>& clients, int clt_skt, std::string ip);
 		int client_idx(int clt_skt);
-		void build_message(std::string buffer, int clt_skt);
+		// void build_message(std::string buffer, int clt_skt);
 		void parse_message(std::string buffer, int clt_skt);
 		void check_command(std::string cmd, int client_idx);
 		void reply(std::string RPL_ERR, int client_idx);
 		// commands
 		void nickname(int client_idx);
+		int check_nick(std::string nick);
 		//
 		static void	handle_signal(int signal);
 };
@@ -83,6 +85,7 @@ class Server
 // tools
 int	check_port(char* port);
 std::vector<std::string> split(std::string str);
+std::string toUpper(const std::string& str);
 
 /** draft **/
 // class InitException : public std::exception

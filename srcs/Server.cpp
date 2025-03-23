@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/23 02:39:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/23 20:42:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void Server::polling(void)
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{
-					build_message(std::string(buff), _pfds.at(i).fd);
+					// build_message(std::string(buff), _pfds.at(i).fd);
 					parse_message(std::string(buff), _pfds.at(i).fd);
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					// for (int j = 2; j < _pfds.size(); j++)
@@ -188,24 +188,25 @@ void Server::polling(void)
 // if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
 // Unless send() was called with the MSG_NOSIGNAL flag.
 
-void Server::build_message(std::string buffer, int clt_skt)
-{
-	int k = client_idx(clt_skt);
+// void Server::build_message(std::string buffer, int clt_skt)
+// {
+// 	int k = client_idx(clt_skt);
 	
-	if (k != -1)	
-		_clients.at(k).set_msg(buffer);
-}
+// 	if (k != -1)	
+// 		_clients.at(k).set_msg(buffer);
+// }
 
-// RFC 2812: message    =  [ ":" prefix SPACE ] command [ params ] CRLF
+// RFC 2812: message = [ ":" prefix SPACE ] command [ params ] CRLF
 void Server::parse_message(std::string buffer, int clt_skt)
 {	
-	std::vector<std::string> tab_msg;	
+	std::vector<std::string> tab_msg;
 	int k = client_idx(clt_skt);
 	// std::cout << "client idx = " << k << std::endl;
 	// std::cout << "client fd = " << _clients.at(k).get_clt_skt() << std::endl;
-		
-	if (k != -1 && buffer.find("\n") != std::string::npos) // \n for nc \r\n for irssi
-	{	
+	if (k != -1)	
+		_clients.at(k).set_msg(buffer);	//build message	
+	if (k != -1 && buffer.find("\r\n") != std::string::npos)
+	{			
 		tab_msg = split(_clients.at(k).get_msg());
 		for (int i = 0; i < tab_msg.size(); i++)
 		{
@@ -215,13 +216,16 @@ void Server::parse_message(std::string buffer, int clt_skt)
 		_clients.at(k).clear_msg();
 	}
 }
+// Note
+// \n for nc or \r\n for irssi so find_first_of() not find() --> NO! nc -C sends \r\n
+// RFC IRC: \n is invalid in command and parameters
+// /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
+// /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
 void Server::check_command(std::string cmd, int k)
 {
-	if (cmd == "NICK" || cmd == "nick")
+	if (toUpper(cmd) == "NICK")
 		nickname(k);
-	// else if (cmd == "CAP" || cmd == "cap")
-	//  	cap(k);	
 	// else if (cmd == "PASS" || cmd == "pass")
 	// 	authenticate(k);
 	// else if (cmd == "USER" || cmd == "user")
