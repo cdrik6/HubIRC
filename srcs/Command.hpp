@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/23 21:38:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/24 03:19:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "Server.hpp"
 
 # define CRLF "\r\n"
-# define SPACE " "
+# define NOCODE ""
 
 // RFC 2812: message    =  [ ":" prefix SPACE ] command [ params ] CRLF
 // RPL Format ":<server_hostname> <code> <nickname> :<message>" CRLF
@@ -27,7 +27,7 @@
 // Numerics in the range from 001 to 099 are used for client-server connections only
 // Replies generated in the response to commands are found in the range from 200 to 399
 // Nick
-# define RPL_NICK(nickname) ("NICK" + SPACE + nickname + CRLF)
+
 
 // # define RPL_CONNECTED(nickname) (": 001 " + nickname + " : Welcome to the IRC server!" + CRLF)
 // # define RPL_UMODEIS(hostname, channelname, mode, user)  ":" + hostname + " MODE " + channelname + " " + mode + " " + user + CRLF
@@ -41,10 +41,20 @@
 // # define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
 
 // Error replies are found in the range from 400 to 599
-//Nick
-# define ERR_NONICKNAMEGIVEN ":localhost 431 :No nickname given\r\n"
-# define ERR_ERRONEUSNICKNAME(nickname) (":localhost 432 " + nickname + " :Erroneous nickname" + CRLF)
-# define ERR_NICKNAMEINUSE(nickname) (":localhost 433 " + nickname + " :Nickname is already in use" + CRLF)
+//PASS
+# define ERR_PASSWDMISMATCH "464"
+# define RPL_PASSWDMISMATCH "Unvalid password"
+# define RPL_PASSWDREQUIRED "Password required"
+# define RPL_PASSWDMISSING "Password missing"
+//NICK
+# define RPL_NICK "NICK"
+# define ERR_NONICKNAMEGIVEN "431"
+# define RPL_NONICKNAMEGIVEN "No nickname given"
+# define ERR_ERRONEUSNICKNAME "432"
+# define RPL_ERRONEUSNICKNAME "Erroneous nickname"
+# define ERR_NICKNAMEINUSE "433"
+# define RPL_NICKNAMEINUSE "Nickname is already in use"
+
 //
 // # define ERR_NEEDMODEPARM(channelname, mode) (": 696 #" + channelname + " * You must specify a parameter for the key mode. " + mode + CRLF)
 // # define ERR_INVALIDMODEPARM(channelname, mode) ": 696 #" + channelname + " Invalid mode parameter. " + mode + CRLF

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/23 20:42:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/24 03:29:35 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,9 @@ void Server::polling(void)
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{
-					// build_message(std::string(buff), _pfds.at(i).fd);
+					// build_message(std::string(buff), _pfds.at(i).fd);					
 					parse_message(std::string(buff), _pfds.at(i).fd);
+						
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					// for (int j = 2; j < _pfds.size(); j++)
 					// {
@@ -208,12 +209,16 @@ void Server::parse_message(std::string buffer, int clt_skt)
 	if (k != -1 && buffer.find("\r\n") != std::string::npos)
 	{			
 		tab_msg = split(_clients.at(k).get_msg());
-		for (int i = 0; i < tab_msg.size(); i++)
+		if (check_pass(tab_msg, k) == OK)
 		{
-			std::cout << i << " = " << tab_msg[i] << std::endl;
-			check_command(tab_msg[i], k);
-		}		
-		_clients.at(k).clear_msg();
+			for (int i = 0; i < tab_msg.size(); i++)
+			{
+				std::cout << i << " = " << tab_msg[i] << std::endl;
+				get_command(tab_msg, tab_msg[i], k);
+			}		
+			_clients.at(k).clear_msg();			
+		}
+		
 	}
 }
 // Note
@@ -222,10 +227,34 @@ void Server::parse_message(std::string buffer, int clt_skt)
 // /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
 // /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
-void Server::check_command(std::string cmd, int k)
+int	Server::check_pass(std::vector<std::string> tab_msg, int client_idx)
+{
+	// already set
+	if (_clients.at(client_idx).get_password() == _password)
+		return (OK);
+	// verify and set password	
+	for (int i = 0; i < tab_msg.size(); i++)
+	{
+		if (toUpper(tab_msg[i]) == "PASS")
+		{	
+			i++;
+    		if (i == tab_msg.size())
+				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISSING, client_idx), KO);
+			if (tab_msg.at(i) == _password)
+				return(_clients.at(client_idx).set_password(tab_msg.at(i)), OK);
+			else
+				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISMATCH, client_idx), KO);
+		}
+		else
+			return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDREQUIRED, client_idx), KO);		
+	}
+	return (KO);
+}
+
+void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int k)
 {
 	if (toUpper(cmd) == "NICK")
-		nickname(k);
+		nickname(tab_msg, k);
 	// else if (cmd == "PASS" || cmd == "pass")
 	// 	authenticate(k);
 	// else if (cmd == "USER" || cmd == "user")

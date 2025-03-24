@@ -6,44 +6,57 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/23 21:46:43 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/24 03:37:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Command.hpp"
 
-/********** try catch  to do ********/
+/********** try catch  to do **********************************/
 // Server --> Client reply
-void Server::reply(std::string rpl_err, int client_idx)
-{    
-    if (send(_clients.at(client_idx).get_clt_skt(), rpl_err.c_str(), rpl_err.length(), MSG_NOSIGNAL) == - 1)
+// RPL Format ":<server_hostname> <code> <nickname> :<message>" CRLF
+void Server::reply(std::string code, std::string msg_replied, int client_idx)
+{       
+    std::string rpl;
+
+    // if (code == NOCODE)
+    //     rpl = ":localhost " + _clients.at(client_idx).get_nickname() + ":" + msg_replied + "\r\n";    
+    // else
+        rpl = ":localhost " + code + " " + _clients.at(client_idx).get_nickname() + " :" + msg_replied + "\r\n";    
+    if (send(_clients.at(client_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
         throw (std::runtime_error("send: " + std::string(strerror(errno))));
-        
-    std::cout << "Reply " << rpl_err << std::endl;    	
+    //    
+    std::cout << "Reply " << rpl << std::endl;    	
 }
 
 // NICK command is used to give user a nickname or change the existing one
-void Server::nickname(int client_idx)
+void Server::nickname(std::vector<std::string>& tab_msg, int client_idx)
 {
-    std::vector<std::string> tab_msg;
     std::string nick;
     int i = 0;
     
-    tab_msg = split(_clients.at(client_idx).get_msg());    
+    // tab_msg = split(_clients.at(client_idx).get_msg());    
     while (toUpper(tab_msg.at(i)) != "NICK")
         i++;
     i++;
     if (i == tab_msg.size())
-        reply(ERR_NONICKNAMEGIVEN, client_idx);        
+        reply(ERR_NONICKNAMEGIVEN, RPL_NONICKNAMEGIVEN, client_idx);
     else
     {
         nick = tab_msg.at(i);
-        if (check_nick(nick) == OK)
-        {
-            reply(RPL_NICK(nick), client_idx);
-        }
+        if (check_nick(nick) == KO)        
+            reply(ERR_ERRONEUSNICKNAME, RPL_ERRONEUSNICKNAME, client_idx);
+        else if (nick_available(nick) == KO)
+            reply(ERR_NICKNAMEINUSE, RPL_NICKNAMEINUSE, client_idx);
         else
-            reply(ERR_NONICKNAMEGIVEN, client_idx);
+        {
+            //_clients.at(client_idx).get_nickname()
+            _clients.at(client_idx).set_nickname(nick);               
+            // reply something ???? reply(NOCODE, RPL_NICK, client_idx);
+            // if ()
+            
+        }
+            
             
         
         
@@ -70,6 +83,12 @@ void Server::nickname(int client_idx)
 }
 
 int Server::check_nick(std::string nick)
+{
+
+    return(OK);
+}
+
+int Server::nick_available(std::string nick)
 {
 
     return(OK);
