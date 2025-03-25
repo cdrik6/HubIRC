@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/24 03:27:56 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/24 22:01:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 Client::Client() :
 _clt_skt(-1),
 _registered(false),
-_password(""),
+_pwd_ok(false),
+// _cap_alone(true),
+// _password(""),
 _nickname("*"),
 _username(""),
 _hostname(""),
@@ -42,9 +44,19 @@ std::string Client::get_nickname(void) const
     return(_nickname);
 }
 
-std::string Client::get_password(void) const
+std::string Client::get_username(void) const
 {
-    return(_password);
+    return(_username);
+}
+
+bool Client::get_pwd_ok(void) const
+{
+    return (_pwd_ok);
+}
+
+bool Client::get_registered(void) const
+{
+    return (_registered);
 }
 
 void Client::set_clt_skt(int clt_skt)
@@ -57,9 +69,19 @@ void Client::set_nickname(std::string nick)
     _nickname = nick;
 }
 
-void Client::set_password(std::string password)
+void Client::set_username(std::string user)
 {
-    _password = password;    
+    _username = user;
+}
+
+void Client::set_pwd_ok(bool pwd_ok)
+{
+    _pwd_ok = pwd_ok;
+}
+
+void Client::set_registered(bool registered)
+{
+    _registered = registered;
 }
 
 void Client::set_hostname(std::string ip)

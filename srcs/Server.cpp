@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/24 03:29:35 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/25 01:19:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,9 +169,12 @@ void Server::polling(void)
 						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
-				{
-					// build_message(std::string(buff), _pfds.at(i).fd);					
-					parse_message(std::string(buff), _pfds.at(i).fd);
+				{					
+					int k = client_idx(_pfds.at(i).fd);
+					parse_message(std::string(buff), k);
+					if (check_registered(k) == OK)					
+						if (_clients.at(k).get_registered() == false)
+							welcome(k);
 						
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					// for (int j = 2; j < _pfds.size(); j++)
@@ -189,36 +192,57 @@ void Server::polling(void)
 // if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
 // Unless send() was called with the MSG_NOSIGNAL flag.
 
-// void Server::build_message(std::string buffer, int clt_skt)
-// {
-// 	int k = client_idx(clt_skt);
+int Server::check_registered(int clt_idx)
+{
+	// std::cout << "pwd_ok = " << _clients.at(clt_idx).get_pwd_ok() << std::endl;
+	// std::cout << "nick = " << _clients.at(clt_idx).get_nickname() << std::endl;
+	// std::cout << "user = " << _clients.at(clt_idx).get_username() << std::endl;
+	if (_clients.at(clt_idx).get_registered() == true)
+		return (OK);
+	if (_clients.at(clt_idx).get_pwd_ok() == false)
+		return (reply(COD_PASSWDMISMATCH, ERR_PASSWDREQUIRED, clt_idx), KO);
+	if (_clients.at(clt_idx).get_nickname() == "*")
+		return (reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx), KO);
+	if (_clients.at(clt_idx).get_username() == "")
+		return (reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx), KO);		
+	return (OK);
+}
+
+void Server::welcome(int clt_idx)
+{
+	std::string msg_replied;
 	
-// 	if (k != -1)	
-// 		_clients.at(k).set_msg(buffer);
-// }
+	_clients.at(clt_idx).set_registered(true);	
+	msg_replied = std::string(RPL_WELCOME) + " " + _clients.at(clt_idx).get_nickname() \
+				+ "!" + _clients.at(clt_idx).get_username() + "@localhost"; //  <nick>!<user>@<host>"    
+	reply(COD_WELCOME, msg_replied, clt_idx);
+	reply(COD_YOURHOST, RPL_YOURHOST, clt_idx);
+	reply(COD_CREATED, RPL_CREATED, clt_idx);
+	reply(COD_MYINFO, RPL_MYINFO, clt_idx);	// <available user modes> <available channel modes>
+	reply(COD_MOTDSTART, RPL_MOTDSTART, clt_idx);
+	reply(COD_MOTD, RPL_MOTD, clt_idx);
+	reply(COD_ENDOFMOTD, RPL_ENDOFMOTD, clt_idx);
+}
 
 // RFC 2812: message = [ ":" prefix SPACE ] command [ params ] CRLF
-void Server::parse_message(std::string buffer, int clt_skt)
+void Server::parse_message(std::string buffer, int clt_idx)
 {	
 	std::vector<std::string> tab_msg;
-	int k = client_idx(clt_skt);
+	// int k = client_idx(clt_skt);
 	// std::cout << "client idx = " << k << std::endl;
 	// std::cout << "client fd = " << _clients.at(k).get_clt_skt() << std::endl;
-	if (k != -1)	
-		_clients.at(k).set_msg(buffer);	//build message	
-	if (k != -1 && buffer.find("\r\n") != std::string::npos)
+	
+	if (clt_idx != -1)	
+		_clients.at(clt_idx).set_msg(buffer);	// build message	
+	if (clt_idx != -1 && buffer.find("\r\n") != std::string::npos)
 	{			
-		tab_msg = split(_clients.at(k).get_msg());
-		if (check_pass(tab_msg, k) == OK)
+		tab_msg = split(_clients.at(clt_idx).get_msg());		
+		for (int i = 0; i < tab_msg.size(); i++)
 		{
-			for (int i = 0; i < tab_msg.size(); i++)
-			{
-				std::cout << i << " = " << tab_msg[i] << std::endl;
-				get_command(tab_msg, tab_msg[i], k);
-			}		
-			_clients.at(k).clear_msg();			
-		}
-		
+			std::cout << i << " = " << tab_msg[i] << std::endl;
+			get_command(tab_msg, tab_msg[i], clt_idx);			
+		}		
+		_clients.at(clt_idx).clear_msg();		
 	}
 }
 // Note
@@ -227,38 +251,16 @@ void Server::parse_message(std::string buffer, int clt_skt)
 // /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
 // /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
-int	Server::check_pass(std::vector<std::string> tab_msg, int client_idx)
-{
-	// already set
-	if (_clients.at(client_idx).get_password() == _password)
-		return (OK);
-	// verify and set password	
-	for (int i = 0; i < tab_msg.size(); i++)
-	{
-		if (toUpper(tab_msg[i]) == "PASS")
-		{	
-			i++;
-    		if (i == tab_msg.size())
-				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISSING, client_idx), KO);
-			if (tab_msg.at(i) == _password)
-				return(_clients.at(client_idx).set_password(tab_msg.at(i)), OK);
-			else
-				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISMATCH, client_idx), KO);
-		}
-		else
-			return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDREQUIRED, client_idx), KO);		
-	}
-	return (KO);
-}
-
 void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int k)
 {
-	if (toUpper(cmd) == "NICK")
+	if (toUpper(cmd) == "PING")
+		ping(tab_msg, k);
+	else if (toUpper(cmd) == "NICK")
 		nickname(tab_msg, k);
-	// else if (cmd == "PASS" || cmd == "pass")
-	// 	authenticate(k);
-	// else if (cmd == "USER" || cmd == "user")
-	// 	username(k);
+	else if (toUpper(cmd) == "PASS")
+	 	pass(tab_msg, k);
+	else if (toUpper(cmd) == "USER")
+	 	username(tab_msg, k);
 	// else if (cmd == "JOIN" || cmd == "join")
 	// 	join(k);
 	// else if (cmd == "PRIVMSG" || cmd == "privmsg")
@@ -266,7 +268,6 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 	// else if (cmd == "KICK" || cmd == "kick")
 	// 	kick(k);
 }
-
 
 int Server::client_idx(int clt_skt)
 {
@@ -283,8 +284,6 @@ int Server::client_idx(int clt_skt)
 	return (k);
 }
 
-
-/******* PASSWORD Authanticate *****/
 void Server::client_connect(void)
 {
 	int clt_skt;
@@ -367,9 +366,36 @@ void Server::handle_signal(int signal)
 
 /**** draft ****/
 
-// throw(Bureaucrat::GradeTooHighException()); /*************** */
-// exception
-// const char* Server::InitException::what() const throw()
+// int	Server::check_pass(std::vector<std::string>& tab_msg, int client_idx)
 // {
-//     return (" ................ ");    
+// 	// already set
+// 	if (_clients.at(client_idx).get_password() == _password)
+// 		return (OK);
+// 	// verify and set password	
+// 	for (int i = 0; i < tab_msg.size(); i++)
+// 	{
+// 		std::cout << i << " = " << tab_msg[i] << std::endl;
+// 		if (toUpper(tab_msg[i]) == "PASS")
+// 		{	
+// 			i++;
+//     		if (i == tab_msg.size())
+// 				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISSING, client_idx), KO);
+// 			if (tab_msg.at(i) == _password)
+// 				return(_clients.at(client_idx).set_password(tab_msg.at(i)), OK);
+// 			else
+// 				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISMATCH, client_idx), KO);
+// 		}
+// 		else
+// 			return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDREQUIRED, client_idx), KO);		
+// 	}
+// 	return (KO);
+// }
+
+
+// void Server::build_message(std::string buffer, int clt_skt)
+// {
+// 	int k = client_idx(clt_skt);
+	
+// 	if (k != -1)	
+// 		_clients.at(k).set_msg(buffer);
 // }

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/24 03:19:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/25 00:50:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,44 @@
 // # define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + "\r\n")
 
 // Error replies are found in the range from 400 to 599
-//PASS
-# define ERR_PASSWDMISMATCH "464"
-# define RPL_PASSWDMISMATCH "Unvalid password"
-# define RPL_PASSWDREQUIRED "Password required"
-# define RPL_PASSWDMISSING "Password missing"
-//NICK
+// PASS
+# define COD_PASSWDMISMATCH "464"
+# define ERR_PASSWDMISMATCH ":Password incorrect"
+# define ERR_PASSWDMISSING ":Password missing"
+# define ERR_PASSWDREQUIRED ":Password required"
+// NICK
 # define RPL_NICK "NICK"
-# define ERR_NONICKNAMEGIVEN "431"
-# define RPL_NONICKNAMEGIVEN "No nickname given"
-# define ERR_ERRONEUSNICKNAME "432"
-# define RPL_ERRONEUSNICKNAME "Erroneous nickname"
-# define ERR_NICKNAMEINUSE "433"
-# define RPL_NICKNAMEINUSE "Nickname is already in use"
+# define COD_NONICKNAMEGIVEN "431"
+# define ERR_NONICKNAMEGIVEN ":No nickname given"
+# define COD_ERRONEUSNICKNAME "432"
+# define ERR_ERRONEUSNICKNAME ":Erroneous nickname"
+# define COD_NICKNAMEINUSE "433"
+# define ERR_NICKNAMEINUSE ":Nickname is already in use"
+// REGISTER
+# define COD_NOTREGISTERED "451"
+# define ERR_NOTREGISTERED ":You have not registered"
+// WELCOME
+# define COD_WELCOME "001"
+# define RPL_WELCOME ":Welcome to the Internet Relay Network" // <nick>!<user>@<host>
+# define COD_YOURHOST "002"
+# define RPL_YOURHOST ":Your host is localhost, running version causette-0.1"
+# define COD_CREATED "003"
+# define RPL_CREATED ":This server was created over March 2025"
+# define COD_MYINFO "004"
+# define RPL_MYINFO ":ircserv 0.1" // <available user modes> <available channel modes>
+// MOTD
+# define COD_MOTDSTART "375"
+# define RPL_MOTDSTART ":- ircserv Message of the day - "
+# define COD_MOTD "372"
+# define RPL_MOTD ":- de do do do, de da da da"
+# define COD_ENDOFMOTD "376"
+# define RPL_ENDOFMOTD ":End of MOTD command"
+// USER
+# define COD_NEEDMOREPARAMS "461"
+# define ERR_NEEDMOREPARAMS ":Not enough parameters" //<command>
+# define COD_ALREADYREGISTRED "462"
+# define ERR_ALREADYREGISTRED ":Unauthorized command (already registered)"
+
 
 //
 // # define ERR_NEEDMODEPARM(channelname, mode) (": 696 #" + channelname + " * You must specify a parameter for the key mode. " + mode + CRLF)
