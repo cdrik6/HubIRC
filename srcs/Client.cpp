@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/24 22:01:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/26 02:01:39 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,16 @@ Client::Client() :
 _clt_skt(-1),
 _registered(false),
 _pwd_ok(false),
-// _cap_alone(true),
 // _password(""),
 _nickname("*"),
+// _oldnick(""),
 _username(""),
 _hostname(""),
 _msg("")
-{    
-}
+{}
 
 Client::~Client()
-{        
-}
+{}
 
 int Client::get_clt_skt(void) const
 {
@@ -43,6 +41,11 @@ std::string Client::get_nickname(void) const
 {
     return(_nickname);
 }
+
+// std::string Client::get_oldnick(void) const
+// {
+//     return(_oldnick);
+// }
 
 std::string Client::get_username(void) const
 {
@@ -68,6 +71,11 @@ void Client::set_nickname(std::string nick)
 {
     _nickname = nick;
 }
+
+// void Client::set_oldnick(std::string nick)
+// {
+//     _oldnick = nick;
+// }
 
 void Client::set_username(std::string user)
 {

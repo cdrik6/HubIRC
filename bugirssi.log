@@ -1,0 +1,22 @@
+<< CAP LS
+<< PASS toto
+<< NICK mangue
+<< USER mangue mangue localhost :mangue
+>> :localhost 464 * :Password required
+>> :localhost 001 mangue :Welcome to the Internet Relay Network mangue!mangue@localhost
+<< MODE mangue +i
+>> :localhost 002 mangue :Your host is localhost, running version causette-0.1
+>> :localhost 003 mangue :This server was created over March 2025
+>> :localhost 004 mangue :ircserv 0.1
+>> :localhost 375 mangue :- ircserv Message of the day - 
+>> :localhost 372 mangue :- de do do do, de da da da
+>> :localhost 376 mangue :End of MOTD command
+<< PING localhost
+<< NICK toti
+>> PONG localhost:mangue!~mangue@localhost NICK toti
+--> lag pong
+<< NICK tatat
+>> :toti!~mangue@localhost NICK tatat
+<< NICK *
+>> :tatat!~mangue@localhost NICK *
+<< QUIT :leaving

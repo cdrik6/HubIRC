@@ -1,0 +1,15 @@
+<< CAP LS
+<< PASS toto
+<< NICK mangue
+<< USER mangue mangue localhost :mangue
+>> : 451 * :You have not registered!
+>> : 001 mangue : Welcome to the IRC server!
+<< MODE mangue +i
+>> : 403 mangue angue :No such channel
+<< PING 
+>> : 421 mangue PING :Unknown command
+<< NICK tata
+>> :mangue NICK tata
+<< NICK titi
+>> :tata NICK titi
+<< QUIT :leaving

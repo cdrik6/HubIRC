@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/25 01:19:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/26 02:28:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,14 +136,8 @@ void Server::polling(void)
 		
 		// if server get sthg to read (--> new connection)	
 		if (_pfds.at(1).revents & POLLIN)
-		{
-			try
-			{
-				client_connect();
-			}
-			catch (const std::exception& e) { throw; }
-		}
-				
+			client_connect();
+			
 		// ckeck revents of clients 
 		for (int i = 2; i < _pfds.size(); i++)
 		{
@@ -151,26 +145,27 @@ void Server::polling(void)
 			{
 				char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
 				int nbytes = recv(_pfds.at(i).fd, buff, BUFFER_SIZE, 0);
+				int k = client_idx(_pfds.at(i).fd);
 				std::cout << "recvbuff: " << buff << std::endl;
 				std::cout << "nbytes: " << nbytes << std::endl;
+				//
 				if (nbytes <= 0) // closed or issues
 				{
 					if (nbytes == 0)
-					{
-						/*************** close everything with the client *********************/						
-						std::cout << "Socket " << _pfds.at(i).fd << " closed the connection\n";
-						close (_pfds.at(i).fd);					
-						_pfds.erase(_pfds.begin() + i);	
-						/**********************************************************************/
-						// int k = client_idx(_pfds.at(i).fd);
-						
+					{	
+						client_disconnect(i, k);
+						// /*************** close everything with the client *********************/						
+						// std::cout << "Socket " << _pfds.at(i).fd << " closed the connection\n";
+						// close (_pfds.at(i).fd);					
+						// _pfds.erase(_pfds.begin() + i);							
+						// /**********************************************************************/
 					}					
 					if (nbytes == -1) //***** everything MUST be closed at main level then *****/
 						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{					
-					int k = client_idx(_pfds.at(i).fd);
+					
 					parse_message(std::string(buff), k);
 					if (check_registered(k) == OK)					
 						if (_clients.at(k).get_registered() == false)
@@ -239,6 +234,7 @@ void Server::parse_message(std::string buffer, int clt_idx)
 		tab_msg = split(_clients.at(clt_idx).get_msg());		
 		for (int i = 0; i < tab_msg.size(); i++)
 		{
+			//*********** debug here ***** */
 			std::cout << i << " = " << tab_msg[i] << std::endl;
 			get_command(tab_msg, tab_msg[i], clt_idx);			
 		}		
@@ -254,7 +250,7 @@ void Server::parse_message(std::string buffer, int clt_idx)
 void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int k)
 {
 	if (toUpper(cmd) == "PING")
-		ping(tab_msg, k);
+		ping(k);
 	else if (toUpper(cmd) == "NICK")
 		nickname(tab_msg, k);
 	else if (toUpper(cmd) == "PASS")
@@ -284,23 +280,29 @@ int Server::client_idx(int clt_skt)
 	return (k);
 }
 
+void Server::client_disconnect(int pfd_idx, int clt_idx)
+{
+	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";
+	close (_pfds.at(pfd_idx).fd);
+	_pfds.erase(_pfds.begin() + pfd_idx);
+	// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
+	_clients.erase(_clients.begin() + clt_idx);	
+	//********** reply to all others clients if channel a quit RPL */
+}
+
 void Server::client_connect(void)
 {
 	int clt_skt;
 	struct sockaddr_storage clt_addr;
-    socklen_t addr_size = sizeof (clt_addr);
-	
+    socklen_t addr_size = sizeof (clt_addr);	
+
 	clt_skt = accept(_srv_skt, (struct sockaddr *)(&clt_addr), &addr_size);
 	if (clt_skt == -1)
 		throw (std::runtime_error("accept: " + std::string(strerror(errno))));	
 	if (fcntl(clt_skt, F_SETFL, O_NONBLOCK) == -1)
 		throw (std::runtime_error("fcntl: " + std::string(strerror(errno))));		
-	add_pfds(_pfds, clt_skt, POLLIN | POLLHUP);
-	try
-	{
-		add_clients(_clients, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));
-	}
-	catch (const std::exception& e) { throw; }	
+	add_pfds(_pfds, clt_skt, POLLIN | POLLHUP);	
+	add_clients(_clients, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));	
 }
 
 /********* check inet_ntop authorised ***********/
@@ -330,10 +332,10 @@ std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_sk
 void Server::add_clients(std::vector<Client>& clients, int clt_skt, std::string ip)
 {
 	Client new_clt;
-	
+		
 	new_clt.set_clt_skt(clt_skt);
 	new_clt.set_hostname(ip);
-	clients.push_back(new_clt);	
+	clients.push_back(new_clt);		
 }
 
 void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
@@ -386,7 +388,7 @@ void Server::handle_signal(int signal)
 // 				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISMATCH, client_idx), KO);
 // 		}
 // 		else
-// 			return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDREQUIRED, client_idx), KO);		
+// 			return(reply(ERR_PAtab_msg.size()SSWDMISMATCH, RPL_PASSWDREQUIRED, client_idx), KO);		
 // 	}
 // 	return (KO);
 // }

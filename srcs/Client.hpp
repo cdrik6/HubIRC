@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:13:35 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/24 22:00:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/26 00:25:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class Client
         // bool _cap_alone;
         // std::string _password;
         std::string _nickname;
+        // std::string _oldnick;
         std::string _username;
         std::string _hostname;
         std::string _msg; //buffer
@@ -35,11 +36,14 @@ class Client
         int get_clt_skt(void) const;
         std::string get_msg(void) const;
         std::string get_nickname(void) const;
+        // std::string get_oldnick(void) const;
         std::string get_username(void) const;
         bool get_pwd_ok(void) const;
         bool get_registered(void) const;
+        //
         void set_clt_skt(int clt_skt);
         void set_nickname(std::string nick);
+        // void set_oldnick(std::string nick);
         void set_username(std::string username);
         void set_pwd_ok(bool pwd_ok);
         void set_registered(bool registered);

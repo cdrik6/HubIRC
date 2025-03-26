@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/25 00:50:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/26 01:25:18 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 # include "Server.hpp"
 
-# define CRLF "\r\n"
-# define NOCODE ""
+// # define CRLF "\r\n"
+// # define NOCODE ""
 
 // RFC 2812: message    =  [ ":" prefix SPACE ] command [ params ] CRLF
 // RPL Format ":<server_hostname> <code> <nickname> :<message>" CRLF
@@ -53,7 +53,7 @@
 # define COD_ERRONEUSNICKNAME "432"
 # define ERR_ERRONEUSNICKNAME ":Erroneous nickname"
 # define COD_NICKNAMEINUSE "433"
-# define ERR_NICKNAMEINUSE ":Nickname is already in use"
+//# define ERR_NICKNAMEINUSE ":Nickname is already in use"
 // REGISTER
 # define COD_NOTREGISTERED "451"
 # define ERR_NOTREGISTERED ":You have not registered"
