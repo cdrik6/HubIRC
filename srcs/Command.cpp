@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/26 02:37:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/26 23:59:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,9 @@ int Server::nick_available(std::string nick)
 
 // *********** rules invalid USER ????**********/////
 // USER command is used at the beginning of connection to specify the username, hostname and realname of a new user
+// USER <username> 0 * :<realname>
+// or ??
+// USER nickname username localhost :realname
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
 {
     std::string user;    
@@ -124,11 +127,7 @@ void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
     else
     {
         user = tab_msg.at(i);
-        /******************* */
-        // check username valid
-        // username is composed of valid characters (alpha-numeric, underscore, dash and dot only)
-        // realname is composed of valid characters (any printable character - including spaces - is allowed)
-        /**************************** */
+        
         if (_clients.at(clt_idx).get_username() != "")        
             reply(COD_ALREADYREGISTRED, ERR_ALREADYREGISTRED, clt_idx);        
         else            
