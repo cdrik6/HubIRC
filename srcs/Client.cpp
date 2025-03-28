@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/26 02:01:39 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/28 00:43:10 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ Client::Client() :
 _clt_skt(-1),
 _registered(false),
 _pwd_ok(false),
-// _password(""),
 _nickname("*"),
-// _oldnick(""),
 _username(""),
 _hostname(""),
 _msg("")

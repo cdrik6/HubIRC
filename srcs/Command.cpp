@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/26 23:59:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/28 00:36:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,7 @@ int Server::nick_available(std::string nick)
 
 // *********** rules invalid USER ????**********/////
 // USER command is used at the beginning of connection to specify the username, hostname and realname of a new user
-// USER <username> 0 * :<realname>
-// or ??
-// USER nickname username localhost :realname
+// USER <username> 0 * :<realname> // USER  username nickname localhost :realname
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
 {
     std::string user;    
@@ -121,7 +119,7 @@ void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
         
     while (toUpper(tab_msg.at(i)) != "USER")
         i++;
-    i = i + 2; // USER nickname username localhost :realname
+    i++;
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else
