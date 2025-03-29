@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 19:59:35 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 22:53:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@
 # define COD_ALREADYREGISTRED "462"
 # define ERR_ALREADYREGISTRED ":Unauthorized command (already registered)"
 // PRIVMSG
-# define COD_AWAY "301" // RPL_AWAY = "<nick> :<away message>"
+# define COD_NONE "300"
 # define COD_NORECIPIENT "411"
 # define ERR_NORECIPIENT ":No recipient given (PRIVMSG)"
 # define COD_NOTEXTTOSEND "412"

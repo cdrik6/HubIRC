@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 20:24:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 23:24:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
     //     rpl = ":localhost " + _clients.at(client_idx).get_nickname() + ":" + msg_replied + "\r\n";
     if (code == "000") // NICK
         rpl = msg_replied + _clients.at(clt_idx).get_nickname() + "\r\n";
-    else if (code == "301") // PRIVMSG
+    else if (code == "300") // PRIVMSG
         rpl = msg_replied + "\r\n";
     else
         rpl = ":localhost " + code + " " + _clients.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
@@ -167,8 +167,8 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
                 if (k != -1)
                 {                    
                     msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost PRIVMSG"; // from
-                    msg_replied = msg_replied + " " + target + " " + msg; // to
-                    reply(COD_AWAY, msg_replied, k);
+                    msg_replied = msg_replied + " " + target + " :" + msg; // to
+                    reply(COD_NONE, msg_replied, k);
                 }
                 else
                     reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, k);                
