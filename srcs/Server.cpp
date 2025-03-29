@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/26 02:28:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 04:28:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,11 @@ void Server::polling(void)
 			if (nbytes == -1)
 				throw (std::runtime_error("read: " + std::string(strerror(errno))));
 			if (nbytes == 0 || std::string(buff, nbytes) == "stop\n")
-				break;	
+				break;
+			// check sockets in use
+			if (std::string(buff, nbytes) == "socket\n")			
+				for (int i = 0; i < _pfds.size(); i++)				
+					std::cout << "Socket " << _pfds.at(i).fd << " is connected\n";
 		}		
 		
 		// if server get sthg to read (--> new connection)	
@@ -146,7 +150,7 @@ void Server::polling(void)
 				char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
 				int nbytes = recv(_pfds.at(i).fd, buff, BUFFER_SIZE, 0);
 				int k = client_idx(_pfds.at(i).fd);
-				std::cout << "recvbuff: " << buff << std::endl;
+				std::cout << "recvbuff: [" << buff << "]" << std::endl;
 				std::cout << "nbytes: " << nbytes << std::endl;
 				//
 				if (nbytes <= 0) // closed or issues
@@ -165,12 +169,10 @@ void Server::polling(void)
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{					
-					
-					parse_message(std::string(buff), k);
-					if (check_registered(k) == OK)					
-						if (_clients.at(k).get_registered() == false)
-							welcome(k);
-						
+					if (parse_message(std::string(buff), k) == OK)
+						if (check_registered(k) == OK)					
+							if (_clients.at(k).get_registered() == false)
+								welcome(k);						
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					// for (int j = 2; j < _pfds.size(); j++)
 					// {
@@ -220,7 +222,7 @@ void Server::welcome(int clt_idx)
 }
 
 // RFC 2812: message = [ ":" prefix SPACE ] command [ params ] CRLF
-void Server::parse_message(std::string buffer, int clt_idx)
+int Server::parse_message(std::string buffer, int clt_idx)
 {	
 	std::vector<std::string> tab_msg;
 	// int k = client_idx(clt_skt);
@@ -232,14 +234,18 @@ void Server::parse_message(std::string buffer, int clt_idx)
 	if (clt_idx != -1 && buffer.find("\r\n") != std::string::npos)
 	{			
 		tab_msg = split(_clients.at(clt_idx).get_msg());		
+		if (tab_msg.size() == 0)
+			return (std::cout << "tab empty" << std::endl, KO); /**************debug here **** */
 		for (int i = 0; i < tab_msg.size(); i++)
 		{
 			//*********** debug here ***** */
-			std::cout << i << " = " << tab_msg[i] << std::endl;
-			get_command(tab_msg, tab_msg[i], clt_idx);			
+			std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
+			get_command(tab_msg, tab_msg[i], clt_idx);
 		}		
-		_clients.at(clt_idx).clear_msg();		
+		_clients.at(clt_idx).clear_msg();
+		return (OK);
 	}
+	return (KO);
 }
 // Note
 // \n for nc or \r\n for irssi so find_first_of() not find() --> NO! nc -C sends \r\n
@@ -247,22 +253,25 @@ void Server::parse_message(std::string buffer, int clt_idx)
 // /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
 // /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
-void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int k)
+void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx)
 {
 	if (toUpper(cmd) == "PING")
-		ping(k);
+		ping(clt_idx);
 	else if (toUpper(cmd) == "NICK")
-		nickname(tab_msg, k);
+		nickname(tab_msg, clt_idx);
 	else if (toUpper(cmd) == "PASS")
-	 	pass(tab_msg, k);
+	 	pass(tab_msg, clt_idx);
 	else if (toUpper(cmd) == "USER")
-	 	username(tab_msg, k);
-	// else if (cmd == "JOIN" || cmd == "join")
-	// 	join(k);
-	// else if (cmd == "PRIVMSG" || cmd == "privmsg")
-	// 	privmsg(k);
-	// else if (cmd == "KICK" || cmd == "kick")
-	// 	kick(k);
+	 	username(tab_msg, clt_idx);		
+	else if (_clients.at(clt_idx).get_registered() == true)
+	{
+		if (toUpper(cmd) == "PRIVMSG")		
+			privmsg(tab_msg, clt_idx);			
+	}	
+	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
+		
+	
+	
 }
 
 int Server::client_idx(int clt_skt)

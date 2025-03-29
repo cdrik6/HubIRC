@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/26 01:08:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 03:46:25 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,44 @@ int check_port(char* port)
     return (OK);
 }
 
-/*****be carefull delete all spaces "H   W" = ["H","W"] **********/
 std::vector<std::string> split(std::string str)
 {
+    // check / clean the ":"
+    std::string msg = "";
+    bool is_msg = false;
+    int i = 0;
+    if (!str.empty())
+    {
+        if (str.at(0) == ':')
+            str = str.substr(1);
+        i = str.find_first_of(":");
+        if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
+        {
+            msg = str.substr(i + 1);  // msg worst "\r\n" 
+            msg = msg.substr(0, msg.length() - 2); // remove \r\n
+            std::cout << "msg = [" << msg << "]" << std::endl;
+            if (!msg.empty())
+                is_msg = true;
+        }
+    }
+    
+    // the spit by spaces    
     std::vector<std::string> tab;
     std::istringstream iss(str);
-    std::string token;
+    std::string token;   
     
     while (iss >> token)
     {
-        tab.push_back(token);
-        // std::cout << "token =" << token << std::endl;
-        
-    }       
+        if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
+            break;                        
+        tab.push_back(token);        
+        std::cout << "token = [" << token << "]" << std::endl;
+    }
+    if (is_msg == true) 
+        tab.push_back(msg);
     return (tab);
 }
+
 
 // Copy inside the function is better because it avoids unnecessary work 
 // when calling the function, making it more efficient for large strings.

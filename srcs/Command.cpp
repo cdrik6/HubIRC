@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/28 00:36:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/28 22:57:06 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,4 +131,21 @@ void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
         else            
             _clients.at(clt_idx).set_username(user);         
     }
+}
+
+// PRIVMSG <msgtarget> <text to be sent>
+void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
+{    
+    int i = 0;
+    std::string target;
+    
+	while (toUpper(tab_msg.at(i)) != "PRIVMSG")
+        i++;
+    i++;
+	if (i == tab_msg.size())
+        reply(COD_PASSWDMISMATCH, ERR_PASSWDMISSING, clt_idx);
+    else if (tab_msg.at(i) == _password)    
+        _clients.at(clt_idx).set_pwd_ok(true);
+    else     
+        reply(COD_PASSWDMISMATCH, ERR_PASSWDMISMATCH, clt_idx);	
 }

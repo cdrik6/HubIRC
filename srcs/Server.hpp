@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/26 02:05:39 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 03:40:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ class Server
 		void add_clients(std::vector<Client>& clients, int clt_skt, std::string ip);
 		int client_idx(int clt_skt);
 		// get command
-		void parse_message(std::string buffer, int clt_idx);
+		int parse_message(std::string buffer, int clt_idx);
 		int check_registered(int clt_idx);
 		void welcome(int clt_idx);		
 		void get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx);		
@@ -84,6 +84,7 @@ class Server
 		void username(std::vector<std::string>& tab_msg, int clt_idx);
 		int check_nick(std::string nick);
 		int nick_available(std::string nick);
+		void privmsg(std::vector<std::string>& tab_msg, int clt_idx);
 		//
 		static void	handle_signal(int signal);
 		//void ping(std::vector<std::string>& tab_msg, int clt_idx);

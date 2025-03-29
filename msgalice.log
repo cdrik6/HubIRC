@@ -1,0 +1,165 @@
+<< CAP LS
+<< NICK mangue
+<< USER mangue mangue irc.dal.net :mangue
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** Checking Ident
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** Found your hostname
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** No Ident response
+>> :serenity.fl.us.dal.net 001 mangue :Welcome to the DALnet IRC Network mangue!~mangue@78.196.183.181
+<< MODE mangue +i
+>> :serenity.fl.us.dal.net 002 mangue :Your host is serenity.fl.us.dal.net, running version bahamut-2.2.2
+>> :serenity.fl.us.dal.net 003 mangue :This server was created Tue 23 Aug UTC at 2022 04:42:56 AM
+>> :serenity.fl.us.dal.net 004 mangue serenity.fl.us.dal.net bahamut-2.2.2 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :serenity.fl.us.dal.net 005 mangue NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :serenity.fl.us.dal.net 005 mangue CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :serenity.fl.us.dal.net 251 mangue :There are 68 users and 6839 invisible on 39 servers
+>> :serenity.fl.us.dal.net 252 mangue 79 :IRC Operators online
+>> :serenity.fl.us.dal.net 254 mangue 3454 :channels formed
+>> :serenity.fl.us.dal.net 255 mangue :I have 243 clients and 1 servers
+>> :serenity.fl.us.dal.net 265 mangue :Current local users: 243 Max: 1393
+>> :serenity.fl.us.dal.net 266 mangue :Current global users: 6907 Max: 12060
+>> :serenity.fl.us.dal.net NOTICE mangue :*** Notice -- motd was last changed at 30/11/2020 19:09
+>> :serenity.fl.us.dal.net 375 mangue :- serenity.fl.us.dal.net Message of the Day - 
+>> :serenity.fl.us.dal.net 372 mangue :-30/11/2020 19:09
+>> :serenity.fl.us.dal.net 372 mangue :- serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net 372 mangue :- sponsored by: Kape, Inc & Datapacket.com
+>> :serenity.fl.us.dal.net 372 mangue :- admin: Mustang
+>> :serenity.fl.us.dal.net 372 mangue :- 
+>> :serenity.fl.us.dal.net 372 mangue :- Please abide by DALnet's Acceptable Use Policy:
+>> :serenity.fl.us.dal.net 372 mangue :- https://www.dal.net/aup
+>> :serenity.fl.us.dal.net 372 mangue :- 
+>> :serenity.fl.us.dal.net 372 mangue :- 
+>> :serenity.fl.us.dal.net 376 mangue :End of /MOTD command.
+>> :mangue MODE mangue :+iH
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :mangue
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :mangue
+--> lag pong
+<< NICK Alice0
+>> :mangue!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip NICK :Alice0
+<< PRIVMSG Bob0 :c'est 
+<< PRIVMSG Bob0 :c'est Alice pour Bob
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Alice0 :c'est Bob pour Alice
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PRIVMSG Bob0 :c'est Alice pour Bob
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Alice0 :c'est Bob pour Alice
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< JOIN #mychannel
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip JOIN :#mychannel
+>> :serenity.fl.us.dal.net 353 Alice0 = #mychannel :@Alice0 
+>> :serenity.fl.us.dal.net 366 Alice0 #mychannel :End of /NAMES list.
+<< MODE #mychannel
+>> :serenity.fl.us.dal.net 324 Alice0 #mychannel + 
+--> chanquery mode
+<< WHO #mychannel
+>> :serenity.fl.us.dal.net 329 Alice0 #mychannel 1743201312
+--> event 329
+>> :serenity.fl.us.dal.net 352 Alice0 #mychannel ~mangue e6e-2838-d1-c13c-d6f6.196.78.ip serenity.fl.us.dal.net Alice0 H@ :0 mangue
+--> silent event who
+>> :serenity.fl.us.dal.net 315 Alice0 #mychannel :End of /WHO list.
+--> chanquery who end
+<< MODE #mychannel b
+>> :serenity.fl.us.dal.net 368 Alice0 #mychannel :End of Channel Ban List
+--> chanquery ban end
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip JOIN :#mychannel
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Alice0 :c'est Bob pour Alice
+<< PRIVMSG Bob0 :c'est Alice pour Bob
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PRIVMSG #mychannel :c'est Alice pour Bob
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG #mychannel :c'est Bob pour Alice
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :Alice0
+--> lag pong
+<< QUIT :leaving

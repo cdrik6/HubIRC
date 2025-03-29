@@ -1,0 +1,113 @@
+<< CAP LS
+<< NICK mangue
+<< USER mangue mangue irc.dal.net :mangue
+>> :lair.nl.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :lair.nl.eu.dal.net NOTICE AUTH :*** Checking Ident
+>> :lair.nl.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :lair.nl.eu.dal.net NOTICE AUTH :*** No Ident response
+>> :lair.nl.eu.dal.net 001 mangue :Welcome to the DALnet IRC Network mangue!~mangue@78.196.183.181
+<< MODE mangue +i
+>> :lair.nl.eu.dal.net 002 mangue :Your host is lair.nl.eu.dal.net, running version bahamut-2.2.4
+>> :lair.nl.eu.dal.net 003 mangue :This server was created Sun Feb 23 2025 at 23:38:19 CET
+>> :lair.nl.eu.dal.net 004 mangue lair.nl.eu.dal.net bahamut-2.2.4 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :lair.nl.eu.dal.net 005 mangue NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :lair.nl.eu.dal.net 005 mangue CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :lair.nl.eu.dal.net 251 mangue :There are 68 users and 6855 invisible on 39 servers
+>> :lair.nl.eu.dal.net 252 mangue 78 :IRC Operators online
+>> :lair.nl.eu.dal.net 254 mangue 3458 :channels formed
+>> :lair.nl.eu.dal.net 255 mangue :I have 726 clients and 1 servers
+>> :lair.nl.eu.dal.net 265 mangue :Current local users: 726 Max: 1592
+>> :lair.nl.eu.dal.net 266 mangue :Current global users: 6923 Max: 8274
+>> :lair.nl.eu.dal.net NOTICE mangue :*** Notice -- motd was last changed at 19/6/2023 18:18
+>> :lair.nl.eu.dal.net 375 mangue :- lair.nl.eu.dal.net Message of the Day - 
+>> :lair.nl.eu.dal.net 372 mangue :-19/6/2023 18:18
+>> :lair.nl.eu.dal.net 372 mangue :-     Welcome to,
+>> :lair.nl.eu.dal.net 372 mangue :-      _       _      
+>> :lair.nl.eu.dal.net 372 mangue :-     | |     (_)     
+>> :lair.nl.eu.dal.net 372 mangue :-     | | __ _ _ _ __ 
+>> :lair.nl.eu.dal.net 372 mangue :-     | |/ _` | | '__|
+>> :lair.nl.eu.dal.net 372 mangue :-     | | (_| | | |   
+>> :lair.nl.eu.dal.net 372 mangue :-     |_|\__,_|_|_|.nl.eu.dal.net    
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    *  Host.............: lair.dal.net | lair-v6.dal.net   
+>> :lair.nl.eu.dal.net 372 mangue :-    *  Ports............: 6667 - 6669, 7000 | SSL - 6697  
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-      Welcome to DALnet, by connecting to this network you agree to 
+>> :lair.nl.eu.dal.net 372 mangue :-    abide by its acceptable use policy, visit : http://www.dal.net/aup
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-        "This server has been sponsored by Psychz Networks"
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-              ---===[https://www.psychz.net/]===---
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    -------------------------------------------------------------------
+>> :lair.nl.eu.dal.net 372 mangue :-    [%] Server Staff  =-
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    .::. Administrator....:
+>> :lair.nl.eu.dal.net 372 mangue :-                           sps
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    .::. Operators........:
+>> :lair.nl.eu.dal.net 372 mangue :-                           eddyk0ng
+>> :lair.nl.eu.dal.net 372 mangue :-                           Nando
+>> :lair.nl.eu.dal.net 372 mangue :-                           RallyMaster
+>> :lair.nl.eu.dal.net 372 mangue :-                           Wagoo
+>> :lair.nl.eu.dal.net 372 mangue :-                           Wheemp
+>> :lair.nl.eu.dal.net 372 mangue :-    -------------------------------------------------------------------
+>> :lair.nl.eu.dal.net 372 mangue :-    [%] Server Policies  =-
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    a. No spamming or advertising allowed, if found you will be banned 
+>> :lair.nl.eu.dal.net 372 mangue :-       from this server/network.
+>> :lair.nl.eu.dal.net 372 mangue :-    b. No malicious bots, including flood and nick/channel chasers
+>> :lair.nl.eu.dal.net 372 mangue :-    c. No channel filler bots/clients/psybncs
+>> :lair.nl.eu.dal.net 372 mangue :-       #  A channel filler is a client, bnc, or bot which is connected
+>> :lair.nl.eu.dal.net 372 mangue :-          just to fill a channel and make it look bigger
+>> :lair.nl.eu.dal.net 372 mangue :-    d. Operator impersonation will not be tolerated and cause you to be
+>> :lair.nl.eu.dal.net 372 mangue :-       banned from this server/network.
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-            "REMEMBER IRC IS A PRIVILEGE, NOT A RIGHT"
+>> :lair.nl.eu.dal.net 372 mangue :-    -------------------------------------------------------------------
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    For IRC Operator assistance /join #Operhelp
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    For DALnet and General IRC related help, goto #Help
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    For multi-lingual documentation - [http://docs.dal.net]
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    If you have any questions/issues related to this server,
+>> :lair.nl.eu.dal.net 372 mangue :-    contact us using: lion-staff@dal.net
+>> :lair.nl.eu.dal.net 372 mangue :- 
+>> :lair.nl.eu.dal.net 372 mangue :-    Thank you for using DALnet, we hope you enjoy the stay with us.
+>> :lair.nl.eu.dal.net 376 mangue :End of /MOTD command.
+>> :mangue MODE mangue :+iH
+<< NICK tototete
+>> :mangue!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip NICK :tototete
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+<< PRIVMSG tototete :c'est tototete pour tititata
+>> :tototete!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG tototete :c'est tototete pour tititata
+<< PRIVMSG tititata :c'est tititata pour tototete
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+<< PRIVMSG tititata :c'est tototete pour tititata
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+<< PRIVMSG tititata :c'est tototete pour tititata
+<< PRIVMSG tititata :c'est tototete pour tititata
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+>> :tititata!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG tototete :c'est titi pour toto
+<< PING lair.nl.eu.dal.net
+>> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :tototete
+--> lag pong
+<< PRIVMSG tototete :c'est titi pour toto
+>> :tototete!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG tototete :c'est titi pour toto
+<< QUIT :leaving

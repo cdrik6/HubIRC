@@ -1,0 +1,222 @@
+<< CAP LS
+<< NICK mangue
+<< USER mangue mangue irc.dal.net :mangue
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** Checking Ident
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** Found your hostname
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** No Ident response
+>> :sakura.jp.as.dal.net 433 * mangue :Nickname is already in use.
+<< NICK mangue_
+>> :sakura.jp.as.dal.net 001 mangue_ :Welcome to the DALnet IRC Network mangue_!~mangue@78.196.183.181
+<< MODE mangue_ +i
+<< WHOIS mangue
+>> :sakura.jp.as.dal.net 002 mangue_ :Your host is sakura.jp.as.dal.net, running version bahamut-2.2.4
+>> :sakura.jp.as.dal.net 003 mangue_ :This server was created Sat Nov 23 2024 at 20:05:50 UTC
+>> :sakura.jp.as.dal.net 004 mangue_ sakura.jp.as.dal.net bahamut-2.2.4 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :sakura.jp.as.dal.net 005 mangue_ NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :sakura.jp.as.dal.net 005 mangue_ CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :sakura.jp.as.dal.net 251 mangue_ :There are 68 users and 6846 invisible on 39 servers
+>> :sakura.jp.as.dal.net 252 mangue_ 78 :IRC Operators online
+>> :sakura.jp.as.dal.net 254 mangue_ 3456 :channels formed
+>> :sakura.jp.as.dal.net 255 mangue_ :I have 1526 clients and 1 servers
+>> :sakura.jp.as.dal.net 265 mangue_ :Current local users: 1526 Max: 3677
+>> :sakura.jp.as.dal.net 266 mangue_ :Current global users: 6914 Max: 12059
+>> :sakura.jp.as.dal.net NOTICE mangue_ :*** Notice -- motd was last changed at 23/1/2024 15:37
+>> :sakura.jp.as.dal.net 375 mangue_ :- sakura.jp.as.dal.net Message of the Day - 
+>> :sakura.jp.as.dal.net 372 mangue_ :-23/1/2024 15:37
+>> :sakura.jp.as.dal.net 372 mangue_ :- =====================================================================
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- Server: sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net 372 mangue_ :- Plaintext ports: 6660 - 6669, 7000
+>> :sakura.jp.as.dal.net 372 mangue_ :- SSL/TLS port: 6697
+>> :sakura.jp.as.dal.net 372 mangue_ :- Both IPv4 and IPv6 are supported on this server
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- Server Administrator: xPsycho (xpsycho@DAL.net)
+>> :sakura.jp.as.dal.net 372 mangue_ :- Operators: toolman (toolman@DAL.net)
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :-            __.--~~.,-.__
+>> :sakura.jp.as.dal.net 372 mangue_ :-            `~-._.-(`-.__`-.
+>> :sakura.jp.as.dal.net 372 mangue_ :-                    \    `~~`
+>> :sakura.jp.as.dal.net 372 mangue_ :-               .--./ \ 
+>> :sakura.jp.as.dal.net 372 mangue_ :-              /#   \  \.--.
+>> :sakura.jp.as.dal.net 372 mangue_ :-              \    /  /#   \ 
+>> :sakura.jp.as.dal.net 372 mangue_ :-          jgs  '--'   \    /
+>> :sakura.jp.as.dal.net 372 mangue_ :-                       '--'
+>> :sakura.jp.as.dal.net 372 mangue_ :-                                                                      
+>> :sakura.jp.as.dal.net 372 mangue_ :- This server is proudly sponsored by DataPacket.com
+>> :sakura.jp.as.dal.net 372 mangue_ :-       <https://www.datapacket.com/>
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- =====================================================================
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :sakura.jp.as.dal.net 372 mangue_ :- by its acceptable use policy available at: https://www.dal.net/aup
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- We reserve the right to deny access to this server to anyone at any
+>> :sakura.jp.as.dal.net 372 mangue_ :- time without warning or explanation.
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- To help prevent abuse, this server will check your PC for open proxy
+>> :sakura.jp.as.dal.net 372 mangue_ :- servers when you connect. If you do not want this test performed, do
+>> :sakura.jp.as.dal.net 372 mangue_ :- not connect.
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- =====================================================================
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- If you need general IRC assistance or help with services commands,
+>> :sakura.jp.as.dal.net 372 mangue_ :- please view our multilingual documentation at http://docs.dal.net/
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- If your question is not answered after reading our documention,
+>> :sakura.jp.as.dal.net 372 mangue_ :- please /join #help for general questions or /join #OperHelp if you
+>> :sakura.jp.as.dal.net 372 mangue_ :- require the immediate assistance of an IRC Operator.
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- =====================================================================
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- Thank you, and enjoy your day!
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 372 mangue_ :- =====================================================================
+>> :sakura.jp.as.dal.net 372 mangue_ :- 
+>> :sakura.jp.as.dal.net 376 mangue_ :End of /MOTD command.
+>> :mangue_ MODE mangue_ :+iH
+>> :sakura.jp.as.dal.net 311 mangue_ mangue ~mangue e6e-2838-d1-c13c-d6f6.196.78.ip * :mangue
+--> nickfind event whois
+>> :sakura.jp.as.dal.net 312 mangue_ mangue serenity.fl.us.dal.net :serenity or something
+--> event empty
+>> :sakura.jp.as.dal.net 318 mangue_ mangue :End of /WHOIS list.
+--> event empty
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :mangue_
+--> lag pong
+<< NICK Bob0
+>> :mangue_!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip NICK :Bob0
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Bob0 :c'est 
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Bob0 :c'est Alice pour Bob
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PRIVMSG Alice0 :c'est Bob pour Alice
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Bob0 :c'est Alice pour Bob
+<< PING sakura.jp.as.dal.net
+<< PRIVMSG Alice0 :c'est Bob pour Alice
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< JOIN #mychannel
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip JOIN :#mychannel
+>> :sakura.jp.as.dal.net 353 Bob0 = #mychannel :Bob0 @Alice0 
+>> :sakura.jp.as.dal.net 366 Bob0 #mychannel :End of /NAMES list.
+<< MODE #mychannel
+>> :sakura.jp.as.dal.net 324 Bob0 #mychannel + 
+--> chanquery mode
+<< WHO #mychannel
+>> :sakura.jp.as.dal.net 329 Bob0 #mychannel 1743201312
+--> event 329
+>> :sakura.jp.as.dal.net 352 Bob0 #mychannel ~mangue e6e-2838-d1-c13c-d6f6.196.78.ip sakura.jp.as.dal.net Bob0 H :0 mangue
+--> silent event who
+>> :sakura.jp.as.dal.net 352 Bob0 #mychannel ~mangue e6e-2838-d1-c13c-d6f6.196.78.ip serenity.fl.us.dal.net Alice0 H@ :2 mangue
+--> silent event who
+>> :sakura.jp.as.dal.net 315 Bob0 #mychannel :End of /WHO list.
+--> chanquery who end
+<< MODE #mychannel b
+>> :sakura.jp.as.dal.net 368 Bob0 #mychannel :End of Channel Ban List
+--> chanquery ban end
+<< PRIVMSG Alice0 :c'est Bob pour Alice
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Bob0 :c'est Alice pour Bob
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG #mychannel :c'est Alice pour Bob
+<< PRIVMSG Bob0 :c'est Alice pour Bob
+>> :Bob0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip PRIVMSG Bob0 :c'est Alice pour Bob
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PRIVMSG mychannel :c'est Bob pour Alice
+>> :sakura.jp.as.dal.net 401 Bob0 mychannel :No such nick/channel
+<< PRIVMSG #mychannel :c'est Bob pour Alice
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Bob0
+--> lag pong
+>> :Alice0!~mangue@e6e-2838-d1-c13c-d6f6.196.78.ip QUIT :Quit: leaving
+<< QUIT :leaving
