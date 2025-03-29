@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/28 22:57:06 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 14:58:22 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,14 +138,20 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
 {    
     int i = 0;
     std::string target;
+    std::string msg;
     
 	while (toUpper(tab_msg.at(i)) != "PRIVMSG")
-        i++;
-    i++;
-	if (i == tab_msg.size())
-        reply(COD_PASSWDMISMATCH, ERR_PASSWDMISSING, clt_idx);
-    else if (tab_msg.at(i) == _password)    
-        _clients.at(clt_idx).set_pwd_ok(true);
-    else     
-        reply(COD_PASSWDMISMATCH, ERR_PASSWDMISMATCH, clt_idx);	
+        i++;    
+	if (i + 1 == tab_msg.size() || i + 2 == tab_msg.size())
+        reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);
+    else
+    {
+        target = tab_msg.at(i + 1);
+        msg = tab_msg.at(i + 2);
+        if (target.at(0) != '#')
+        {
+          target_index(target)
+          reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);  
+        }    
+    }
 }
