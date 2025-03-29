@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 14:58:22 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 20:24:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
     //     rpl = ":localhost " + _clients.at(client_idx).get_nickname() + ":" + msg_replied + "\r\n";
     if (code == "000") // NICK
         rpl = msg_replied + _clients.at(clt_idx).get_nickname() + "\r\n";
+    else if (code == "301") // PRIVMSG
+        rpl = msg_replied + "\r\n";
     else
         rpl = ":localhost " + code + " " + _clients.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
     if (send(_clients.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
@@ -139,19 +141,51 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
     int i = 0;
     std::string target;
     std::string msg;
+    std::string msg_replied;
     
 	while (toUpper(tab_msg.at(i)) != "PRIVMSG")
         i++;    
-	if (i + 1 == tab_msg.size() || i + 2 == tab_msg.size())
+	if (i + 1 == tab_msg.size())
         reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);
+    else if (i + 2 == tab_msg.size())
+    {
+        if (tab_msg.at(i + 1).at(0) == ':')
+            reply(COD_NORECIPIENT, ERR_NORECIPIENT, clt_idx);
+        else
+            reply(COD_NOTEXTTOSEND, ERR_NOTEXTTOSEND, clt_idx);
+    }        
     else
     {
-        target = tab_msg.at(i + 1);
-        msg = tab_msg.at(i + 2);
-        if (target.at(0) != '#')
+        msg = tab_msg.at(tab_msg.size() - 1);
+        i++;
+        while (tab_msg.at(i).at(0) != ':') // recipients list
         {
-          target_index(target)
-          reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);  
-        }    
+            target = tab_msg.at(i);
+            if (target.at(0) != '#')
+            {
+                int k = target_index(target);
+                if (k != -1)
+                {                    
+                    msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost PRIVMSG"; // from
+                    msg_replied = msg_replied + " " + target + " " + msg; // to
+                    reply(COD_AWAY, msg_replied, k);
+                }
+                else
+                    reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, k);                
+            }
+            else
+            {
+                // #channel
+            }            
+            i++;
+        }
     }
+}
+
+int Server::target_index(std::string target)
+{
+    for (int i = 0; i < _clients.size(); i++)       
+        if (_clients.at(i).get_nickname() == target)
+            return (i);
+    return (-1);
 }

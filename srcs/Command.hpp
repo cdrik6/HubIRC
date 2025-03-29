@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 04:28:36 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/29 19:59:35 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,13 @@
 # define ERR_ALREADYREGISTRED ":Unauthorized command (already registered)"
 // PRIVMSG
 # define COD_AWAY "301" // RPL_AWAY = "<nick> :<away message>"
+# define COD_NORECIPIENT "411"
+# define ERR_NORECIPIENT ":No recipient given (PRIVMSG)"
+# define COD_NOTEXTTOSEND "412"
+# define ERR_NOTEXTTOSEND ":No text to send"
+# define COD_NOSUCHNICK "401"
+# define ERR_NOSUCHNICK " :No such nick/channel" //"<nickname> :No such nick/channel"
+
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"
 // # define ERR_UNKNOWNCOMMAND " :Unknown command" // "<command> :Unknown command"
