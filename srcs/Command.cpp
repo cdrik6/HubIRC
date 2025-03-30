@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/30 03:21:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/30 18:42:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int Server::nick_available(std::string nick)
 
 // *********** rules invalid USER ????**********/////
 // USER command is used at the beginning of connection to specify the username, hostname and realname of a new user
-// USER <username> 0 * :<realname> // USER  username nickname localhost :realname
+// USER <username> 0 * :<realname> // USER  username nickname hostname :realname
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
 {
     std::string user;    
@@ -146,13 +146,13 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
 	while (toUpper(tab_msg.at(i)) != "PRIVMSG")
         i++;    
 	if (i + 1 == tab_msg.size())
-        reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);
+        reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx); // check by irssi actually
     else if (i + 2 == tab_msg.size())
     {
         if (tab_msg.at(i + 1).at(0) == ':')
-            reply(COD_NORECIPIENT, ERR_NORECIPIENT, clt_idx);
+            reply(COD_NORECIPIENT, ERR_NORECIPIENT, clt_idx); // check by irssi actually
         else
-            reply(COD_NOTEXTTOSEND, ERR_NOTEXTTOSEND, clt_idx);
+            reply(COD_NOTEXTTOSEND, ERR_NOTEXTTOSEND, clt_idx); // check by irssi actually
     }        
     else
     {
@@ -167,11 +167,11 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
                 if (k != -1)
                 {                    
                     msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost PRIVMSG"; // from
-                    msg_replied = msg_replied + " " + target + " :" + msg; // to
-                    reply(COD_NONE, msg_replied, clt_idx);
+                    msg_replied = msg_replied + " " + target + " " + msg; // to
+                    reply(COD_NONE, msg_replied, k);
                 }
                 else
-                    reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, clt_idx);  // error******              
+                    reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, clt_idx);  
             }
             else
             {

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/30 03:05:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/30 18:18:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {    
     if (argc != 3)
         return(std::cerr << "Usage: ./ircserv <port> <password>" << std::endl, OK);       
-	while (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < 20)
+	if (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < 20)
     {           
         signal(SIGINT, Server::handle_signal);
         signal(SIGQUIT, Server::handle_signal);
