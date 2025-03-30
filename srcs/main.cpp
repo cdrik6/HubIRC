@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 19:27:22 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/30 03:05:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {    
     if (argc != 3)
         return(std::cerr << "Usage: ./ircserv <port> <password>" << std::endl, OK);       
-	if (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < 20)
+	while (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < 20)
     {           
         signal(SIGINT, Server::handle_signal);
         signal(SIGQUIT, Server::handle_signal);
@@ -28,7 +28,8 @@ int main(int argc, char **argv)
         catch (std::exception &e)
         {
             // **** destructor called (otherwise would need to close fds) *** /
-            return (std::cerr << "main exception: " << e.what() << std::endl, KO); // destructor
+            // return (std::cerr << "main exception: " << e.what() << std::endl, KO); // destructor
+            std::cerr << "main exception: " << e.what() << std::endl;
         }        
     }
     // destructor
@@ -119,3 +120,4 @@ std::string toUpper(const std::string& str)
  * SIGQUIT = ctrl+\
  * ctrl+d = not a signal
 **/ 
+

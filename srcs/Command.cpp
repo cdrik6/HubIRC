@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 23:24:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/30 03:21:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,10 +168,10 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
                 {                    
                     msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost PRIVMSG"; // from
                     msg_replied = msg_replied + " " + target + " :" + msg; // to
-                    reply(COD_NONE, msg_replied, k);
+                    reply(COD_NONE, msg_replied, clt_idx);
                 }
                 else
-                    reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, k);                
+                    reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, clt_idx);  // error******              
             }
             else
             {
