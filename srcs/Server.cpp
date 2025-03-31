@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 04:28:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/31 01:32:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,8 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 	else if (_clients.at(clt_idx).get_registered() == true)
 	{
 		if (toUpper(cmd) == "PRIVMSG")		
-			privmsg(tab_msg, clt_idx);			
+			privmsg(tab_msg, clt_idx);
+			
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
 		

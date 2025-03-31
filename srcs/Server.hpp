@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 19:49:35 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/31 00:51:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ class Server
 		void nickname(std::vector<std::string>& tab_msg, int clt_idx);
 		void username(std::vector<std::string>& tab_msg, int clt_idx);
 		int check_nick(std::string nick);
-		int nick_available(std::string nick);
+		int nick_available(std::string nick, int clt_idx);
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx);
 		int target_index(std::string target);
 		//

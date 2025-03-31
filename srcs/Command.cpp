@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/30 18:42:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/03/31 01:12:49 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx)
         nick = tab_msg.at(i);
         if (check_nick(nick) == KO)        
             reply(COD_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME, clt_idx);
-        else if (nick_available(nick) == KO)
+        else if (nick_available(nick, clt_idx) == KO)
             reply(COD_NICKNAMEINUSE, ":" + nick, clt_idx);
         else
         {               
@@ -91,27 +91,31 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx)
 
 int Server::check_nick(std::string nick)
 {
-    if (nick.length() > 20)
+    std::string allowed = "_[]{}\\|";
+    
+    if (nick.length() > 30 || nick.length() == 0)
         return (KO);
+    if (isdigit(nick.at(0)))
+        return (KO);    
     for (int i = 0; i < nick.length(); i++)
-    {
-        if(!isalnum(nick.at(i)) && nick.at(i) != '_')
+    {           
+        if(!isalnum(nick.at(i)) && allowed.find(nick.at(i)) == std::string::npos)
             return (KO);
     }        
     return (OK);
 }
 
-int Server::nick_available(std::string nick)
-{
-    for (int i = 0; i < _clients.size(); i++)
+int Server::nick_available(std::string nick, int clt_idx)
+{    
+     for (int i = 0; i < _clients.size(); i++)
     {
-        if (_clients.at(i).get_nickname() == nick)
-        return (KO);
+        if (i != clt_idx)
+            if (toUpper(_clients.at(i).get_nickname()) == toUpper(nick))
+                return (KO);
     }
     return (OK);
 }
 
-// *********** rules invalid USER ????**********/////
 // USER command is used at the beginning of connection to specify the username, hostname and realname of a new user
 // USER <username> 0 * :<realname> // USER  username nickname hostname :realname
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
@@ -126,12 +130,16 @@ void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
         reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else
     {
-        user = tab_msg.at(i);
-        
-        if (_clients.at(clt_idx).get_username() != "")        
-            reply(COD_ALREADYREGISTRED, ERR_ALREADYREGISTRED, clt_idx);        
-        else            
-            _clients.at(clt_idx).set_username(user);         
+        user = tab_msg.at(i);        
+        if (user != "")
+        {
+            if (_clients.at(clt_idx).get_username() != "")        
+                reply(COD_ALREADYREGISTRED, ERR_ALREADYREGISTRED, clt_idx);        
+            else            
+                _clients.at(clt_idx).set_username(user);
+        }
+        else // don't happen actually 
+            reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     }
 }
 
