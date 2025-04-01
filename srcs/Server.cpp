@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 15:37:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/02 01:10:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,11 +295,37 @@ int Server::client_idx(int clt_skt)
 void Server::client_disconnect(int pfd_idx, int clt_idx)
 {
 	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";
-	close (_pfds.at(pfd_idx).fd);
+	close(_pfds.at(pfd_idx).fd);
 	_pfds.erase(_pfds.begin() + pfd_idx);
 	// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
 	_clients.erase(_clients.begin() + clt_idx);	
 	//********** reply to all others clients if channel a quit RPL */
+	quit_channels("Connection closed", clt_idx);
+}
+
+void Server::quit_channels(std::string reason, int clt_idx)
+{
+	std::string msg_replied;
+	
+	for (int i = 0; i < _chnls.size(); i++)
+	{
+		for (int j = 0; j < _chnls.at(i).get_tab_clt_idx().size(); j++)
+		{
+			if (_chnls.at(i).get_tab_clt_idx().at(j) == clt_idx)
+			{
+				_chnls.at(i).get_tab_clt_idx().erase( _chnls.at(i).get_tab_clt_idx().begin() + j);
+				for (int k = 0; k < _chnls.at(i).get_tab_clt_idx().size(); k++)	
+				{
+					// :<nickname>!<user>@<host> QUIT :[optional message]
+					int idx = _chnls.at(i).get_tab_clt_idx().at(k); ////// ~ or not ~
+					msg_replied = ":" + _clients.at(idx).get_nickname() + "!" + _clients.at(idx).get_username() + "@localhost QUIT :"; // from
+                    msg_replied = msg_replied + reason;                    
+					reply(COD_NONE, msg_replied, _chnls.at(i).get_tab_clt_idx().at(k));
+				}				
+			}	
+		}
+	}
+	// check if last to leave --> delete channel
 }
 
 void Server::client_connect(void)
