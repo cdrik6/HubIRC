@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/31 00:51:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/01 15:55:17 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 
 # include "Client.hpp"
 # include "Command.hpp"
+# include "Channel.hpp"
 
 # define OK 0
 # define KO 1
@@ -50,6 +51,7 @@ class Server
 		std::string _password;
 		std::vector<Client> _clients;
 		std::vector<struct pollfd> _pfds;
+		std::vector<Channel> _chans;
 		//
 		static bool _signal; //static makes _signal shared across all instances
 		//
@@ -86,6 +88,7 @@ class Server
 		int nick_available(std::string nick, int clt_idx);
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx);
 		int target_index(std::string target);
+		void join(std::vector<std::string>& tab_msg, int clt_idx);
 		//
 		static void	handle_signal(int signal);
 		//void ping(std::vector<std::string>& tab_msg, int clt_idx);

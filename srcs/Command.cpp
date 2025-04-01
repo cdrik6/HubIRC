@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/31 01:12:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/01 16:22:36 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,4 +196,17 @@ int Server::target_index(std::string target)
         if (_clients.at(i).get_nickname() == target)
             return (i);
     return (-1);
+}
+
+void Server::join(std::vector<std::string>& tab_msg, int clt_idx)
+{
+    int i = 0;
+    
+    while (toUpper(tab_msg.at(i)) != "JOIN")
+        i++;
+    // create channel 
+    // join existting
+
+    
+    
 }
