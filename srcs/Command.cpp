@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 16:22:36 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/01 23:56:46 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,12 +201,99 @@ int Server::target_index(std::string target)
 void Server::join(std::vector<std::string>& tab_msg, int clt_idx)
 {
     int i = 0;
+    std::vector<std::string> channels; 
+    std::vector<std::string> keys;
     
+    // get channels
     while (toUpper(tab_msg.at(i)) != "JOIN")
         i++;
-    // create channel 
-    // join existting
+    i++;
+    if (i == tab_msg.size())
+        reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);
+    else if (tab_msg.at(i) == "0")
+    {
+        // PART of all channels client is a member
+    }
+    else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')    
+        reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);    
+    else 
+    {
+        channels = split_char(tab_msg.at(i), ',');        
+        i++;
+        if (i != tab_msg.size())
+            keys = split_char(tab_msg.at(i), ',');        
+        while (keys.size() < channels.size())
+            keys.push_back("");
+    }
+    
+    // check existing or create channel   
+    bool new_chan;    
+    if (channels.size() != 0)
+    {
+        for (int j = 0; channels.size(); j++)
+        {            
+            if (check_channel(channels.at(j).substr(1)) == OK && check_key(keys.at(j)) == OK)
+            {
+                new_chan = true;
+                for (int k = 0; _chans.size(); k++)
+                {
+                    if (channels.at(j).substr(1) == _chans.at(k).get_name())
+                    {                        
+                        if (keys.at(j) == _chans.at(k).get_key())                        
+                            _chans.at(k).get_tab_clt_idx().push_back(clt_idx); //add client to channel                        
+                        else
+                            reply(COD_BADCHANNELKEY, channels.at(j).substr(1) + " :wrong key to join the channel", clt_idx);                        
+                        new_chan = false;
+                        break;
+                    }                                     
+                }
+                if (new_chan == true) // create channel                
+                    add_chans(_chans, channels.at(j).substr(1), keys.at(j), clt_idx); // create and add                
+            }
+            else
+                reply(COD_NOSUCHCHANNEL, channels.at(j).substr(1) + " :invalid name/key for a channel", clt_idx);
+        }
+    }
+}
 
+void Server::add_chans(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx)
+{
+    Channel new_chan;
+
+    new_chan.set_name(name);    
+    new_chan.set_key(key);
+    new_chan.set_tab_clt_idx(clt_idx);
+    chans.push_back(new_chan);
+}
+
+int Server::check_channel(std::string chan_name)
+{
+    std::string allowed = "-_[]{}|";
     
+    if (chan_name.length() > 30 || chan_name.length() == 0)
+        return (KO);    
+    for (int i = 0; i < chan_name.length(); i++)
+    {           
+        if(!isalnum(chan_name.at(i)) && allowed.find(chan_name.at(i)) == std::string::npos)
+            return (KO);
+    }        
+    if (chan_name == "opers" || chan_name == "services")
+        return (KO);    
+    return (OK);
+}
+
+int Server::check_key(std::string key_name)
+{
+    std::string allowed = "-_[]{}|+*%$()=";
     
+    if (key_name == "")
+        return (OK);
+    if (key_name.length() > 32)
+        return (KO);    
+    for (int i = 0; i < key_name.length(); i++)
+    {           
+        if(!isalnum(key_name.at(i)) && allowed.find(key_name.at(i)) == std::string::npos)
+            return (KO);
+    }
+    return (OK);
 }

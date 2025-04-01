@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/29 22:53:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/01 23:45:06 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@
 # define ERR_NOTEXTTOSEND ":No text to send"
 # define COD_NOSUCHNICK "401"
 # define ERR_NOSUCHNICK " :No such nick/channel" //"<nickname> :No such nick/channel"
+// CHANNEL
+# define COD_NOSUCHCHANNEL "403" 
+// # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel // not used yet
+# define COD_BADCHANNELKEY "475" 
+// # define ERR_BADCHANNELKEY ""  // "<client> <channel> :Cannot join channel (+k)"
+
 
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"

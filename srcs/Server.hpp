@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 15:55:17 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/01 23:23:10 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <iostream>
 # include <vector>
 # include <sstream>
+# include <algorithm>
 //
 # include <netdb.h>
 # include <arpa/inet.h>
@@ -89,6 +90,9 @@ class Server
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx);
 		int target_index(std::string target);
 		void join(std::vector<std::string>& tab_msg, int clt_idx);
+		void add_chans(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx);
+		int Server::check_channel(std::string chan_name);
+		int Server::check_key(std::string key_name);
 		//
 		static void	handle_signal(int signal);
 		//void ping(std::vector<std::string>& tab_msg, int clt_idx);
@@ -102,6 +106,7 @@ class Server
 // tools
 int	check_port(char* port);
 std::vector<std::string> split(std::string str);
+std::vector<std::string> split_char(std::string str, char c);
 std::string toUpper(const std::string& str);
 
 /** draft **/

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/31 00:40:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/01 21:03:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ std::vector<std::string> split(std::string str)
     return (tab);
 }
 
+std::vector<std::string> split_char(std::string str, char c)
+{
+    replace(str.begin(), str.end(), c, ' ');
+    std::vector<std::string> tab;
+    std::istringstream iss(str);
+    std::string token;   
+    
+    while (iss >> token)        
+        tab.push_back(token);
+    return (tab);
+}
 
 // Copy inside the function is better because it avoids unnecessary work 
 // when calling the function, making it more efficient for large strings.
