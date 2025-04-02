@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 23:45:06 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/02 23:15:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 // Replies generated in the response to commands are found in the range from 200 to 399
 // Error replies are found in the range from 400 to 599
 
+# define COD_NONE "000"
 // PASS
 # define COD_PASSWDMISMATCH "464"
 # define ERR_PASSWDMISMATCH ":Password incorrect"
@@ -61,7 +62,6 @@
 # define COD_ALREADYREGISTRED "462"
 # define ERR_ALREADYREGISTRED ":Unauthorized command (already registered)"
 // PRIVMSG
-# define COD_NONE "300"
 # define COD_NORECIPIENT "411"
 # define ERR_NORECIPIENT ":No recipient given (PRIVMSG)"
 # define COD_NOTEXTTOSEND "412"
@@ -70,10 +70,15 @@
 # define ERR_NOSUCHNICK " :No such nick/channel" //"<nickname> :No such nick/channel"
 // CHANNEL
 # define COD_NOSUCHCHANNEL "403" 
-// # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel // not used yet
+// # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel
 # define COD_BADCHANNELKEY "475" 
 // # define ERR_BADCHANNELKEY ""  // "<client> <channel> :Cannot join channel (+k)"
-
+# define COD_TOPIC "332" // 332 <nickname> <channel> :<topic>
+# define COD_NOTOPIC "331" // 331 <nickname> <channel> :No topic is set
+# define RPL_NOTOPIC ":No topic set yet"
+# define COD_NAMREPLY "353"
+# define COD_ENDOFNAMES "366"
+# define RPL_ENDOFNAMES ":End of /NAMES list"
 
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"

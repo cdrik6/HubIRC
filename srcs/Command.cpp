@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/02 00:19:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/03 01:14:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 {       
     std::string rpl;    
     
-    // if (code == NOCODE)
-    //     rpl = ":localhost " + _clients.at(client_idx).get_nickname() + ":" + msg_replied + "\r\n";
-    if (code == "000") // NICK
-        rpl = msg_replied + _clients.at(clt_idx).get_nickname() + "\r\n";
-    else if (code == "300") // PRIVMSG
+    //  if (code == "000") // NICK
+    //     rpl = msg_replied + _clients.at(clt_idx).get_nickname() + "\r\n";
+    if (code == COD_NONE) // PRIVMSG
         rpl = msg_replied + "\r\n";
     else
         rpl = ":localhost " + code + " " + _clients.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
@@ -60,8 +58,8 @@ void Server::pass(std::vector<std::string>& tab_msg, int clt_idx)
 // NICK command is used to give user a nickname or change the existing one
 void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx)
 {
-    std::string nick;
-    int i = 0;    
+    int i = 0;
+    std::string nick;    
     
     while (toUpper(tab_msg.at(i)) != "NICK" && i < tab_msg.size())
         i++;
@@ -76,11 +74,10 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx)
         else if (nick_available(nick, clt_idx) == KO)
             reply(COD_NICKNAMEINUSE, ":" + nick, clt_idx);
         else
-        {               
-            // _clients.at(clt_idx).set_oldnick(_clients.at(clt_idx).get_nickname());
+        {         
             std::string oldnick = _clients.at(clt_idx).get_nickname();            
-            _clients.at(clt_idx).set_nickname(nick);
-            reply("000", ":" + oldnick + " NICK ", clt_idx);
+            _clients.at(clt_idx).set_nickname(nick);            
+            reply(COD_NONE, ":" + oldnick + " NICK " + nick, clt_idx);
         }
     }
 }
@@ -217,11 +214,11 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx)
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')    
         reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);    
     else 
-    {
+    {        
         channels = split_char(tab_msg.at(i), ',');        
-        i++;
-        if (i != tab_msg.size())
-            keys = split_char(tab_msg.at(i), ',');        
+        i++;        
+        if (i != tab_msg.size())                    
+            keys = split_char(tab_msg.at(i), ',');
         while (keys.size() < channels.size())
             keys.push_back("");
     }
@@ -230,30 +227,89 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx)
     bool new_chan;    
     if (channels.size() != 0)
     {
-        for (int j = 0; channels.size(); j++)
+        for (int j = 0; j < channels.size(); j++)
         {            
             if (check_channel(channels.at(j).substr(1)) == OK && check_key(keys.at(j)) == OK)
             {
                 new_chan = true;
-                for (int k = 0; _chnls.size(); k++)
+                for (int k = 0; k < _chnls.size(); k++)
                 {
                     if (channels.at(j).substr(1) == _chnls.at(k).get_name())
                     {                        
-                        if (keys.at(j) == _chnls.at(k).get_key())                        
-                            _chnls.at(k).get_tab_clt_idx().push_back(clt_idx); //add client to channel                        
-                        else
-                            reply(COD_BADCHANNELKEY, channels.at(j).substr(1) + " :wrong key to join the channel", clt_idx);                        
                         new_chan = false;
+                        if (keys.at(j) == _chnls.at(k).get_key())
+                        {
+                            reply_join_add(channels.at(j), k, clt_idx); // before adding it (for name list not include the new one)
+                            _chnls.at(k).get_tab_clt_idx().push_back(clt_idx); // add client to channel
+
+                            // //:<nickname>!<user>@<host> JOIN <channel>     
+                            // msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost JOIN " + channels.at(j);
+					        // reply(COD_NONE, msg_replied, clt_idx);                            
+                        }                            
+                        else
+                            reply(COD_BADCHANNELKEY, channels.at(j).substr(1) + " :wrong key to join the channel", clt_idx);
                         break;
-                    }                                     
+                    }
                 }
                 if (new_chan == true) // create channel                
-                    add_chnls(_chnls, channels.at(j).substr(1), keys.at(j), clt_idx); // create and add                
+                {                    
+                    reply_join_new(channels.at(j), clt_idx);
+                    add_chnls(_chnls, channels.at(j).substr(1), keys.at(j), clt_idx); // create and add                    
+                }    
             }
             else
                 reply(COD_NOSUCHCHANNEL, channels.at(j).substr(1) + " :invalid name/key for a channel", clt_idx);
         }
     }
+}
+
+void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
+{
+    
+    std::string msg_replied;
+    std::string topic = _chnls.at(chnl_idx).get_topic();
+    int idx;
+    
+    //:<nickname>!<user>@<host> JOIN <channel>     
+    msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost JOIN " + channel;    
+    reply(COD_NONE, msg_replied, clt_idx);
+    // All other users in #chatroom also receive this
+    for (int i = 0; i < _chnls.at(chnl_idx).get_tab_clt_idx().size(); i++)    
+        reply(COD_NONE, msg_replied, _chnls.at(chnl_idx).get_tab_clt_idx().at(i));
+    if (topic == "") // 331 <nickname> <channel> :No topic set
+        reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx);    
+    else // 332 <nickname> <channel> :<topic>        
+        reply(COD_TOPIC, channel + " :" + topic, clt_idx);   
+    // 353 <nickname> = <channel> :<user1> <user2> <user3> ...
+    msg_replied = "= " + channel + " :";
+    for (int i = 0; i < _chnls.at(chnl_idx).get_tab_clt_idx().size(); i++)
+    {
+        idx = _chnls.at(chnl_idx).get_tab_clt_idx().at(i);
+        if (_clients.at(idx).get_is_op())
+            msg_replied = msg_replied + "@" + _clients.at(idx).get_nickname() + " ";
+        else     
+            msg_replied = msg_replied + _clients.at(idx).get_nickname() + " ";
+    }    
+    reply(COD_NAMREPLY, msg_replied, clt_idx);    
+    // 366 <nickname> <channel> :End of /NAMES list    
+    reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx);
+}
+
+void Server::reply_join_new(std::string channel, int clt_idx)
+{
+    std::string msg_replied;
+    
+    //:<nickname>!<user>@<host> JOIN <channel>     
+    msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost JOIN " + channel;
+    reply(COD_NONE, msg_replied, clt_idx);
+    // 331 <nickname> <channel> :No topic is set
+    msg_replied = channel + " " + RPL_NOTOPIC;
+    reply(COD_NOTOPIC, msg_replied, clt_idx);
+    // 353 <nickname> = <channel> :<user1> <user2> <user3> ...
+    msg_replied = "= " + channel + " :@" + _clients.at(clt_idx).get_nickname();
+    reply(COD_NAMREPLY, msg_replied, clt_idx);
+    // 366 <nickname> <channel> :End of /NAMES list    
+    reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx);
 }
 
 void Server::add_chnls(std::vector<Channel>& chnls, std::string name, std::string key, int clt_idx)

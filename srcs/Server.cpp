@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/02 01:10:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/02 21:17:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,7 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 		if (toUpper(cmd) == "PRIVMSG")		
 			privmsg(tab_msg, clt_idx);
 		else if (toUpper(cmd) == "JOIN")
-			privmsg(tab_msg, clt_idx);
+			join(tab_msg, clt_idx);
 			
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);

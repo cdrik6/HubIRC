@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 23:54:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/02 23:08:28 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ Channel::~Channel()
 std::string Channel::get_name(void) const
 {
 	return (_name);	
+}
+
+std::string Channel::get_topic(void) const
+{
+	return (_topic);	
 }
 
 std::string Channel::get_key(void) const

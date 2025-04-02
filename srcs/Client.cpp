@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/03/28 00:43:10 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/03 00:54:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Client::Client() :
 _clt_skt(-1),
 _registered(false),
 _pwd_ok(false),
+_is_op(false),
 _nickname("*"),
 _username(""),
 _hostname(""),
@@ -53,6 +54,11 @@ std::string Client::get_username(void) const
 bool Client::get_pwd_ok(void) const
 {
     return (_pwd_ok);
+}
+
+bool Client::get_is_op(void) const
+{
+    return (_is_op);
 }
 
 bool Client::get_registered(void) const

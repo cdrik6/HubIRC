@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 23:53:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/02 23:08:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class Channel
         ~Channel();
         std::string get_name(void) const;
         std::string get_key(void) const;
+        std::string get_topic(void) const;
         std::vector<int> get_tab_clt_idx(void) const;
         void set_name(std::string name);    
         void set_key(std::string key);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/01 21:03:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/02 21:26:57 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,14 +91,14 @@ std::vector<std::string> split(std::string str)
 }
 
 std::vector<std::string> split_char(std::string str, char c)
-{
-    replace(str.begin(), str.end(), c, ' ');
+{    
+    replace(str.begin(), str.end(), c, ' ');   
     std::vector<std::string> tab;
     std::istringstream iss(str);
     std::string token;   
     
     while (iss >> token)        
-        tab.push_back(token);
+        tab.push_back(token);        
     return (tab);
 }
 
