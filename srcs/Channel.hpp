@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/03 21:12:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 01:23:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Channel
         std::string _key;
         std::string _topic;
         std::vector<std::string> _operators;
-        std::vector<int> _tab_clt_idx;        
+        std::vector<Client> _chnlclts;
     
     public:
         Channel();
@@ -31,13 +31,15 @@ class Channel
         std::string get_key(void) const;
         std::string get_topic(void) const;
         std::vector<std::string> get_operators(void) const;
-        std::vector<int> get_tab_clt_idx(void) const;
+        std::vector<Client> get_chnlclts(void) const;
         void set_name(std::string name);    
         void set_key(std::string key);        
-        void set_tab_clt_idx(int clt_idx);
-        void add_operators(std::string nick);
-        void sub_operators(std::string nick);
-        bool is_operator(std::string nick);
+        void set_chnlclts(Client client);
+        void add_operator(std::string nick);
+        void rem_operator(std::string nick);
+        bool is_operator(std::string nick);        
+        void rem_client(int idx);
+        
 };
 
 #endif

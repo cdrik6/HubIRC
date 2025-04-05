@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/03 21:14:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 01:25:06 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ std::string Channel::get_key(void) const
 	return (_key);
 }
 
-std::vector<int> Channel::get_tab_clt_idx(void) const
+std::vector<Client> Channel::get_chnlclts(void) const
 {
-	return (_tab_clt_idx);
+	return (_chnlclts);
 }
 
 void Channel::set_name(std::string name)
@@ -53,12 +53,12 @@ void Channel::set_key(std::string key)
 	_key = key;
 }
 
-void Channel::set_tab_clt_idx(int clt_idx)
+void Channel::set_chnlclts(Client client)
 {
-	_tab_clt_idx.push_back(clt_idx);
+	_chnlclts.push_back(client);
 }
 
-void Channel::add_operators(std::string nick)
+void Channel::add_operator(std::string nick)
 {
 	_operators.push_back(nick);
 }
@@ -67,7 +67,7 @@ void Channel::add_operators(std::string nick)
 // They must be explicitly given +o to appear as a channel operator.
 // Even without @, they can still override channel protections.
 
-void Channel::sub_operators(std::string nick)
+void Channel::rem_operator(std::string nick)
 {
 	for (int i = 0; i < _operators.size(); i++)
 	{
@@ -87,4 +87,9 @@ bool Channel::is_operator(std::string nick)
 			return (true);					
 	}
 	return (false);
+}
+
+void Channel::rem_client(int idx)
+{
+	_chnlclts.erase(_chnlclts.begin() + idx);
 }

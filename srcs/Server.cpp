@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/02 21:17:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 04:02:07 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,7 @@ void Server::polling(void)
 				{					
 					if (parse_message(std::string(buff), k) == OK)
 						if (check_registered(k) == OK)					
-							if (_clients.at(k).get_registered() == false)
+							if (_clts.at(k).get_registered() == false)
 								welcome(k);						
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					// for (int j = 2; j < _pfds.size(); j++)
@@ -194,13 +194,13 @@ int Server::check_registered(int clt_idx)
 	// std::cout << "pwd_ok = " << _clients.at(clt_idx).get_pwd_ok() << std::endl;
 	// std::cout << "nick = " << _clients.at(clt_idx).get_nickname() << std::endl;
 	// std::cout << "user = " << _clients.at(clt_idx).get_username() << std::endl;
-	if (_clients.at(clt_idx).get_registered() == true)
+	if (_clts.at(clt_idx).get_registered() == true)
 		return (OK);
-	if (_clients.at(clt_idx).get_pwd_ok() == false)
+	if (_clts.at(clt_idx).get_pwd_ok() == false)
 		return (reply(COD_PASSWDMISMATCH, ERR_PASSWDREQUIRED, clt_idx), KO);
-	if (_clients.at(clt_idx).get_nickname() == "*")
+	if (_clts.at(clt_idx).get_nickname() == "*")
 		return (reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx), KO);
-	if (_clients.at(clt_idx).get_username() == "")
+	if (_clts.at(clt_idx).get_username() == "")
 		return (reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx), KO);		
 	return (OK);
 }
@@ -209,9 +209,9 @@ void Server::welcome(int clt_idx)
 {
 	std::string msg_replied;
 	
-	_clients.at(clt_idx).set_registered(true);	
-	msg_replied = std::string(RPL_WELCOME) + " " + _clients.at(clt_idx).get_nickname() \
-				+ "!" + _clients.at(clt_idx).get_username() + "@localhost"; //  <nick>!<user>@<host>"    
+	_clts.at(clt_idx).set_registered(true);	
+	msg_replied = std::string(RPL_WELCOME) + " " + _clts.at(clt_idx).get_nickname() \
+				+ "!" + _clts.at(clt_idx).get_username() + "@localhost"; //  <nick>!<user>@<host>"    
 	reply(COD_WELCOME, msg_replied, clt_idx);
 	reply(COD_YOURHOST, RPL_YOURHOST, clt_idx);
 	reply(COD_CREATED, RPL_CREATED, clt_idx);
@@ -230,10 +230,10 @@ int Server::parse_message(std::string buffer, int clt_idx)
 	// std::cout << "client fd = " << _clients.at(k).get_clt_skt() << std::endl;
 	
 	if (clt_idx != -1)	
-		_clients.at(clt_idx).set_msg(buffer);	// build message	
+		_clts.at(clt_idx).set_msg(buffer);	// build message	
 	if (clt_idx != -1 && buffer.find("\r\n") != std::string::npos)
 	{			
-		tab_msg = split(_clients.at(clt_idx).get_msg());		
+		tab_msg = split(_clts.at(clt_idx).get_msg());		
 		if (tab_msg.size() == 0)
 			return (std::cout << "tab empty" << std::endl, KO); /**************debug here **** */
 		for (int i = 0; i < tab_msg.size(); i++)
@@ -242,7 +242,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 			std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
 			get_command(tab_msg, tab_msg[i], clt_idx);
 		}		
-		_clients.at(clt_idx).clear_msg();
+		_clts.at(clt_idx).clear_msg();
 		return (OK);
 	}
 	return (KO);
@@ -256,19 +256,21 @@ int Server::parse_message(std::string buffer, int clt_idx)
 void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx)
 {
 	if (toUpper(cmd) == "PING")
-		ping(clt_idx);
+		ping(tab_msg, clt_idx);
 	else if (toUpper(cmd) == "NICK")
 		nickname(tab_msg, clt_idx);
 	else if (toUpper(cmd) == "PASS")
 	 	pass(tab_msg, clt_idx);
 	else if (toUpper(cmd) == "USER")
 	 	username(tab_msg, clt_idx);		
-	else if (_clients.at(clt_idx).get_registered() == true)
+	else if (_clts.at(clt_idx).get_registered() == true)
 	{
 		if (toUpper(cmd) == "PRIVMSG")		
 			privmsg(tab_msg, clt_idx);
 		else if (toUpper(cmd) == "JOIN")
 			join(tab_msg, clt_idx);
+		else if (toUpper(cmd) == "WHO")
+			who(tab_msg, clt_idx);	
 			
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
@@ -279,48 +281,56 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 
 int Server::client_idx(int clt_skt)
 {
-	int k = -1;	// disconnected in between or error ?
-	
-	for (int i = 0; i < _clients.size(); i++)
+	for (int i = 0; i < _clts.size(); i++)
 	{		
-		if (_clients.at(i).get_clt_skt() == clt_skt)
-		{	
-			k = i;
-			break;
-		}
+		if (_clts.at(i).get_clt_skt() == clt_skt)			
+			return (i);		
 	}	
-	return (k);
+	return (-1); // disconnected in between or error ?
+}
+
+int Server::channel_idx(std::string channel)
+{
+	for (int i = 0; i < _chnls.size(); i++)
+	{		
+		if (_chnls.at(i).get_name() == channel)			
+			return (i);		
+	}	
+	return (-1); // disconnected in between or error ?
 }
 
 void Server::client_disconnect(int pfd_idx, int clt_idx)
 {
+	quit_channels("Connection closed", clt_idx);
 	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";
 	close(_pfds.at(pfd_idx).fd);
 	_pfds.erase(_pfds.begin() + pfd_idx);
 	// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
-	_clients.erase(_clients.begin() + clt_idx);	
+	_clts.erase(_clts.begin() + clt_idx);
 	//********** reply to all others clients if channel a quit RPL */
-	quit_channels("Connection closed", clt_idx);
+	
 }
 
 void Server::quit_channels(std::string reason, int clt_idx)
 {
 	std::string msg_replied;
-	
+		
 	for (int i = 0; i < _chnls.size(); i++)
-	{
-		for (int j = 0; j < _chnls.at(i).get_tab_clt_idx().size(); j++)
-		{
-			if (_chnls.at(i).get_tab_clt_idx().at(j) == clt_idx)
+	{		
+		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+		{			
+			if (client_idx(_chnls.at(i).get_chnlclts().at(j).get_clt_skt()) == clt_idx)
 			{
-				_chnls.at(i).get_tab_clt_idx().erase( _chnls.at(i).get_tab_clt_idx().begin() + j);
-				for (int k = 0; k < _chnls.at(i).get_tab_clt_idx().size(); k++)	
+				_chnls.at(i).rem_client(j);
+				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
+				for (int k = 0; k < _chnls.at(i).get_chnlclts().size(); k++)	
 				{
 					// :<nickname>!<user>@<host> QUIT :[optional message]
-					int idx = _chnls.at(i).get_tab_clt_idx().at(k); ////// ~ or not ~
-					msg_replied = ":" + _clients.at(idx).get_nickname() + "!" + _clients.at(idx).get_username() + "@localhost QUIT :"; // from
+					int idx = client_idx(_chnls.at(i).get_chnlclts().at(k).get_clt_skt()); ////// ~ or not ~
+					std::cout << idx << " = clt idx = " << _clts.at(idx).get_nickname() << "\n";					
+					msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() + "@localhost QUIT :"; // from
                     msg_replied = msg_replied + reason;                    
-					reply(COD_NONE, msg_replied, _chnls.at(i).get_tab_clt_idx().at(k));
+					reply(COD_NONE, msg_replied, idx);
 				}				
 			}	
 		}
@@ -340,7 +350,7 @@ void Server::client_connect(void)
 	if (fcntl(clt_skt, F_SETFL, O_NONBLOCK) == -1)
 		throw (std::runtime_error("fcntl: " + std::string(strerror(errno))));		
 	add_pfds(_pfds, clt_skt, POLLIN | POLLHUP);	
-	add_clients(_clients, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));	
+	add_clients(_clts, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));	
 }
 
 /********* check inet_ntop authorised ***********/
@@ -439,3 +449,4 @@ void Server::handle_signal(int signal)
 // 	if (k != -1)	
 // 		_clients.at(k).set_msg(buffer);
 // }
+

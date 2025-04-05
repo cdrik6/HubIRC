@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:13:35 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/03 00:53:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 03:51:25 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Client
         int get_clt_skt(void) const;
         std::string get_msg(void) const;
         std::string get_nickname(void) const;
-        // std::string get_oldnick(void) const;
+        std::string get_hostname(void) const;
         std::string get_username(void) const;
         bool get_pwd_ok(void) const;
         bool get_is_op(void) const;

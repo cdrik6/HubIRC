@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/03 00:54:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 03:52:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ std::string Client::get_nickname(void) const
     return(_nickname);
 }
 
-// std::string Client::get_oldnick(void) const
-// {
-//     return(_oldnick);
-// }
+std::string Client::get_hostname(void) const
+{
+    return(_hostname);
+}
 
 std::string Client::get_username(void) const
 {

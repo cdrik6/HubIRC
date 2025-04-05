@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/02 23:15:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 03:10:30 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@
 # define COD_NOTEXTTOSEND "412"
 # define ERR_NOTEXTTOSEND ":No text to send"
 # define COD_NOSUCHNICK "401"
-# define ERR_NOSUCHNICK " :No such nick/channel" //"<nickname> :No such nick/channel"
+# define ERR_NOSUCHNICK ":No such nick/channel" //"<nickname> :No such nick/channel"
 // CHANNEL
 # define COD_NOSUCHCHANNEL "403" 
 // # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel
@@ -79,6 +79,11 @@
 # define COD_NAMREPLY "353"
 # define COD_ENDOFNAMES "366"
 # define RPL_ENDOFNAMES ":End of /NAMES list"
+// WHO 
+# define COD_WHOREPLY "352"
+# define COD_ENDOFWHO "315"
+# define RPL_ENDOFWHO ":End of /WHO list"
+
 
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"

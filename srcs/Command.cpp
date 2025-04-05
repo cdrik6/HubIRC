@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/03 23:49:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 05:00:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,33 @@
 // RPL Format ":<server_hostname> <code> <nickname> :<message>" CRLF
 void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 {       
-    std::string rpl;    
+    std::string rpl;
     
-    //  if (code == "000") // NICK
-    //     rpl = msg_replied + _clients.at(clt_idx).get_nickname() + "\r\n";
-    if (code == COD_NONE) // PRIVMSG
+    if (code == COD_NONE)
         rpl = msg_replied + "\r\n";
     else
-        rpl = ":localhost " + code + " " + _clients.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
-    if (send(_clients.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
+        rpl = ":ircserv " + code + " " + _clts.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
+    if (send(_clts.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
         throw (std::runtime_error("send: " + std::string(strerror(errno))));
     // ***** debug ***** //   
-    std::cout << "Reply debug " << rpl << std::endl;
+    std::cout << "Reply sent = " << rpl << std::endl;
 }
 
-//void Server::ping(std::vector<std::string>& tab_msg, int clt_idx)
-void Server::ping(int clt_idx)
+// PONG: [<server>] <token>
+void Server::ping(std::vector<std::string>& tab_msg, int clt_idx)
 {
-    reply("000", "PONG localhost :", clt_idx);
+    int i = 0;
+    
+    while (toUpper(tab_msg.at(i)) != "PING")
+        i++;
+    i++;
+	if (i >= tab_msg.size())
+        reply(COD_NEEDMOREPARAMS, "PING " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
+    else
+    {   
+        std::string token = tab_msg.at(i);
+        reply(COD_NONE, "PONG " + token, clt_idx);
+    }    
     //std::string rpl = "PONG localhost :" + _clients.at(clt_idx).get_nickname() + "\r\n";
     // if (send(_clients.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
     //     throw (std::runtime_error("send: " + std::string(strerror(errno))));    
@@ -47,10 +56,10 @@ void Server::pass(std::vector<std::string>& tab_msg, int clt_idx)
     while (toUpper(tab_msg.at(i)) != "PASS")
         i++;
     i++;
-	if (i == tab_msg.size())
+	if (i >= tab_msg.size())
         reply(COD_PASSWDMISMATCH, ERR_PASSWDMISSING, clt_idx);
     else if (tab_msg.at(i) == _password)    
-        _clients.at(clt_idx).set_pwd_ok(true);
+        _clts.at(clt_idx).set_pwd_ok(true);
     else     
         reply(COD_PASSWDMISMATCH, ERR_PASSWDMISMATCH, clt_idx);	
 }
@@ -75,8 +84,8 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx)
             reply(COD_NICKNAMEINUSE, ":" + nick, clt_idx);
         else
         {         
-            std::string oldnick = _clients.at(clt_idx).get_nickname();            
-            _clients.at(clt_idx).set_nickname(nick);            
+            std::string oldnick = _clts.at(clt_idx).get_nickname();            
+            _clts.at(clt_idx).set_nickname(nick);
             reply(COD_NONE, ":" + oldnick + " NICK " + nick, clt_idx);
         }
     }
@@ -104,10 +113,10 @@ int Server::check_nick(std::string nick)
 
 int Server::nick_available(std::string nick, int clt_idx)
 {    
-     for (int i = 0; i < _clients.size(); i++)
+     for (int i = 0; i < _clts.size(); i++)
     {
         if (i != clt_idx)
-            if (toUpper(_clients.at(i).get_nickname()) == toUpper(nick))
+            if (toUpper(_clts.at(i).get_nickname()) == toUpper(nick))
                 return (KO);
     }
     return (OK);
@@ -130,10 +139,10 @@ void Server::username(std::vector<std::string>& tab_msg, int clt_idx)
         user = tab_msg.at(i);        
         if (user != "")
         {
-            if (_clients.at(clt_idx).get_username() != "")        
+            if (_clts.at(clt_idx).get_username() != "")        
                 reply(COD_ALREADYREGISTRED, ERR_ALREADYREGISTRED, clt_idx);        
             else            
-                _clients.at(clt_idx).set_username(user);
+                _clts.at(clt_idx).set_username(user);
         }
         else // don't happen actually 
             reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
@@ -171,12 +180,12 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
                 int k = target_index(target);
                 if (k != -1)
                 {                    
-                    msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost PRIVMSG"; // from
+                    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() + "@localhost PRIVMSG"; // from
                     msg_replied = msg_replied + " " + target + " " + msg; // to
                     reply(COD_NONE, msg_replied, k);
                 }
                 else
-                    reply(COD_NOSUCHNICK, target + ERR_NOSUCHNICK, clt_idx);  
+                    reply(COD_NOSUCHNICK, target + " " + ERR_NOSUCHNICK, clt_idx);  
             }
             else
             {
@@ -189,8 +198,8 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx)
 
 int Server::target_index(std::string target)
 {
-    for (int i = 0; i < _clients.size(); i++)       
-        if (_clients.at(i).get_nickname() == target)
+    for (int i = 0; i < _clts.size(); i++)       
+        if (_clts.at(i).get_nickname() == target)
             return (i);
     return (-1);
 }
@@ -215,7 +224,13 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx)
         reply(COD_NEEDMOREPARAMS, ERR_NEEDMOREPARAMS, clt_idx);    
     else 
     {        
-        channels = split_char(tab_msg.at(i), ',');        
+        channels = split_char(tab_msg.at(i), ',');
+        /***/
+        for (int j = 0; j < channels.size(); j++) 
+        {
+            std::cout << channels.at(j) << " = channel \n";            
+        } 
+        /*** */
         i++;        
         if (i != tab_msg.size())                    
             keys = split_char(tab_msg.at(i), ',');
@@ -241,7 +256,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx)
                         if (keys.at(j) == _chnls.at(k).get_key())
                         {
                             reply_join_add(channels.at(j), k, clt_idx); // before adding it (--> name list not include the new one)
-                            _chnls.at(k).set_tab_clt_idx(clt_idx); // add client to channel
+                            _chnls.at(k).set_chnlclts(_clts.at(clt_idx)); // add client to channel
                             std::cout << clt_idx << " added\n";
                         }                            
                         else
@@ -269,26 +284,26 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     int idx;
     
     //:<nickname>!<user>@<host> JOIN <channel>     
-    msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost JOIN " + channel;    
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() + "@localhost JOIN " + channel;    
     reply(COD_NONE, msg_replied, clt_idx);
     // All other users in #chatroom also receive this
-    for (int i = 0; i < _chnls.at(chnl_idx).get_tab_clt_idx().size(); i++)    
-        reply(COD_NONE, msg_replied, _chnls.at(chnl_idx).get_tab_clt_idx().at(i));
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+        reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt()));
     if (topic == "") // 331 <nickname> <channel> :No topic set
         reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx);    
     else // 332 <nickname> <channel> :<topic>        
         reply(COD_TOPIC, channel + " :" + topic, clt_idx);   
     // 353 <nickname> = <channel> :<user1> <user2> <user3> ...
     msg_replied = "= " + channel + " :";
-    std::cout << _chnls.at(chnl_idx).get_tab_clt_idx().size() << " = tab clt idx size\n";
-    for (int i = 0; i < _chnls.at(chnl_idx).get_tab_clt_idx().size(); i++)
+    std::cout << _chnls.at(chnl_idx).get_chnlclts().size() << " = tab clients in channel size\n";
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
-        idx = _chnls.at(chnl_idx).get_tab_clt_idx().at(i);
-        std::cout << idx << "= idx\n";
-        if (_chnls.at(chnl_idx).is_operator(_clients.at(idx).get_nickname()))
-            msg_replied = msg_replied + "@" + _clients.at(idx).get_nickname() + " ";
+        idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt());
+        std::cout << idx << " = idx\n";
+        if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
+            msg_replied = msg_replied + "@" + _clts.at(idx).get_nickname() + " ";
         else     
-            msg_replied = msg_replied + _clients.at(idx).get_nickname() + " ";
+            msg_replied = msg_replied + _clts.at(idx).get_nickname() + " ";
         std::cout << msg_replied << "\n";
     }    
     reply(COD_NAMREPLY, msg_replied, clt_idx);    
@@ -302,13 +317,13 @@ void Server::reply_join_new(std::string channel, int clt_idx)
     std::string msg_replied;
     
     //:<nickname>!<user>@<host> JOIN <channel>     
-    msg_replied = ":" + _clients.at(clt_idx).get_nickname() + "!~" + _clients.at(clt_idx).get_username() + "@localhost JOIN " + channel;
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() + "@localhost JOIN " + channel;
     reply(COD_NONE, msg_replied, clt_idx);
     // 331 <nickname> <channel> :No topic is set
     msg_replied = channel + " " + RPL_NOTOPIC;
     reply(COD_NOTOPIC, msg_replied, clt_idx);
     // 353 <nickname> = <channel> :<user1> <user2> <user3> ...
-    msg_replied = "= " + channel + " :@" + _clients.at(clt_idx).get_nickname();
+    msg_replied = "= " + channel + " :@" + _clts.at(clt_idx).get_nickname();
     reply(COD_NAMREPLY, msg_replied, clt_idx);    
     // 366 <nickname> <channel> :End of /NAMES list    
     reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx);
@@ -320,8 +335,8 @@ void Server::add_chnls(std::vector<Channel>& chnls, std::string name, std::strin
 
     new_chan.set_name(name);    
     new_chan.set_key(key);
-    new_chan.set_tab_clt_idx(clt_idx);    
-    new_chan.add_operators(_clients.at(clt_idx).get_nickname()); // Add creator as operator of the channel
+    new_chan.set_chnlclts(_clts.at(clt_idx));
+    new_chan.add_operator(_clts.at(clt_idx).get_nickname()); // Add creator as operator of the channel
     chnls.push_back(new_chan);
 }
 
@@ -329,7 +344,7 @@ int Server::check_channel(std::string chan_name)
 {
     std::string allowed = "-_[]{}|";
     
-    if (chan_name.length() > 30 || chan_name.length() == 0)
+    if (chan_name.length() > 50 || chan_name.length() == 0)
         return (KO);    
     for (int i = 0; i < chan_name.length(); i++)
     {           
@@ -355,4 +370,44 @@ int Server::check_key(std::string key_name)
             return (KO);
     }
     return (OK);
+}
+
+
+// WHO only for #channel
+// :irc.local 352 toto #test user1 host1 irc.local titi H :0 Titi Realname
+void Server::who(std::vector<std::string>& tab_msg, int clt_idx)
+{       
+    int i = 0;
+        
+    while (toUpper(tab_msg.at(i)) != "WHO")
+        i++;
+    i++;
+    if (i >= tab_msg.size())
+        reply(COD_NEEDMOREPARAMS, "WHO " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
+    else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')    
+    {
+        reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " :invalid name for a channel", clt_idx);
+    }
+    else
+    {        
+        std::string channel = tab_msg.at(i);
+        std::string msg_replied;        
+        int chnl_idx = channel_idx(channel);        
+        int idx;
+        if ( chnl_idx != -1)        
+        {
+            for (int j = 0; j < _chnls.at(chnl_idx).get_chnlclts().size(); j++)
+            {
+                idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(j).get_clt_skt());
+                msg_replied = channel + " " + _clts.at(idx).get_username() + " " + _clts.at(idx).get_hostname();
+                msg_replied = msg_replied + " ircserv " + _clts.at(idx).get_nickname();
+                if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
+                    msg_replied = msg_replied + " H@ :0";
+                else
+                    msg_replied = msg_replied + " H :0";
+                reply(COD_WHOREPLY, msg_replied, clt_idx);
+            }        
+            reply(COD_ENDOFWHO, channel + " " + RPL_ENDOFWHO, clt_idx);
+        }        
+    }
 }

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/03 20:39:38 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 04:03:24 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class Server
 	private:
 		int _srv_skt;		
 		std::string _password;
-		std::vector<Client> _clients;
+		std::vector<Client> _clts;
 		std::vector<struct pollfd> _pfds;
 		std::vector<Channel> _chnls;
 		//
@@ -74,8 +74,9 @@ class Server
 		void quit_channels(std::string reason, int clt_idx);
 		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
-		void add_clients(std::vector<Client>& clients, int clt_skt, std::string ip);
+		void add_clients(std::vector<Client>& clts, int clt_skt, std::string ip);
 		int client_idx(int clt_skt);
+		int channel_idx(std::string channel);
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
 		int check_registered(int clt_idx);
@@ -83,7 +84,7 @@ class Server
 		void get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx);		
 		// commands
 		void reply(std::string code, std::string msg_replied, int clt_idx);		
-		void ping(int clt_idx);
+		void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		void pass(std::vector<std::string>& tab_msg, int clt_idx);
 		void nickname(std::vector<std::string>& tab_msg, int clt_idx);
 		void username(std::vector<std::string>& tab_msg, int clt_idx);
@@ -97,6 +98,7 @@ class Server
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);
 		int check_key(std::string key_name);
+		void who(std::vector<std::string>& tab_msg, int clt_idx);
 		//
 		static void	handle_signal(int signal);
 		//void ping(std::vector<std::string>& tab_msg, int clt_idx);
