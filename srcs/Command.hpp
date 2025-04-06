@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 03:10:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 00:36:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,10 @@
 # define ERR_NOTEXTTOSEND ":No text to send"
 # define COD_NOSUCHNICK "401"
 # define ERR_NOSUCHNICK ":No such nick/channel" //"<nickname> :No such nick/channel"
+# define COD_NOSUCHCHANNEL "403"
+# define ERR_NOSUCHCHANNEL ":No such channel" //"<channel> :No such channel"
+# define COD_CANNOTSENDTOCHAN "404"
+# define ERR_CANNOTSENDTOCHAN ":Cannot send to channel"
 // CHANNEL
 # define COD_NOSUCHCHANNEL "403" 
 // # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel

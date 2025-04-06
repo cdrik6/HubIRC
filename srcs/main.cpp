@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/02 21:26:57 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/05 23:41:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,41 +54,86 @@ int check_port(char* port)
 
 std::vector<std::string> split(std::string str)
 {
-    // check / clean the ":"
-    std::string msg = "";
-    bool is_msg = false;
-    int i = 0;
-    if (!str.empty())
-    {
-        if (str.at(0) == ':')
-            str = str.substr(1);
-        i = str.find_first_of(":");
-        if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
-        {
-            msg = str.substr(i);  // msg worst ":\r\n" // keep the ":"
-            msg = msg.substr(0, msg.length() - 2); // remove \r\n
-            std::cout << "msg = [" << msg << "]" << std::endl;
-            if (!msg.empty())
-                is_msg = true;
-        }
-    }
-    
-    // the spit by spaces    
     std::vector<std::string> tab;
-    std::istringstream iss(str);
-    std::string token;   
-    
-    while (iss >> token)
+    std::istringstream issbuff(str);
+    std::string line;
+
+    while (getline(issbuff, line))
     {
-        if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
-            break;                        
-        tab.push_back(token);        
-        std::cout << "token = [" << token << "]" << std::endl;
+        // check / clean the ":"
+        std::string msg = "";
+        bool is_msg = false;
+        int i = 0;        
+        if (!line.empty())
+        {
+            if (line.at(0) == ':')
+                line = line.substr(1);
+            i = line.find_first_of(":");
+            if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
+            {
+                msg = line.substr(i);  // msg worst ":\r\n" // keep the ":"
+                if (msg.at(msg.length() - 1) == '\r')
+                    msg = msg.substr(0, msg.length() - 1); // remove \r\n                
+                std::cout << "msg = [" << msg << "]" << std::endl;
+                if (!msg.empty())
+                    is_msg = true;
+            }
+        }
+        
+        // the spit by spaces       
+        std::istringstream iss(line);
+        std::string token;  
+        
+        while (iss >> token)
+        {
+            if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
+                break;                        
+            tab.push_back(token);        
+            std::cout << "token = [" << token << "]" << std::endl;
+        }
+        if (is_msg == true) 
+            tab.push_back(msg);        
     }
-    if (is_msg == true) 
-        tab.push_back(msg);
     return (tab);
 }
+
+// std::vector<std::string> split(std::string str)
+// {
+//     // check / clean the ":"
+//     std::string msg = "";
+//     bool is_msg = false;
+//     int i = 0;
+//     if (!str.empty())
+//     {
+//         if (str.at(0) == ':')
+//             str = str.substr(1);
+//         i = str.find_first_of(":");
+//         if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
+//         {
+//             msg = str.substr(i);  // msg worst ":\r\n" // keep the ":"
+//             msg = msg.substr(0, msg.length() - 2); // remove \r\n
+//             std::cout << "msg = [" << msg << "]" << std::endl;
+//             if (!msg.empty())
+//                 is_msg = true;
+//         }
+//     }
+    
+//     // the spit by spaces    
+//     std::vector<std::string> tab;
+//     std::istringstream iss(str);
+//     std::string token;   
+    
+//     while (iss >> token)
+//     {
+//         if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
+//             break;                        
+//         tab.push_back(token);        
+//         std::cout << "token = [" << token << "]" << std::endl;
+//     }
+//     if (is_msg == true) 
+//         tab.push_back(msg);
+//     return (tab);
+// }
 
 std::vector<std::string> split_char(std::string str, char c)
 {    

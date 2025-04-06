@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 04:02:07 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 04:06:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,17 @@ void Server::polling(void)
 				}
 				else // got some data from a client --> to send the others (not srv not sender)
 				{					
-					if (parse_message(std::string(buff), k) == OK)
-						if (check_registered(k) == OK)					
-							if (_clts.at(k).get_registered() == false)
-								welcome(k);						
+					// std::string line;
+					// std::istringstream iss(buff);
+					// while (std::getline(iss, line))
+					// {
+						// std::cout << "line = " << line << std::endl;
+						if (parse_message(std::string(buff), k) == OK)
+						// if (parse_message(line + "\r\n", k) == OK)
+							if (check_registered(k) == OK)					
+								if (_clts.at(k).get_registered() == false)
+									welcome(k);						
+					// }
 					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
 					// for (int j = 2; j < _pfds.size(); j++)
 					// {
@@ -233,6 +240,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 		_clts.at(clt_idx).set_msg(buffer);	// build message	
 	if (clt_idx != -1 && buffer.find("\r\n") != std::string::npos)
 	{			
+		
 		tab_msg = split(_clts.at(clt_idx).get_msg());		
 		if (tab_msg.size() == 0)
 			return (std::cout << "tab empty" << std::endl, KO); /**************debug here **** */
@@ -240,7 +248,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 		{
 			//*********** debug here ***** */
 			std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
-			get_command(tab_msg, tab_msg[i], clt_idx);
+			get_command(tab_msg, tab_msg[i], clt_idx, i);
 		}		
 		_clts.at(clt_idx).clear_msg();
 		return (OK);
@@ -253,24 +261,24 @@ int Server::parse_message(std::string buffer, int clt_idx)
 // /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
 // /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
-void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx)
+void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx)
 {
 	if (toUpper(cmd) == "PING")
-		ping(tab_msg, clt_idx);
+		ping(tab_msg, clt_idx, tab_idx);
 	else if (toUpper(cmd) == "NICK")
-		nickname(tab_msg, clt_idx);
+		nickname(tab_msg, clt_idx, tab_idx);
 	else if (toUpper(cmd) == "PASS")
-	 	pass(tab_msg, clt_idx);
+	 	pass(tab_msg, clt_idx, tab_idx);
 	else if (toUpper(cmd) == "USER")
-	 	username(tab_msg, clt_idx);		
+	 	username(tab_msg, clt_idx, tab_idx);		
 	else if (_clts.at(clt_idx).get_registered() == true)
 	{
 		if (toUpper(cmd) == "PRIVMSG")		
-			privmsg(tab_msg, clt_idx);
+			privmsg(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "JOIN")
-			join(tab_msg, clt_idx);
+			join(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "WHO")
-			who(tab_msg, clt_idx);	
+			who(tab_msg, clt_idx, tab_idx);	
 			
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
