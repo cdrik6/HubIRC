@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 18:19:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 21:59:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	Server::create_srv_skt(char *port)
 		srv_skt = socket((*p).ai_family, (*p).ai_socktype, (*p).ai_protocol);
 		if (srv_skt < 0)
 			continue;
-		if (setsockopt(srv_skt, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
+		if (setsockopt(srv_skt, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) // SO_KEEPALIVE --> to check dead/silent client
 			(perror("setsockopt"), freeaddrinfo(res), exit (KO));				
 		if (fcntl(srv_skt, F_SETFL, O_NONBLOCK) == -1)
 			(perror("fcntl"), freeaddrinfo(res), exit (KO));
@@ -218,7 +218,7 @@ void Server::welcome(int clt_idx)
 	
 	_clts.at(clt_idx).set_registered(true);	
 	msg_replied = std::string(RPL_WELCOME) + " " + _clts.at(clt_idx).get_nickname() \
-				+ "!" + _clts.at(clt_idx).get_username() + "@localhost"; //  <nick>!<user>@<host>"    
+				+ "!" + _clts.at(clt_idx).get_username() + "@" + _clts.at(clt_idx).get_hostname(); //  <nick>!<user>@<host>"    
 	reply(COD_WELCOME, msg_replied, clt_idx);
 	reply(COD_YOURHOST, RPL_YOURHOST, clt_idx);
 	reply(COD_CREATED, RPL_CREATED, clt_idx);
@@ -320,6 +320,7 @@ void Server::client_disconnect(int pfd_idx, int clt_idx)
 	//********** reply to all others clients if channel a quit RPL */	
 }
 
+// :<nickname>!<user>@<host> QUIT :[optional message]
 void Server::quit_channels(std::string reason, int clt_idx)
 {
 	std::string msg_replied;
@@ -332,15 +333,14 @@ void Server::quit_channels(std::string reason, int clt_idx)
 			{
 				_chnls.at(i).rem_client(j);
 				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
-				for (int k = 0; k < _chnls.at(i).get_chnlclts().size(); k++)	
-				{
-					// :<nickname>!<user>@<host> QUIT :[optional message]
-					int idx = client_idx(_chnls.at(i).get_chnlclts().at(k).get_clt_skt()); ////// ~ or not ~
-					std::cout << idx << " = clt idx = " << _clts.at(idx).get_nickname() << "\n";					
-					msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() + "@localhost QUIT :"; // from
-                    msg_replied = msg_replied + reason;                    
-					reply(COD_NONE, msg_replied, idx);
-				}				
+				msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+						+ "@" + _clts.at(clt_idx).get_nickname() + " QUIT :" + reason;              
+				reply_to_all(msg_replied, i);
+				// for (int k = 0; k < _chnls.at(i).get_chnlclts().size(); k++)	
+				// {										
+				// 	int idx = client_idx(_chnls.at(i).get_chnlclts().at(k).get_clt_skt());				
+				// 	reply(COD_NONE, msg_replied, idx);
+				// }			
 			}	
 		}		
 	}

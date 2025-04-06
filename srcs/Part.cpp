@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 19:54:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 21:09:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             {                
                 if (channels.at(j) == _chnls.at(k).get_name())
                 {
-                    if (in_channel(k, clt_idx) == OK)
+                    int idx = in_channel(k, clt_idx);
+                    if (idx != -1)
                     {
                         msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                             + "@" + _clts.at(clt_idx).get_hostname() + " PART " + channels.at(j) + reason;
-                        reply_to_all(msg_replied, k);
-                        
-                        _chnls.at(k).get_chnlclts().erase(begin() + );
+                        reply_to_all(msg_replied, k); // to all including the leaving                        
+                        _chnls.at(k).rem_client(idx);
+				        _chnls.at(k).rem_operator(_clts.at(clt_idx).get_nickname());                        
                     }
                     else
                         reply(COD_NOTONCHANNEL, channels.at(j) + " " + ERR_NOTONCHANNEL, clt_idx);

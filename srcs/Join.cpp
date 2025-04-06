@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 19:49:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 21:03:35 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     if (channels.at(j) == _chnls.at(k).get_name())
                     {                      
                         new_chan = false;
-                        if (in_channel(k, clt_idx) == KO) // check already in the channel --> seems done by irssi, for nc
+                        if (in_channel(k, clt_idx) == -1) // KO not in// check already in the channel --> seems done by irssi, for nc
                         { 
                             if (keys.at(j) == _chnls.at(k).get_key())
                             {
                                 reply_join_add(channels.at(j), k, clt_idx); // before adding it (--> name list not include the new one)
                                 _chnls.at(k).set_chnlclts(_clts.at(clt_idx)); // add client to channel
-                                std::cout << clt_idx << " added\n";
+                                // std::cout << clt_idx << " added\n";
                             }                            
                             else
                                 reply(COD_BADCHANNELKEY, channels.at(j) + " " + ERR_BADCHANNELKEY, clt_idx);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 20:08:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 21:02:06 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
         while (tab_msg.at(i).at(0) != ':') // recipients list
         {
             target = split_char(tab_msg.at(i), ','); // splitted by irssi actually, for nc
-            
-
             for (int t = 0; t < target.size(); t++)
             {                   
                 msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
@@ -84,9 +82,9 @@ int Server::in_channel(int chnl_idx, int clt_idx)
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
         if (_chnls.at(chnl_idx).get_chnlclts().at(i).get_nickname() == _clts.at(clt_idx).get_nickname())   
-            return (OK);
+            return (i);
     }
-    return (KO);
+    return (-1);
 }
 
 int Server::target_index(std::string target)
