@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 04:06:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 05:03:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,8 +315,7 @@ void Server::client_disconnect(int pfd_idx, int clt_idx)
 	_pfds.erase(_pfds.begin() + pfd_idx);
 	// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
 	_clts.erase(_clts.begin() + clt_idx);
-	//********** reply to all others clients if channel a quit RPL */
-	
+	//********** reply to all others clients if channel a quit RPL */	
 }
 
 void Server::quit_channels(std::string reason, int clt_idx)
@@ -341,9 +340,14 @@ void Server::quit_channels(std::string reason, int clt_idx)
 					reply(COD_NONE, msg_replied, idx);
 				}				
 			}	
-		}
+		}		
 	}
 	// check if last to leave --> delete channel
+	// for (int i = 0; i < _chnls.size(); i++)
+	// {	
+	// 	if (_chnls.at(i).get_chnlclts().size() == 0)
+	// 		_chnls.erase(_chnls.begin() + i);
+	// }
 }
 
 void Server::client_connect(void)

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 04:05:45 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 05:12:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 {
                     if (channels.at(j) == _chnls.at(k).get_name())
                     {                        
-                        // check already in the channel --> seems done by irssi
+                        // check already in the channel --> seems done by irssi, TO DO for nc /************** */
                         new_chan = false;
                         if (keys.at(j) == _chnls.at(k).get_key())
                         {
