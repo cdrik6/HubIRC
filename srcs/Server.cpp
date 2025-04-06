@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 21:59:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 01:32:51 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -320,36 +320,69 @@ void Server::client_disconnect(int pfd_idx, int clt_idx)
 	//********** reply to all others clients if channel a quit RPL */	
 }
 
+// // :<nickname>!<user>@<host> QUIT :[optional message]
+// void Server::quit_channels(std::string reason, int clt_idx)
+// {
+// 	std::string msg_replied;	
+		
+// 	for (int i = 0; i < _chnls.size(); i++)	
+// 	{		
+// 		//for (int j = _chnls.at(i).get_chnlclts().size() - 1; j >= 0 ; --j) // reverse not needed due to break;
+// 		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+// 		{			
+// 			if (client_idx(_chnls.at(i).get_chnlclts().at(j).get_clt_skt()) == clt_idx)
+// 			{
+// 				_chnls.at(i).rem_client(j);
+// 				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
+// 				msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+// 						+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
+// 				reply_to_all(msg_replied, i);
+// 				break;				
+// 			}			
+// 		}	
+// 	}
+// 	rem_empty_chnl();
+// }
+
 // :<nickname>!<user>@<host> QUIT :[optional message]
 void Server::quit_channels(std::string reason, int clt_idx)
 {
-	std::string msg_replied;
+	std::string msg_replied;	
 		
-	for (int i = 0; i < _chnls.size(); i++)
+	for (int i = 0; i < _chnls.size(); i++)	
 	{		
-		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
-		{			
-			if (client_idx(_chnls.at(i).get_chnlclts().at(j).get_clt_skt()) == clt_idx)
-			{
-				_chnls.at(i).rem_client(j);
-				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
-				msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-						+ "@" + _clts.at(clt_idx).get_nickname() + " QUIT :" + reason;              
-				reply_to_all(msg_replied, i);
-				// for (int k = 0; k < _chnls.at(i).get_chnlclts().size(); k++)	
-				// {										
-				// 	int idx = client_idx(_chnls.at(i).get_chnlclts().at(k).get_clt_skt());				
-				// 	reply(COD_NONE, msg_replied, idx);
-				// }			
-			}	
-		}		
+		int idx = in_channel(i, clt_idx);
+		if (idx != -1)
+		{
+			_chnls.at(i).rem_client(idx);
+			_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
+			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
+			reply_to_all(msg_replied, i);				
+		}			
 	}
-	// check if last to leave --> delete channel
-	// for (int i = 0; i < _chnls.size(); i++)
-	// {	
-	// 	if (_chnls.at(i).get_chnlclts().size() == 0)
-	// 		_chnls.erase(_chnls.begin() + i);
-	// }
+	rem_empty_chnl();
+	std::cout << "liste des chnls et clients in it" << std::endl;
+	for (int i = 0; i < _chnls.size(); i++)	
+	{
+		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+		{
+			std::cout <<  _chnls.at(i).get_chnlclts().at(j).get_nickname() << " = " <<  _chnls.at(i).get_chnlclts().at(j).get_clt_skt() << std::endl;
+		}
+	}
+}
+
+void Server::rem_empty_chnl(void)
+{
+	std::vector<Channel>::iterator it;
+	
+	for (it = _chnls.begin(); it != _chnls.end();)
+	{
+		if ((*it).get_chnlclts().size() == 0)
+			it = _chnls.erase(it);  // returns next valid iterator
+		else
+			++it;
+	}
 }
 
 void Server::client_connect(void)

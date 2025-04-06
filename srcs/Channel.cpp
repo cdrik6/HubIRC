@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 01:25:06 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 01:15:28 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,22 @@ void Channel::add_operator(std::string nick)
 // An IRCop has full control over channels but does NOT get @ automatically.
 // They must be explicitly given +o to appear as a channel operator.
 // Even without @, they can still override channel protections.
+
+// void Channel::rem_operator(std::string nick)
+// {
+// 	std::vector<std::string>::iterator it;
+	
+// 	for (it = _operators.begin(); it != _operators.end();)
+// 	{
+// 		if (*it == nick)			
+// 		{
+// 			it = _operators.erase(it);			
+// 			break;
+// 		}		
+// 		else
+// 			++it;
+// 	}	
+// }
 
 void Channel::rem_operator(std::string nick)
 {

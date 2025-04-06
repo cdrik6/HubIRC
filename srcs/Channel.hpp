@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 01:23:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 01:12:06 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ class Channel
         void add_operator(std::string nick);
         void rem_operator(std::string nick);
         bool is_operator(std::string nick);        
-        void rem_client(int idx);
-        
+        void rem_client(int idx);        
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 19:48:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 22:27:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class Server
 		std::vector<struct pollfd> _pfds;
 		std::vector<Channel> _chnls;
 		//
-		static bool _signal; //static makes _signal shared across all instances
+		static bool _signal; // static makes _signal shared across all instances
 		//
 		Server();
 		Server& operator=(const Server& other);
@@ -67,6 +67,7 @@ class Server
 		//
 		int get_srv_skt(void) const;		
 		static void	handle_signal(int signal);
+		void rem_empty_chnl(void);
         // polling
 		int	create_srv_skt(char *port);
 		void polling(void);		

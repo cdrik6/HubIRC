@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 21:02:06 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 01:52:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                     int k = channel_idx(target.at(t));                
                     if (k != -1)
                     {           
-                        if (in_channel(k, clt_idx) == OK)
+                        if (in_channel(k, clt_idx) != -1)
                         {
                             for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
                             {

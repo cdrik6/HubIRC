@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 21:03:35 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 00:02:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                             break;
                         }
                         else
-                            reply(COD_USERONCHANNEL, channels.at(j) + " " + ERR_USERONCHANNEL, clt_idx);
+                            reply(COD_USERONCHANNEL, _clts.at(clt_idx).get_nickname() + " " + ERR_USERONCHANNEL, clt_idx);                            
                     }
                 }
                 if (new_chan == true) // create channel                
