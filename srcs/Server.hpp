@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 04:06:18 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:48:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # include <cctype>
 
 # include "Client.hpp"
-# include "Command.hpp"
+# include "Register.hpp"
 # include "Channel.hpp"
 
 # define OK 0
@@ -66,6 +66,7 @@ class Server
 		~Server();
 		//
 		int get_srv_skt(void) const;		
+		static void	handle_signal(int signal);
         // polling
 		int	create_srv_skt(char *port);
 		void polling(void);		
@@ -82,7 +83,7 @@ class Server
 		int check_registered(int clt_idx);
 		void welcome(int clt_idx);		
 		void get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx);		
-		// commands
+		// Register
 		void reply(std::string code, std::string msg_replied, int clt_idx);		
 		void ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
@@ -90,19 +91,24 @@ class Server
 		void username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int check_nick(std::string nick);
 		int nick_available(std::string nick, int clt_idx);
+		// Privmsg
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
 		int target_index(std::string target);
+		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void add_chnls(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx);
 		void reply_join_add(std::string channel, int chnl_idx, int clt_idx);
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);
 		int check_key(std::string key_name);
-		void who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		//
-		static void	handle_signal(int signal);
-		//void ping(std::vector<std::string>& tab_msg, int clt_idx);
+		// int check_already(int chnl_idx, int clt_idx);
+		// Who
+		void who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);				
+		// Part
+		void part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void reply_to_all(std::string msg_replied, int chnl_idx);
+		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		
 		// int check_pass(std::vector<std::string>& tab_msg, int client_idx);
 		// void cap(std::vector<std::string>& tab_msg, int client_idx);
@@ -115,10 +121,3 @@ int	check_port(char* port);
 std::vector<std::string> split(std::string str);
 std::vector<std::string> split_char(std::string str, char c);
 std::string toUpper(const std::string& str);
-
-/** draft **/
-// class InitException : public std::exception
-// {
-//     public :
-//         virtual const char* what() const throw();                             
-// };

@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Command.hpp                                        :+:      :+:    :+:   */
+/*   Register.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 00:36:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/06 19:07:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_HPP
-# define COMMAND_HPP
-
+#ifndef REGISTER_HPP
+# define REGISTER_HPP
 
 # include "Server.hpp"
 // RFC 2812: message    =  [ ":" prefix SPACE ] command [ params ] CRLF
@@ -72,23 +71,26 @@
 # define ERR_NOSUCHCHANNEL ":No such channel" //"<channel> :No such channel"
 # define COD_CANNOTSENDTOCHAN "404"
 # define ERR_CANNOTSENDTOCHAN ":Cannot send to channel"
-// CHANNEL
+// JOIN
 # define COD_NOSUCHCHANNEL "403" 
 // # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel
 # define COD_BADCHANNELKEY "475" 
-// # define ERR_BADCHANNELKEY ""  // "<client> <channel> :Cannot join channel (+k)"
+# define ERR_BADCHANNELKEY ":wrong key to join the channel" // "<client> <channel> :Cannot join channel (+k)"
 # define COD_TOPIC "332" // 332 <nickname> <channel> :<topic>
 # define COD_NOTOPIC "331" // 331 <nickname> <channel> :No topic is set
 # define RPL_NOTOPIC ":No topic set yet"
 # define COD_NAMREPLY "353"
 # define COD_ENDOFNAMES "366"
 # define RPL_ENDOFNAMES ":End of /NAMES list"
+# define COD_USERONCHANNEL "443"
+# define ERR_USERONCHANNEL ":is already on channel"  //"<client> <nick> <channel> :is already on channel"
 // WHO 
 # define COD_WHOREPLY "352"
 # define COD_ENDOFWHO "315"
 # define RPL_ENDOFWHO ":End of /WHO list"
-
-
+// PART
+# define COD_NOTONCHANNEL "442" 
+# define ERR_NOTONCHANNEL ":You're not on that channel"
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"
 // # define ERR_UNKNOWNCOMMAND " :Unknown command" // "<command> :Unknown command"
