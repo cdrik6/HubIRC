@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 22:27:52 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 03:34:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ class Server
 		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
 		void add_clients(std::vector<Client>& clts, int clt_skt, std::string ip);
-		int client_idx(int clt_skt);
-		int channel_idx(std::string channel);
+		int client_idx(int clt_skt);		
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
 		int check_registered(int clt_idx);
@@ -96,6 +95,7 @@ class Server
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
 		int target_index(std::string target);
+		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void add_chnls(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx);
@@ -109,6 +109,9 @@ class Server
 		// Part
 		void part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void reply_to_all(std::string msg_replied, int chnl_idx);
+		// Mode
+		void mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		std::string get_modes(int chnl_idx);
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		
 		// int check_pass(std::vector<std::string>& tab_msg, int client_idx);

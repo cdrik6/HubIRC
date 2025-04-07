@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 01:52:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 03:07:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,16 @@ int Server::target_index(std::string target)
         if (_clts.at(i).get_nickname() == target)
             return (i);
     return (-1);
+}
+
+int Server::channel_idx(std::string channel)
+{
+	for (int i = 0; i < _chnls.size(); i++)
+	{		
+		if (_chnls.at(i).get_name() == channel)			
+			return (i);		
+	}	
+	return (-1); // disconnected in between or error ?
 }
 
 /**** draft */

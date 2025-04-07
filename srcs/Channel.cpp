@@ -6,14 +6,21 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 01:15:28 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 03:53:15 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
 Channel::Channel(): _name(""), _key(""), _topic("")
-{}
+{
+	_mode_i = false;
+    _mode_t = false;
+	_mode_k = false;
+	_mode_o = false;
+	_mode_l = false;
+	_limit = -1;
+}
 
 Channel::~Channel()
 {}
@@ -43,6 +50,38 @@ std::vector<Client> Channel::get_chnlclts(void) const
 	return (_chnlclts);
 }
 
+bool Channel::get_mode_i(void) const
+{
+	return (_mode_i);
+}
+
+bool Channel::get_mode_t(void) const
+{
+	return (_mode_t);
+}
+
+bool Channel::get_mode_k(void) const
+{
+	return (_mode_k);	
+}
+
+bool Channel::get_mode_o(void) const
+{
+	return (_mode_o);
+}
+
+bool Channel::get_mode_l(void) const
+{
+	return (_mode_l);
+}
+
+int Channel::get_limit(void) const
+{
+	if (get_mode_l())
+		return (_limit);
+	return (-1);	
+}
+
 void Channel::set_name(std::string name)
 {
 	_name = name;	
@@ -56,6 +95,14 @@ void Channel::set_key(std::string key)
 void Channel::set_chnlclts(Client client)
 {
 	_chnlclts.push_back(client);
+}
+
+void Channel::set_limit(int limit)
+{
+	if (get_mode_l())
+		_limit = limit;
+	else 	
+		_limit = -1;
 }
 
 void Channel::add_operator(std::string nick)

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:54:39 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 01:50:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 03:24:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "WHO " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')
-        reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + ERR_NOSUCHCHANNEL, clt_idx);    
+        reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " " + ERR_NOSUCHCHANNEL, clt_idx);    
     else
     {        
         std::string channel = tab_msg.at(i);
@@ -46,6 +46,6 @@ void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             reply(COD_ENDOFWHO, channel + " " + RPL_ENDOFWHO, clt_idx);
         }
         else
-            reply(COD_NOSUCHCHANNEL, channel + " :invalid name for a channel", clt_idx);
+            reply(COD_NOSUCHCHANNEL, channel + " " + ERR_NOSUCHCHANNEL, clt_idx);
     }
 }

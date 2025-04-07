@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 19:07:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 04:22:15 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,12 @@
 // PART
 # define COD_NOTONCHANNEL "442" 
 # define ERR_NOTONCHANNEL ":You're not on that channel"
+// MODE 
+# define COD_CHANNELMODEIS "324" // 329 time optional 
+# define COD_CHANOPRIVSNEEDED "482" 
+# define ERR_CHANOPRIVSNEEDED ":You're not channel operator"
+
+
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"
 // # define ERR_UNKNOWNCOMMAND " :Unknown command" // "<command> :Unknown command"

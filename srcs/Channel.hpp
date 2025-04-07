@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 01:12:06 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 03:50:43 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ class Channel
         std::string _topic;
         std::vector<std::string> _operators;
         std::vector<Client> _chnlclts;
+        bool _mode_i; // set(true)-remove(false) Invite-only
+        bool _mode_t; // set(true)-remove(false) restrict TOPIC to _operators
+        bool _mode_k; // set(true)-remove(false) channel key
+        bool _mode_o; // give(true)-take(false) channel operator privilege
+        bool _mode_l; // set(true)-remove(false) the user limit
+        int _limit; //--> to implement in JOIN /************** */
     
     public:
         Channel();
@@ -32,9 +38,16 @@ class Channel
         std::string get_topic(void) const;
         std::vector<std::string> get_operators(void) const;
         std::vector<Client> get_chnlclts(void) const;
+        bool get_mode_i(void) const;
+        bool get_mode_t(void) const;
+        bool get_mode_k(void) const;
+        bool get_mode_o(void) const;
+        bool get_mode_l(void) const;
+        int get_limit(void) const;
         void set_name(std::string name);    
         void set_key(std::string key);        
         void set_chnlclts(Client client);
+        void set_limit(int limit);
         void add_operator(std::string nick);
         void rem_operator(std::string nick);
         bool is_operator(std::string nick);        

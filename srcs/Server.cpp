@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 01:32:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 03:07:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,8 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 			who(tab_msg, clt_idx, tab_idx);	
 		else if (toUpper(cmd) == "PART")
 			part(tab_msg, clt_idx, tab_idx);
+		else if (toUpper(cmd) == "MODE")
+			part(tab_msg, clt_idx, tab_idx);	
 			
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
@@ -299,16 +301,6 @@ int Server::client_idx(int clt_skt)
 	return (-1); // disconnected in between or error ?
 }
 
-int Server::channel_idx(std::string channel)
-{
-	for (int i = 0; i < _chnls.size(); i++)
-	{		
-		if (_chnls.at(i).get_name() == channel)			
-			return (i);		
-	}	
-	return (-1); // disconnected in between or error ?
-}
-
 void Server::client_disconnect(int pfd_idx, int clt_idx)
 {
 	quit_channels("Connection closed", clt_idx);
@@ -319,30 +311,6 @@ void Server::client_disconnect(int pfd_idx, int clt_idx)
 	_clts.erase(_clts.begin() + clt_idx);
 	//********** reply to all others clients if channel a quit RPL */	
 }
-
-// // :<nickname>!<user>@<host> QUIT :[optional message]
-// void Server::quit_channels(std::string reason, int clt_idx)
-// {
-// 	std::string msg_replied;	
-		
-// 	for (int i = 0; i < _chnls.size(); i++)	
-// 	{		
-// 		//for (int j = _chnls.at(i).get_chnlclts().size() - 1; j >= 0 ; --j) // reverse not needed due to break;
-// 		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
-// 		{			
-// 			if (client_idx(_chnls.at(i).get_chnlclts().at(j).get_clt_skt()) == clt_idx)
-// 			{
-// 				_chnls.at(i).rem_client(j);
-// 				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
-// 				msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-// 						+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
-// 				reply_to_all(msg_replied, i);
-// 				break;				
-// 			}			
-// 		}	
-// 	}
-// 	rem_empty_chnl();
-// }
 
 // :<nickname>!<user>@<host> QUIT :[optional message]
 void Server::quit_channels(std::string reason, int clt_idx)
@@ -361,15 +329,7 @@ void Server::quit_channels(std::string reason, int clt_idx)
 			reply_to_all(msg_replied, i);				
 		}			
 	}
-	rem_empty_chnl();
-	std::cout << "liste des chnls et clients in it" << std::endl;
-	for (int i = 0; i < _chnls.size(); i++)	
-	{
-		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
-		{
-			std::cout <<  _chnls.at(i).get_chnlclts().at(j).get_nickname() << " = " <<  _chnls.at(i).get_chnlclts().at(j).get_clt_skt() << std::endl;
-		}
-	}
+	rem_empty_chnl();	
 }
 
 void Server::rem_empty_chnl(void)
@@ -497,3 +457,35 @@ void Server::handle_signal(int signal)
 // 		_clients.at(k).set_msg(buffer);
 // }
 
+
+// // :<nickname>!<user>@<host> QUIT :[optional message]
+// void Server::quit_channels(std::string reason, int clt_idx)
+// {
+// 	std::string msg_replied;	
+		
+// 	for (int i = 0; i < _chnls.size(); i++)	
+// 	{		
+// 		//for (int j = _chnls.at(i).get_chnlclts().size() - 1; j >= 0 ; --j) // reverse not needed due to break;
+// 		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+// 		{			
+// 			if (client_idx(_chnls.at(i).get_chnlclts().at(j).get_clt_skt()) == clt_idx)
+// 			{
+// 				_chnls.at(i).rem_client(j);
+// 				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
+// 				msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+// 						+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
+// 				reply_to_all(msg_replied, i);
+// 				break;				
+// 			}			
+// 		}	
+// 	}
+// 	rem_empty_chnl();
+// std::cout << "liste des chnls et clients in it" << std::endl;
+// 	for (int i = 0; i < _chnls.size(); i++)	
+// 	{
+// 		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+// 		{
+// 			std::cout <<  _chnls.at(i).get_chnlclts().at(j).get_nickname() << " = " <<  _chnls.at(i).get_chnlclts().at(j).get_clt_skt() << std::endl;
+// 		}
+// 	}
+// }
