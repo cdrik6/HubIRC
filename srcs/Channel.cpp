@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 03:53:15 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 22:59:57 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ Channel::Channel(): _name(""), _key(""), _topic("")
 {
 	_mode_i = false;
     _mode_t = false;
-	_mode_k = false;
-	_mode_o = false;
-	_mode_l = false;
+	// _mode_k = false;
+	// _mode_o = false;
+	// _mode_l = false;
 	_limit = -1;
 }
 
@@ -60,26 +60,27 @@ bool Channel::get_mode_t(void) const
 	return (_mode_t);
 }
 
-bool Channel::get_mode_k(void) const
-{
-	return (_mode_k);	
-}
+// bool Channel::get_mode_k(void) const
+// {
+// 	return (_mode_k);	
+// }
 
-bool Channel::get_mode_o(void) const
-{
-	return (_mode_o);
-}
+// bool Channel::get_mode_o(void) const
+// {
+// 	return (_mode_o);
+// }
 
-bool Channel::get_mode_l(void) const
-{
-	return (_mode_l);
-}
+// bool Channel::get_mode_l(void) const
+// {
+// 	return (_mode_l);
+// }
 
 int Channel::get_limit(void) const
 {
-	if (get_mode_l())
-		return (_limit);
-	return (-1);	
+	// if (get_mode_l())
+	// 	return (_limit);
+	// return (-1);
+	return (_limit);	
 }
 
 void Channel::set_name(std::string name)
@@ -97,12 +98,22 @@ void Channel::set_chnlclts(Client client)
 	_chnlclts.push_back(client);
 }
 
+void Channel::set_mode_i(bool invite_only)
+{
+	_mode_i = invite_only;
+}
+
+void Channel::set_mode_t(bool restrict_topic)
+{
+	_mode_t = restrict_topic;
+}
+
 void Channel::set_limit(int limit)
 {
-	if (get_mode_l())
+	// if (get_mode_l())
 		_limit = limit;
-	else 	
-		_limit = -1;
+	// else 	
+	// 	_limit = -1;
 }
 
 void Channel::add_operator(std::string nick)

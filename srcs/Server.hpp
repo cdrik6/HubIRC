@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 03:34:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 00:56:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@
 # define OK 0
 # define KO 1
 
-// # define PORT "6667"
-# define BACKLOG 10
+# define BACKLOG 10 // pending connections before the kernel starts rejecting new ones
 # define BUFFER_SIZE 1024 //512 //510
+# define MAX_CHANNEL_LIMIT 1000
+
 
 class Channel;
 
@@ -111,7 +112,13 @@ class Server
 		void reply_to_all(std::string msg_replied, int chnl_idx);
 		// Mode
 		void mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		std::string get_modes(int chnl_idx);
+		std::string get_modes(int chnl_idx, int clt_idx);
+		std::string get_plus(std::string modestr);
+		std::string get_minus(std::string modestr);
+		void set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
+		void set_minus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
+		int nick_in_channel(int chnl_idx, std::string nick);
+		long check_limit(std::string limit);
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		
 		// int check_pass(std::vector<std::string>& tab_msg, int client_idx);

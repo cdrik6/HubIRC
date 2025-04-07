@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/06 12:54:58 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/07 23:35:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int Server::check_nick(std::string nick)
 
 int Server::nick_available(std::string nick, int clt_idx)
 {    
-     for (int i = 0; i < _clts.size(); i++)
+    for (int i = 0; i < _clts.size(); i++)
     {
         if (i != clt_idx)
             if (toUpper(_clts.at(i).get_nickname()) == toUpper(nick))

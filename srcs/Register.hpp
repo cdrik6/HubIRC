@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 04:22:15 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 00:52:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,16 @@
 # define COD_CHANNELMODEIS "324" // 329 time optional 
 # define COD_CHANOPRIVSNEEDED "482" 
 # define ERR_CHANOPRIVSNEEDED ":You're not channel operator"
+# define COD_UNKNOWNMODE "472"
+# define ERR_UNKNOWNMODE ":is unknown mode char to me" // <modechar>
+# define COD_INVALIDKEY "525"
+# define ERR_INVALIDKEY ":Key is not well-formed" // <target chan>
+# define COD_USERNOTINCHANNEL "441"
+# define ERR_USERNOTINCHANNEL ":They aren't on that channel" // <nick> <channel>
+# define COD_UNKNOWNERROR "400"
+# define ERR_UNKNOWNERROR ":Invalid limit" //<command>{ <subcommand>} :<info>" for limit > MAX
+
+// ERR_CHANNELISFULL (471) /***** to do JOIN limit */
 
 
 // // COMMAND NOT FOUND
