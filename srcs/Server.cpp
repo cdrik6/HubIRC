@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 03:07:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 03:42:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,7 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 		else if (toUpper(cmd) == "PART")
 			part(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "MODE")
-			part(tab_msg, clt_idx, tab_idx);	
+			mode(tab_msg, clt_idx, tab_idx);
 			
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);

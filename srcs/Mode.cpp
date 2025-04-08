@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 01:46:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 07:03:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // IRC_ops are not channel operator by default (they must use froce to get it)
 void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {       
-    int i = tab_idx++;    
+    int i = tab_idx + 1;
     
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
@@ -31,24 +31,28 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         
         if (chnl_idx != -1)
         {
-            if (i++ >= tab_msg.size()) // query by any user            
-                reply(COD_CHANNELMODEIS, channel + " " + get_modes(chnl_idx, clt_idx), clt_idx); // " " + ""
+            i++;
+            if (i >= tab_msg.size()) // query by any user            
+                reply(COD_CHANNELMODEIS, channel + " " + get_modes(chnl_idx, clt_idx), clt_idx); // " " + ""            
             else if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // check it is a channel oparator
             {
                 std::string minus = get_minus(tab_msg.at(i)); // ""
                 std::string plus = get_plus(tab_msg.at(i)); // ""                 
                 std::vector<std::string> params;                
-                
-                while (i++ < tab_msg.size())
-                    params.push_back(tab_msg.at(i));
+                int j = i + 1;
+                while (j < tab_msg.size())
+                {
+                    params.push_back(tab_msg.at(j));
+                    j++;
+                }                    
                 if (tab_msg.at(i).at(0) == '+')                
                     (set_plus(plus, params, chnl_idx, clt_idx), set_minus(minus, params, chnl_idx, clt_idx));
                 else if (tab_msg.at(i).at(0) == '-')
                     (set_minus(minus, params, chnl_idx, clt_idx), set_plus(plus, params, chnl_idx, clt_idx));
-                else 
-                    reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
+                // else 
+                //     reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
             }
-            else
+            else if (tab_msg.at(i) != "b")    
                 reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);            
         }
         else
@@ -62,7 +66,7 @@ void Server::set_plus(std::string plus, std::vector<std::string>& params, int ch
         return;
                     
     std::string allowed = "itkol";
-    std::string msg_replied; // :toto!~toto@localhost MODE #test +k secret // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
+    std::string msg_replied; // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
     msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name();
     
@@ -193,7 +197,11 @@ void Server::set_minus(std::string minus, std::vector<std::string>& params, int 
             }                
         }        
         else
-            reply(COD_UNKNOWNMODE, minus.at(i) + " " + std::string(ERR_UNKNOWNMODE), clt_idx);
+        {
+            std::stringstream ss;
+            ss << minus.at(i);
+            reply(COD_UNKNOWNMODE, ss.str() + " " + ERR_UNKNOWNMODE, clt_idx);
+        }            
         i++;
     }        
 }
@@ -262,6 +270,7 @@ std::string Server::get_modes(int chnl_idx, int clt_idx)
         modes << "i";
     if (_chnls.at(chnl_idx).get_mode_t())
         modes << "t";
+    
     // if (_chnls.at(chnl_idx).get_mode_k()) 
     if (!_chnls.at(chnl_idx).get_key().empty()) 
     {
@@ -269,19 +278,19 @@ std::string Server::get_modes(int chnl_idx, int clt_idx)
         if (in_channel(chnl_idx, clt_idx) != -1) // show key if in the channel
             params << _chnls.at(chnl_idx).get_key();
     }            
+    
     //if (_chnls.at(chnl_idx).get_mode_l())
     if (_chnls.at(chnl_idx).get_limit() != -1)
     {
         modes << "l";
-        if (params != "")
+        if (params.str() != "")
             params << " " << _chnls.at(chnl_idx).get_limit();
         else     
             params << _chnls.at(chnl_idx).get_limit();
     }        
     if (modes.str() == "+")
         return ("");
-    if (params != "")
-        modes << " " << params;
+    if (params.str() != "")
+        modes << " " << params.str();
     return (modes.str());
 }
-

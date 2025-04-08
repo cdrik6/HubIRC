@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 00:52:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 06:40:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@
 # define COD_CANNOTSENDTOCHAN "404"
 # define ERR_CANNOTSENDTOCHAN ":Cannot send to channel"
 // JOIN
-# define COD_NOSUCHCHANNEL "403" 
-// # define ERR_NOSUCHCHANNEL ":No such channel" //<nickname> <channel> :No such channel
 # define COD_BADCHANNELKEY "475" 
 # define ERR_BADCHANNELKEY ":wrong key to join the channel" // "<client> <channel> :Cannot join channel (+k)"
 # define COD_TOPIC "332" // 332 <nickname> <channel> :<topic>
@@ -84,6 +82,8 @@
 # define RPL_ENDOFNAMES ":End of /NAMES list"
 # define COD_USERONCHANNEL "443"
 # define ERR_USERONCHANNEL ":is already on channel"  //"<client> <nick> <channel> :is already on channel"
+# define COD_CHANNELISFULL "471"
+# define ERR_CHANNELISFULL ":Cannot join channel (+l)" // <channel>
 // WHO 
 # define COD_WHOREPLY "352"
 # define COD_ENDOFWHO "315"
