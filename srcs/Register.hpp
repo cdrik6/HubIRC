@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 22:21:24 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:06:38 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,9 @@
 # define COD_TOPICWHOTIME "333" // RPL_TOPICWHOTIME <channel> <nick> <setat>
 # define COD_INPUTTOOLONG "417"
 # define ERR_INPUTTOOLONG ":Input line was too long (topiclen = 307)"
+// KICK
+# define DEFAULT_REASON "Bye!"
+
 
 
 

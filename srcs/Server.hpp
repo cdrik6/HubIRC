@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 22:46:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/09 00:32:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,9 @@ class Server
 		// Topic
 		void topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void update_topic(std::string topic, int chnl_idx, int clt_idx);
+		// Kick
+		void kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void kick_users(std::vector<std::string> users, std::string reason, int chnl_idx, int clt_idx);
 		//
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		

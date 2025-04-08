@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 13:52:09 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 23:09:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,8 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 			mode(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "TOPIC")
 			topic(tab_msg, clt_idx, tab_idx);
+		else if (toUpper(cmd) == "KICK")
+			kick(tab_msg, clt_idx, tab_idx);
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
 		
