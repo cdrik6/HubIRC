@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 18:58:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:21:24 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // Replies generated in the response to commands are found in the range from 200 to 399
 // Error replies are found in the range from 400 to 599
 
-// /server ADD myserver 127.0.0.1 6667 mypassword
+// /server add -auto localhost 1024 -password toto
 // Edit ~/.irssi/config
 
 # define COD_NONE "000"
@@ -84,7 +84,7 @@
 # define COD_ENDOFNAMES "366"
 # define RPL_ENDOFNAMES ":End of /NAMES list"
 # define COD_USERONCHANNEL "443"
-# define ERR_USERONCHANNEL ":is already on channel"  //"<client> <nick> <channel> :is already on channel"
+# define ERR_USERONCHANNEL ":is already on channel"  // "<client> <nick> <channel> :is already on channel"
 # define COD_CHANNELISFULL "471"
 # define ERR_CHANNELISFULL ":Cannot join channel (+l)" // <channel>
 // WHO 
@@ -105,13 +105,13 @@
 # define COD_USERNOTINCHANNEL "441"
 # define ERR_USERNOTINCHANNEL ":They aren't on that channel" // <nick> <channel>
 # define COD_UNKNOWNERROR "400"
-# define ERR_UNKNOWNERROR ":Invalid limit" //<command>{ <subcommand>} :<info>" for limit > MAX
+# define ERR_UNKNOWNERROR ":Invalid limit" // <command>{ <subcommand>} :<info>" for limit > MAX
 // TOPIC
-# define COD_TOPICWHOTIME "333"
-//# define RPL_TOPICWHOTIME "" // <channel> <nick> <setat>
+# define COD_TOPICWHOTIME "333" // RPL_TOPICWHOTIME <channel> <nick> <setat>
+# define COD_INPUTTOOLONG "417"
+# define ERR_INPUTTOOLONG ":Input line was too long (topiclen = 307)"
 
 
-"<client> <channel> <nick> <setat>"
 
 
 // // COMMAND NOT FOUND

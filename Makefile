@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/08 03:28:48 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/08 22:11:51 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS		=	srcs/main.cpp \
 				srcs/Join.cpp \
 				srcs/Who.cpp \
 				srcs/Mode.cpp \
+				srcs/Topic.cpp \
 				srcs/Part.cpp
 
 CC			=	c++

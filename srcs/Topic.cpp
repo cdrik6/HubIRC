@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 18:17:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:03:07 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,53 @@ void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             if (in_channel(chnl_idx, clt_idx) != -1)
             {
                 i++;
-                if (i >= tab_msg.size()) // no topic, only query by user in the channel
+                if (i >= tab_msg.size()) // only query by user in the channel
                 {
                     if (_chnls.at(chnl_idx).get_topic() == "") 
-                        reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx); // 331 <nickname> <channel> :No topic set
+                        reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx);
                     else
                     {
-                        reply(COD_TOPIC, channel + " :" + _chnls.at(chnl_idx).get_topic(), clt_idx); // 332 <nickname> <channel> :<topic>
-                        
-                    } 
-                        
-                    // change to all
-                    
+                        reply(COD_TOPIC, channel + " :" + _chnls.at(chnl_idx).get_topic(), clt_idx);
+                        std::stringstream ss;
+                        ss << _chnls.at(chnl_idx).get_setat();                        
+                        reply(COD_TOPICWHOTIME, channel + " " + _chnls.at(chnl_idx).get_setby() + " " + ss.str(), clt_idx); // 333 <channel> <nick> <setat>
+                    }
                 }
-                    reply(COD_CHANNELMODEIS, channel + " " + get_modes(chnl_idx, clt_idx), clt_idx); // " " + ""
-                
-                
+                else // set or clear topic
+                {
+                    if (tab_msg.at(i).length() <= TOPICLEN)
+                    {                             
+                        if (!_chnls.at(chnl_idx).get_mode_t()) // not restricted to operators                        
+                            update_topic(tab_msg.at(i), chnl_idx, clt_idx);                        
+                        else // restricted
+                        {
+                            if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // only operator can set topic
+                                update_topic(tab_msg.at(i), chnl_idx, clt_idx);                            
+                            else
+                                reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);                            
+                        }
+                    }                        
+                    else
+                        reply(COD_INPUTTOOLONG, ERR_INPUTTOOLONG, clt_idx);        
+                }
             }
             else
                 reply(COD_NOTONCHANNEL, channel + " " + ERR_NOTONCHANNEL, clt_idx);
         }    
         else
             reply(COD_NOSUCHCHANNEL, channel + " " + ERR_NOSUCHCHANNEL, clt_idx);
-    }
-    
+    }    
 }
 
-// topiclen = 307
+void Server::update_topic(std::string topic, int chnl_idx, int clt_idx)
+{    
+    std::string msg_replied;
+    
+    _chnls.at(chnl_idx).set_topic(topic);
+    _chnls.at(chnl_idx).set_setby(_clts.at(clt_idx).get_nickname());
+    _chnls.at(chnl_idx).set_setat();    
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+                + "@" + _clts.at(clt_idx).get_hostname() + " TOPIC " + _chnls.at(chnl_idx).get_name() \
+                + " " + topic;
+    reply_to_all(msg_replied, chnl_idx);
+}

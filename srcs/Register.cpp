@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 23:35:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:53:25 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,19 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 // PONG: [<server>] <token>
 void Server::ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx;
-    
-    // while (toUpper(tab_msg.at(i)) != "PING")
-    //     i++;
-    i++;
+    int i = tab_idx + 1;
+        
 	if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "PING " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
-    else
-    {   
-        std::string token = tab_msg.at(i);
-        reply(COD_NONE, "PONG " + token, clt_idx);
-    }    
-    //std::string rpl = "PONG localhost :" + _clients.at(clt_idx).get_nickname() + "\r\n";
-    // if (send(_clients.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
-    //     throw (std::runtime_error("send: " + std::string(strerror(errno))));    
+    else        
+        reply(COD_NONE, "PONG " + tab_msg.at(i), clt_idx);            
 }
 
 void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {    
-    int i = tab_idx;
+    int i = tab_idx + 1;
     
-	// verify password
-    // while (toUpper(tab_msg.at(i)) != "PASS")
-    //     i++;
-    i++;
+	// verify password    
 	if (i >= tab_msg.size())
         reply(COD_PASSWDMISMATCH, ERR_PASSWDMISSING, clt_idx);
     else if (tab_msg.at(i) == _password)    
@@ -67,12 +55,9 @@ void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 // NICK command is used to give user a nickname or change the existing one
 void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx;
+    int i = tab_idx + 1;
     std::string nick;    
-    
-    // while (toUpper(tab_msg.at(i)) != "NICK" && i < tab_msg.size())
-    //     i++;
-    i++;
+        
     if (i >= tab_msg.size())
         reply(COD_NONICKNAMEGIVEN, ERR_NONICKNAMEGIVEN, clt_idx);
     else
@@ -99,7 +84,7 @@ int Server::check_nick(std::string nick)
 {
     std::string allowed = "_[]{}\\|";
     
-    if (nick.length() > 30 || nick.length() == 0)
+    if (nick.length() > NICKLEN || nick.length() == 0)
         return (KO);
     if (isdigit(nick.at(0)))
         return (KO);    
@@ -127,11 +112,8 @@ int Server::nick_available(std::string nick, int clt_idx)
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
     std::string user;    
-    int i = tab_idx;
-        
-    // while (toUpper(tab_msg.at(i)) != "USER")
-    //     i++;
-    i++;
+    int i = tab_idx + 1;    
+    
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else

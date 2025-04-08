@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 13:54:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:55:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     // get channels        
     if (i == tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "JOIN " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
-    else if (tab_msg.at(i) == "0")
-    {
-        // PART of all channels client is a member ********************************** to do /
-    }
+    // else if (tab_msg.at(i) == "0") //PART of all channels client is a member // but impossible with irssi /JOIN 0 --> /JOIN #0    
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')
         reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " " + ERR_NOSUCHCHANNEL, clt_idx);
     else 
@@ -92,9 +89,10 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     {    
         msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                     + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
-        reply(COD_NONE, msg_replied, clt_idx);    
-        for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++) // All other users in #chatroom also receive this
-            reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt()));
+        reply(COD_NONE, msg_replied, clt_idx);
+        // for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++) // All other users in #chatroom also receive this
+        //     reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt()));
+        reply_to_all(msg_replied, chnl_idx);
         if (topic == "") 
             reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx); // 331 <nickname> <channel> :No topic set
         else 
@@ -150,7 +148,7 @@ int Server::check_channel(std::string chan_name)
 {
     std::string allowed = "-_[]{}|";
     
-    if (chan_name.length() > 50 || chan_name.length() == 0)
+    if (chan_name.length() > CHANLEN || chan_name.length() == 0)
         return (KO);    
     for (int i = 0; i < chan_name.length(); i++)
     {           

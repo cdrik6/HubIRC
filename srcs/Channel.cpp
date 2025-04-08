@@ -6,19 +6,16 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 22:59:57 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:43:51 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-Channel::Channel(): _name(""), _key(""), _topic("")
+Channel::Channel(): _name(""), _key(""), _topic(""),_setby(""), _setat(0)
 {
 	_mode_i = false;
-    _mode_t = false;
-	// _mode_k = false;
-	// _mode_o = false;
-	// _mode_l = false;
+    _mode_t = false;	
 	_limit = -1;
 }
 
@@ -33,6 +30,16 @@ std::string Channel::get_name(void) const
 std::string Channel::get_topic(void) const
 {
 	return (_topic);	
+}
+
+std::string Channel::get_setby(void) const
+{
+	return (_setby);	
+}
+
+time_t Channel::get_setat(void) const
+{
+	return (_setat);	
 }
 
 std::vector<std::string> Channel::get_operators(void) const
@@ -109,12 +116,25 @@ void Channel::set_mode_t(bool restrict_topic)
 }
 
 void Channel::set_limit(int limit)
-{
-	// if (get_mode_l())
-		_limit = limit;
-	// else 	
-	// 	_limit = -1;
+{	
+	_limit = limit;
 }
+
+void Channel::set_topic(std::string topic)
+{
+	_topic = topic;	
+}
+
+void Channel::set_setby(std::string nick)
+{
+	_setby = nick;
+}
+
+void Channel::set_setat(void)
+{
+	_setat = time(NULL);
+}
+
 
 void Channel::add_operator(std::string nick)
 {

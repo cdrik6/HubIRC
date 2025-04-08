@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 14:06:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:46:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <cstdio>
 # include <csignal>
 # include <cctype>
+# include <ctime>
 
 # include "Client.hpp"
 # include "Register.hpp"
@@ -43,6 +44,9 @@
 # define BACKLOG 10 // pending connections before the kernel starts rejecting new ones
 # define BUFFER_SIZE 1024 //512 //510
 # define MAX_CHANNEL_LIMIT 1000
+# define NICKLEN 30
+# define TOPICLEN 307
+# define CHANLEN 50
 
 
 class Channel;
@@ -120,7 +124,8 @@ class Server
 		int nick_in_channel(int chnl_idx, std::string nick);
 		long check_limit(std::string limit);
 		// Topic
-		void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void update_topic(std::string topic, int chnl_idx, int clt_idx);
 		//
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		
