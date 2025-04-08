@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 00:56:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 14:06:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,9 @@ class Server
 		void set_minus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
 		int nick_in_channel(int chnl_idx, std::string nick);
 		long check_limit(std::string limit);
+		// Topic
+		void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		//
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		
 		// int check_pass(std::vector<std::string>& tab_msg, int client_idx);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 06:40:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:58:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 // Numerics in the range from 001 to 099 are used for client-server connections only
 // Replies generated in the response to commands are found in the range from 200 to 399
 // Error replies are found in the range from 400 to 599
+
+// /server ADD myserver 127.0.0.1 6667 mypassword
+// Edit ~/.irssi/config
 
 # define COD_NONE "000"
 // PASS
@@ -103,8 +106,12 @@
 # define ERR_USERNOTINCHANNEL ":They aren't on that channel" // <nick> <channel>
 # define COD_UNKNOWNERROR "400"
 # define ERR_UNKNOWNERROR ":Invalid limit" //<command>{ <subcommand>} :<info>" for limit > MAX
+// TOPIC
+# define COD_TOPICWHOTIME "333"
+//# define RPL_TOPICWHOTIME "" // <channel> <nick> <setat>
 
-// ERR_CHANNELISFULL (471) /***** to do JOIN limit */
+
+"<client> <channel> <nick> <setat>"
 
 
 // // COMMAND NOT FOUND

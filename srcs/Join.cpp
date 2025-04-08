@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 06:56:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/08 13:54:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx;
+    int i = tab_idx + 1;
     std::vector<std::string> channels; 
     std::vector<std::string> keys;
     
-    // get channels    
-    i++;
+    // get channels        
     if (i == tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "JOIN " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else if (tab_msg.at(i) == "0")
