@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 23:09:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 01:31:45 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,22 +212,6 @@ int Server::check_registered(int clt_idx)
 	return (OK);
 }
 
-void Server::welcome(int clt_idx)
-{
-	std::string msg_replied;
-	
-	_clts.at(clt_idx).set_registered(true);	
-	msg_replied = std::string(RPL_WELCOME) + " " + _clts.at(clt_idx).get_nickname() \
-				+ "!" + _clts.at(clt_idx).get_username() + "@" + _clts.at(clt_idx).get_hostname(); //  <nick>!<user>@<host>"    
-	reply(COD_WELCOME, msg_replied, clt_idx);
-	reply(COD_YOURHOST, RPL_YOURHOST, clt_idx);
-	reply(COD_CREATED, RPL_CREATED, clt_idx);
-	reply(COD_MYINFO, RPL_MYINFO, clt_idx);	// <available user modes> <available channel modes>
-	reply(COD_MOTDSTART, RPL_MOTDSTART, clt_idx);
-	reply(COD_MOTD, RPL_MOTD, clt_idx);
-	reply(COD_ENDOFMOTD, RPL_ENDOFMOTD, clt_idx);
-}
-
 // RFC 2812: message = [ ":" prefix SPACE ] command [ params ] CRLF
 int Server::parse_message(std::string buffer, int clt_idx)
 {	
@@ -287,6 +271,8 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 			topic(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "KICK")
 			kick(tab_msg, clt_idx, tab_idx);
+		else if (toUpper(cmd) == "INVITE")
+			invite(tab_msg, clt_idx, tab_idx);
 	}	
 	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
 		
@@ -304,15 +290,14 @@ int Server::client_idx(int clt_skt)
 	return (-1); // disconnected in between or error ?
 }
 
+// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
 void Server::client_disconnect(int pfd_idx, int clt_idx)
 {
 	quit_channels("Connection closed", clt_idx);
-	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";
+	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";	
 	close(_pfds.at(pfd_idx).fd);
-	_pfds.erase(_pfds.begin() + pfd_idx);
-	// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
-	_clts.erase(_clts.begin() + clt_idx);
-	//********** reply to all others clients if channel a quit RPL */	
+	_pfds.erase(_pfds.begin() + pfd_idx);	
+	_clts.erase(_clts.begin() + clt_idx);	
 }
 
 // :<nickname>!<user>@<host> QUIT :[optional message]
@@ -327,6 +312,7 @@ void Server::quit_channels(std::string reason, int clt_idx)
 		{
 			_chnls.at(i).rem_client(idx);
 			_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
+			_chnls.at(i).rem_invitee(_clts.at(clt_idx).get_nickname());
 			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
 					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
 			reply_to_all(msg_replied, i);				

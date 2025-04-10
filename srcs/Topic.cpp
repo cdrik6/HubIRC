@@ -6,12 +6,11 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 22:03:07 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:04:11 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-
 
 // Topic #test : --> clear the topic
 void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)

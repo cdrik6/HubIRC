@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/09 01:09:40 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:59:11 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 	
 	for (int j = 0; j < users.size(); j++)
 	{
-		int tgt_idx = target_index(users.at(j));
+		int tgt_idx = target_idx(users.at(j));
 		
 		if (tgt_idx != -1)
 		{

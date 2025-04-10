@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 21:43:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 00:10:05 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ std::vector<std::string> Channel::get_operators(void) const
 	return (_operators);	
 }
 
+std::vector<std::string> Channel::get_invitees(void) const
+{
+	return (_invitees);
+}
+
 std::string Channel::get_key(void) const
 {
 	return (_key);
@@ -67,26 +72,8 @@ bool Channel::get_mode_t(void) const
 	return (_mode_t);
 }
 
-// bool Channel::get_mode_k(void) const
-// {
-// 	return (_mode_k);	
-// }
-
-// bool Channel::get_mode_o(void) const
-// {
-// 	return (_mode_o);
-// }
-
-// bool Channel::get_mode_l(void) const
-// {
-// 	return (_mode_l);
-// }
-
 int Channel::get_limit(void) const
-{
-	// if (get_mode_l())
-	// 	return (_limit);
-	// return (-1);
+{	
 	return (_limit);	
 }
 
@@ -135,7 +122,6 @@ void Channel::set_setat(void)
 	_setat = time(NULL);
 }
 
-
 void Channel::add_operator(std::string nick)
 {
 	_operators.push_back(nick);
@@ -144,22 +130,6 @@ void Channel::add_operator(std::string nick)
 // An IRCop has full control over channels but does NOT get @ automatically.
 // They must be explicitly given +o to appear as a channel operator.
 // Even without @, they can still override channel protections.
-
-// void Channel::rem_operator(std::string nick)
-// {
-// 	std::vector<std::string>::iterator it;
-	
-// 	for (it = _operators.begin(); it != _operators.end();)
-// 	{
-// 		if (*it == nick)			
-// 		{
-// 			it = _operators.erase(it);			
-// 			break;
-// 		}		
-// 		else
-// 			++it;
-// 	}	
-// }
 
 void Channel::rem_operator(std::string nick)
 {
@@ -183,7 +153,52 @@ bool Channel::is_operator(std::string nick)
 	return (false);
 }
 
+void Channel::add_invitee(std::string nick)
+{
+	_invitees.push_back(nick);
+}
+
+void Channel::rem_invitee(std::string nick)
+{
+	for (int i = 0; i < _invitees.size(); i++)
+	{
+		if (_invitees.at(i) == nick)			
+		{
+			_invitees.erase(_invitees.begin() + i);
+			break;
+		}
+	}
+}
+
+bool Channel::is_invitee(std::string nick)
+{
+	for (int i = 0; i < _invitees.size(); i++)
+	{
+		if (_invitees.at(i) == nick)
+			return (true);					
+	}
+	return (false);
+}
+
 void Channel::rem_client(int idx)
 {
 	_chnlclts.erase(_chnlclts.begin() + idx);
 }
+
+
+/**** draft  */
+// void Channel::rem_operator(std::string nick)
+// {
+// 	std::vector<std::string>::iterator it;
+	
+// 	for (it = _operators.begin(); it != _operators.end();)
+// 	{
+// 		if (*it == nick)			
+// 		{
+// 			it = _operators.erase(it);			
+// 			break;
+// 		}		
+// 		else
+// 			++it;
+// 	}	
+// }

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/07 03:07:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/09 22:59:38 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                 msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
-                    int k = target_index(target.at(t));
+                    int k = target_idx(target.at(t));
                     if (k != -1)                    
                         reply(COD_NONE, msg_replied, k);                
                     else
@@ -87,7 +87,7 @@ int Server::in_channel(int chnl_idx, int clt_idx)
     return (-1);
 }
 
-int Server::target_index(std::string target)
+int Server::target_idx(std::string target)
 {
     for (int i = 0; i < _clts.size(); i++)       
         if (_clts.at(i).get_nickname() == target)
@@ -138,7 +138,7 @@ int Server::channel_idx(std::string channel)
 //             msg_replied = msg_replied + " " + target + " " + msg; // to            
 //             if (target.at(0) != '#' && target.at(0) != '&')
 //             {
-//                 int k = target_index(target);
+//                 int k = target_idx(target);
 //                 if (k != -1)                    
 //                     reply(COD_NONE, msg_replied, k);                
 //                 else

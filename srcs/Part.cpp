@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 21:55:09 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 00:12:26 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         reply_to_all(msg_replied, k); // to all including the leaving                        
                         _chnls.at(k).rem_client(idx);
 				        _chnls.at(k).rem_operator(_clts.at(clt_idx).get_nickname());
+                        _chnls.at(k).rem_invitee(_clts.at(clt_idx).get_nickname());
                     }
                     else
                         reply(COD_NOTONCHANNEL, channels.at(j) + " " + ERR_NOTONCHANNEL, clt_idx);

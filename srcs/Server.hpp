@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/09 00:32:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 01:33:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,7 @@ class Server
 		int client_idx(int clt_skt);		
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
-		int check_registered(int clt_idx);
-		void welcome(int clt_idx);		
+		int check_registered(int clt_idx);		
 		void get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx);		
 		// Register
 		void reply(std::string code, std::string msg_replied, int clt_idx);		
@@ -96,10 +95,11 @@ class Server
 		void username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int check_nick(std::string nick);
 		int nick_available(std::string nick, int clt_idx);
+		void welcome(int clt_idx);		
 		// Privmsg
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
-		int target_index(std::string target);
+		int target_idx(std::string target);
 		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
@@ -129,6 +129,9 @@ class Server
 		// Kick
 		void kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void kick_users(std::vector<std::string> users, std::string reason, int chnl_idx, int clt_idx);
+		// Invite
+		void invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void let_it_in(int chnl_idx, int clt_idx, int inv_idx);
 		//
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		

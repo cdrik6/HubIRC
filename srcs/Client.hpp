@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:13:35 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 03:51:25 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 01:34:28 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ class Client
         bool get_registered(void) const;
         //
         void set_clt_skt(int clt_skt);
-        void set_nickname(std::string nick);
-        // void set_oldnick(std::string nick);
+        void set_nickname(std::string nick);        
         void set_username(std::string username);
         void set_pwd_ok(bool pwd_ok);
         void set_registered(bool registered);

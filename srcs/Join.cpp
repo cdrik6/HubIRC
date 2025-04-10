@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 22:55:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 03:07:07 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,15 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         new_chan = false;
                         if (in_channel(k, clt_idx) == -1) // KO not in// check already in the channel --> seems done by irssi, for nc
                         { 
+                            // invite, limit, key --> in that order for irssi
+                            
+                            // key + limit
                             if (keys.at(j) == _chnls.at(k).get_key())
                                 reply_join_add(channels.at(j), k, clt_idx);                        
                             else
                                 reply(COD_BADCHANNELKEY, channels.at(j) + " " + ERR_BADCHANNELKEY, clt_idx);
                             break;
+                            
                         }
                         else
                             reply(COD_USERONCHANNEL, _clts.at(clt_idx).get_nickname() + " " + ERR_USERONCHANNEL, clt_idx);                            
@@ -78,6 +82,13 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     }
 }
 
+int Server::check_invite()
+{
+
+    
+}
+
+
 //:<nickname>!<user>@<host> JOIN <channel>
 void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
 {
@@ -93,6 +104,7 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
         // for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++) // All other users in #chatroom also receive this
         //     reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt()));
         reply_to_all(msg_replied, chnl_idx);
+        //
         if (topic == "") 
             reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx); // 331 <nickname> <channel> :No topic set
         else 
@@ -175,15 +187,3 @@ int Server::check_key(std::string key_name)
     }
     return (OK);
 }
-
-// // channel et checker nick in _chnlclts() // same as in_channel !
-// int Server::check_already(int chnl_idx, int clt_idx)
-// {
-//     int k = chnl_idx;
-//     for (int i = 0; i < _chnls.at(k).get_chnlclts().size(); i++)
-//     {
-//         if (_chnls.at(k).get_chnlclts().at(i).get_nickname() == _clts.at(clt_idx).get_nickname())
-//             return (OK);
-//     }
-//     return (KO);
-// }

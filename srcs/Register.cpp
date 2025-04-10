@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 21:53:25 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 01:31:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,3 +131,18 @@ void Server::username(std::vector<std::string>& tab_msg, int clt_idx, int tab_id
     }
 }
 
+void Server::welcome(int clt_idx)
+{
+	std::string msg_replied;
+	
+	_clts.at(clt_idx).set_registered(true);	
+	msg_replied = std::string(RPL_WELCOME) + " " + _clts.at(clt_idx).get_nickname() \
+				+ "!" + _clts.at(clt_idx).get_username() + "@" + _clts.at(clt_idx).get_hostname(); //  <nick>!<user>@<host>"    
+	reply(COD_WELCOME, msg_replied, clt_idx);
+	reply(COD_YOURHOST, RPL_YOURHOST, clt_idx);
+	reply(COD_CREATED, RPL_CREATED, clt_idx);
+	reply(COD_MYINFO, RPL_MYINFO, clt_idx);	// <available user modes> <available channel modes>
+	reply(COD_MOTDSTART, RPL_MOTDSTART, clt_idx);
+	reply(COD_MOTD, RPL_MOTD, clt_idx);
+	reply(COD_ENDOFMOTD, RPL_ENDOFMOTD, clt_idx);
+}

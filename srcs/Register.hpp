@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/09 00:06:38 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 01:51:49 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@
 # define RPL_ENDOFWHO ":End of /WHO list"
 // PART
 # define COD_NOTONCHANNEL "442" 
-# define ERR_NOTONCHANNEL ":You're not on that channel"
+# define ERR_NOTONCHANNEL ":You're not on that channel" // <channel>
 // MODE 
 # define COD_CHANNELMODEIS "324" // 329 time optional 
 # define COD_CHANOPRIVSNEEDED "482" 
@@ -112,10 +112,11 @@
 # define ERR_INPUTTOOLONG ":Input line was too long (topiclen = 307)"
 // KICK
 # define DEFAULT_REASON "Bye!"
-
-
-
-
+// INVITE
+# define COD_INVITING "341"
+// # define COD_INVITELIST "336"
+// # define COD_ENDOFINVITELIST "337"
+// # define RPL_ENDOFINVITELIST ":End of /INVITE list" // <client>
 
 // // COMMAND NOT FOUND
 // # define COD_UNKNOWNCOMMAND "421"
