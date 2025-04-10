@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 06:11:21 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 15:03:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,8 @@ class Server
 		std::string get_modes(int chnl_idx, int clt_idx);
 		std::string get_plus(std::string modestr);
 		std::string get_minus(std::string modestr);
-		std::string set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
-		std::string set_minus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
+		std::vector<std::string> set_plus(std::string& plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
+		std::vector<std::string> set_minus(std::string& minus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
 		int nick_in_channel(int chnl_idx, std::string nick);
 		int check_limit(std::string limit);
 		// Topic

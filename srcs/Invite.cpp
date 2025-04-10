@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:13:27 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 02:13:43 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 14:37:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void Server::invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 {
                     if (in_channel(chnl_idx, clt_idx) != -1) // inviter in it?
                     {
-                        if (in_channel(chnl_idx, inv_idx) != -1) // invitee already in it?
+                        if (in_channel(chnl_idx, inv_idx) == -1) // invitee not/already in it?
                         {                      
                             if (!_chnls.at(chnl_idx).get_mode_i()) // not restricted to operators
                                 let_it_in(chnl_idx, clt_idx, inv_idx);
@@ -50,8 +50,7 @@ void Server::invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                                     let_it_in(chnl_idx, clt_idx, inv_idx);
                                 else
                                     reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);                            
-                            }
-                               
+                            }                               
                         }
                         else
                             reply(COD_USERONCHANNEL, invitee + " " + channel + " " + ERR_USERONCHANNEL, clt_idx);    
