@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 23:41:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 05:13:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ std::vector<std::string> split(std::string str)
         if (is_msg == true) 
             tab.push_back(msg);        
     }
+    std::cout << std::endl; /*************** */    
     return (tab);
 }
 

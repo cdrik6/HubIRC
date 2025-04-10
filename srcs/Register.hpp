@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 01:51:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 04:33:39 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@
 # define ERR_USERONCHANNEL ":is already on channel"  // "<client> <nick> <channel> :is already on channel"
 # define COD_CHANNELISFULL "471"
 # define ERR_CHANNELISFULL ":Cannot join channel (+l)" // <channel>
+# define COD_INVITEONLYCHAN "473"
+# define ERR_INVITEONLYCHAN ":Cannot join channel (+i)" // <channel>
 // WHO 
 # define COD_WHOREPLY "352"
 # define COD_ENDOFWHO "315"
@@ -114,13 +116,8 @@
 # define DEFAULT_REASON "Bye!"
 // INVITE
 # define COD_INVITING "341"
-// # define COD_INVITELIST "336"
-// # define COD_ENDOFINVITELIST "337"
-// # define RPL_ENDOFINVITELIST ":End of /INVITE list" // <client>
-
-// // COMMAND NOT FOUND
-// # define COD_UNKNOWNCOMMAND "421"
-// # define ERR_UNKNOWNCOMMAND " :Unknown command" // "<command> :Unknown command"
-
+// COMMAND NOT FOUND
+# define COD_UNKNOWNCOMMAND "421"
+# define ERR_UNKNOWNCOMMAND ":Unknown command" // <command>
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/08 07:03:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 06:27:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,12 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 reply(COD_CHANNELMODEIS, channel + " " + get_modes(chnl_idx, clt_idx), clt_idx); // " " + ""            
             else if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // check it is a channel oparator
             {
-                std::string minus = get_minus(tab_msg.at(i)); // ""
-                std::string plus = get_plus(tab_msg.at(i)); // ""                 
+                std::string msg_replied; // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
+                msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+                            + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name();
+                
+                std::string minus = get_minus(tab_msg.at(i)); // "" /*************reprendre */
+                std::string plus = get_plus(tab_msg.at(i)); // ""  /*************reprendre */
                 std::vector<std::string> params;                
                 int j = i + 1;
                 while (j < tab_msg.size())
@@ -46,9 +50,9 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     j++;
                 }                    
                 if (tab_msg.at(i).at(0) == '+')                
-                    (set_plus(plus, params, chnl_idx, clt_idx), set_minus(minus, params, chnl_idx, clt_idx));
+                    (set_plus(plus, params, chnl_idx, clt_idx), set_minus(minus, params, chnl_idx, clt_idx)); /*************reprendre */
                 else if (tab_msg.at(i).at(0) == '-')
-                    (set_minus(minus, params, chnl_idx, clt_idx), set_plus(plus, params, chnl_idx, clt_idx));
+                    (set_minus(minus, params, chnl_idx, clt_idx), set_plus(plus, params, chnl_idx, clt_idx)); /*************reprendre */
                 // else 
                 //     reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
             }
@@ -60,15 +64,16 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     }
 }
 
-void Server::set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
+std::string Server::set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
 {
     if (plus == "")
         return;
                     
     std::string allowed = "itkol";
-    std::string msg_replied; // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
-    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-                + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name();
+    std::string params_replied = "";
+    std::string msg_replied = ""; // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
+    // msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+    //             + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name();
     
     int i = 0;    
     while (i < plus.length())
@@ -78,12 +83,14 @@ void Server::set_plus(std::string plus, std::vector<std::string>& params, int ch
             if (plus.at(i) == 'i')
             {
                 _chnls.at(chnl_idx).set_mode_i(true);
-                reply_to_all(msg_replied + " +i", chnl_idx);
+                msg_replied = msg_replied + "i";
+                // reply_to_all(msg_replied + " +i", chnl_idx);
             }                
             if (plus.at(i) == 't')
             {
                 _chnls.at(chnl_idx).set_mode_t(true);
-                reply_to_all(msg_replied + " +t", chnl_idx);
+                msg_replied = msg_replied + "t";
+                // reply_to_all(msg_replied + " +t", chnl_idx);
             }                
             if (plus.at(i) == 'k')
             {
@@ -92,7 +99,9 @@ void Server::set_plus(std::string plus, std::vector<std::string>& params, int ch
                     if (check_key(params.at(0)) == OK)
                     {
                         _chnls.at(chnl_idx).set_key(params.at(0));
-                        reply_to_all(msg_replied + " +k " + params.at(0), chnl_idx);
+                        msg_replied = msg_replied + "k";
+                        params_replied = params_replied + " " + params.at(0);
+                        // reply_to_all(msg_replied + " +k " + params.at(0), chnl_idx);
                     }                        
                     else
                         reply(COD_INVALIDKEY, _chnls.at(chnl_idx).get_name() + " " + ERR_INVALIDKEY, clt_idx);
@@ -110,7 +119,9 @@ void Server::set_plus(std::string plus, std::vector<std::string>& params, int ch
                         if (!_chnls.at(chnl_idx).is_operator(params.at(0))) // already operator --> do nothing
                         {
                             _chnls.at(chnl_idx).add_operator(params.at(0));
-                            reply_to_all(msg_replied + " +o " + params.at(0), chnl_idx);                            
+                            msg_replied = msg_replied + "o";
+                            params_replied = params_replied + " " + params.at(0);
+                            // reply_to_all(msg_replied + " +o " + params.at(0), chnl_idx);                            
                         }                        
                     }                        
                     else
@@ -122,13 +133,16 @@ void Server::set_plus(std::string plus, std::vector<std::string>& params, int ch
             }
             if (plus.at(i) == 'l')
             {
+                
                 if (params.size() > 0)
                 {
-                    long lim = check_limit(params.at(0));
+                    int lim = check_limit(params.at(0));                    
                     if (lim != -1)
-                    {
-                        _chnls.at(chnl_idx).set_limit(lim);
-                        reply_to_all(msg_replied + " +l " + params.at(0), chnl_idx);
+                    {                        
+                        _chnls.at(chnl_idx).set_limit(lim);                        
+                        msg_replied = msg_replied + "l";
+                        params_replied = params_replied + " " + params.at(0);
+                        // reply_to_all(msg_replied + " +l " + params.at(0), chnl_idx);
                     }                        
                     else
                         reply(COD_UNKNOWNERROR, "MODE " + params.at(0) + " " + ERR_UNKNOWNERROR, clt_idx);
@@ -136,23 +150,32 @@ void Server::set_plus(std::string plus, std::vector<std::string>& params, int ch
                 }
                 else 
                     reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
-            }
+            }            
         }        
         else
-            reply(COD_UNKNOWNMODE, plus.at(i) + " " + std::string(ERR_UNKNOWNMODE), clt_idx);
+        {
+            std::stringstream ss;
+            ss << plus.at(i);
+            reply(COD_UNKNOWNMODE, ss.str() + " " + std::string(ERR_UNKNOWNMODE), clt_idx);
+        }            
         i++;
-    }        
+    }
+    // Format
+    if (msg_replied != "")    
+        msg_replied = "+" + msg_replied + params_replied;
+    return (msg_replied);
 }
 
-void Server::set_minus(std::string minus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
+std::string Server::set_minus(std::string minus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
 {
     if (minus == "")
         return;
             
     std::string allowed = "itkol";
-    std::string msg_replied; // :toto!~toto@localhost MODE #test +k secret // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
-    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-                + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name();
+    std::string params_replied = "";
+    std::string msg_replied = ""; // :toto!~toto@localhost MODE #test +k secret // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
+    // msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+    //             + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name();
     
     int i = 0;    
     while (i < minus.length())
@@ -162,17 +185,21 @@ void Server::set_minus(std::string minus, std::vector<std::string>& params, int 
             if (minus.at(i) == 'i')
             {
                 _chnls.at(chnl_idx).set_mode_i(false);
-                reply_to_all(msg_replied + " -i", chnl_idx);
+                msg_replied = msg_replied + "i";
+                // reply_to_all(msg_replied + " -i", chnl_idx);
             }                
             if (minus.at(i) == 't')
             {
                 _chnls.at(chnl_idx).set_mode_t(false);
-                reply_to_all(msg_replied + " -t", chnl_idx);
+                msg_replied = msg_replied + "t";
+                // reply_to_all(msg_replied + " -t", chnl_idx);
             }                
             if (minus.at(i) == 'k')
             {
+                params_replied = params_replied + " " + _chnls.at(chnl_idx).get_key();
                 _chnls.at(chnl_idx).set_key("");
-                reply_to_all(msg_replied + " -k", chnl_idx);
+                msg_replied = msg_replied + "k";                
+                // reply_to_all(msg_replied + " -k", chnl_idx);
             }                
             if (minus.at(i) == 'o')
             {
@@ -181,7 +208,9 @@ void Server::set_minus(std::string minus, std::vector<std::string>& params, int 
                     if (nick_in_channel(chnl_idx, params.at(0)) == OK)
                     {
                         _chnls.at(chnl_idx).rem_operator(params.at(0));
-                        reply_to_all(msg_replied + " -o " + params.at(0), chnl_idx);
+                        params_replied = params_replied + " " + params.at(0);
+                        msg_replied = msg_replied + "o";
+                        // reply_to_all(msg_replied + " -o " + params.at(0), chnl_idx);
                     }    
                     else
                         reply(COD_USERNOTINCHANNEL, params.at(0) + " " + _chnls.at(chnl_idx).get_name() + " " + ERR_USERNOTINCHANNEL, clt_idx);
@@ -191,9 +220,10 @@ void Server::set_minus(std::string minus, std::vector<std::string>& params, int 
                     reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
             }
             if (minus.at(i) == 'l')
-            {
-                _chnls.at(chnl_idx).set_limit(-1);
-                reply_to_all(msg_replied + " -l", chnl_idx);
+            {                
+                _chnls.at(chnl_idx).set_limit(-1);                
+                msg_replied = msg_replied + "l";
+                //reply_to_all(msg_replied + " -l", chnl_idx);
             }                
         }        
         else
@@ -203,17 +233,21 @@ void Server::set_minus(std::string minus, std::vector<std::string>& params, int 
             reply(COD_UNKNOWNMODE, ss.str() + " " + ERR_UNKNOWNMODE, clt_idx);
         }            
         i++;
-    }        
+    }
+    // Format
+    if (msg_replied != "")    
+        msg_replied = "-" + msg_replied + params_replied;
+    return (msg_replied);        
 }
 
 // limit affect - future - JOIN 
-long Server::check_limit(std::string limit)
+int Server::check_limit(std::string limit)
 {
-    char **endptr;
-    long lim = strtol(limit.c_str(), endptr, 10);
+    char *endptr;
+    long lim = strtol(limit.c_str(), &endptr, 10);
     
     if (0 < lim && lim <= MAX_CHANNEL_LIMIT)
-        return (lim);
+        return ((int)lim);
     return (-1);
 }
 
@@ -247,10 +281,11 @@ std::string Server::get_minus(std::string modestr)
 {
     std::string minus;
 
-    int i = 0;
-    while (i < modestr.length() && modestr.at(i) != '-')
-        i++;    
-    for (int j = i + 1; j < modestr.length(); j++)
+    // int i = 0;
+    // while (i < modestr.length() && modestr.at(i) != '-')
+    //     i++;    
+    // for (int j = i + 1; j < modestr.length(); j++)
+    for (int i = 0; i < modestr.length(); i++) /******************************** reprendre ici -ito-k */
     {
         if (modestr.at(j) == '+')
             break;

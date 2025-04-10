@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 01:31:45 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 05:24:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Server::Server(char *port, std::string password)
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
 	add_pfds(_pfds, _srv_skt, POLLIN); // server en 1	
 	std::cout << "Server: waiting for connections...\n";
-	std::cout << "Server: \"stop\" to stop it\n";
+	std::cout << "Server: \"stop\" to stop it\n\n";
 }
 
 // Server& Server::operator=(const Server& other)
@@ -150,8 +150,10 @@ void Server::polling(void)
 				char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
 				int nbytes = recv(_pfds.at(i).fd, buff, BUFFER_SIZE, 0);
 				int k = client_idx(_pfds.at(i).fd);
-				std::cout << "recvbuff: [" << buff << "]" << std::endl;
-				std::cout << "nbytes: " << nbytes << std::endl;
+				// Server output
+				std::cout << "Received buffer on socket " << _pfds.at(i).fd << " : [" << buff << "]" << std::endl;
+				std::cout << "(nbytes = " << nbytes << ")" << std::endl;
+				std::cout << std::endl;
 				//
 				if (nbytes <= 0) // closed or issues
 				{
@@ -223,8 +225,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 	if (clt_idx != -1)	
 		_clts.at(clt_idx).set_msg(buffer);	// build message	
 	if (clt_idx != -1 && buffer.find("\r\n") != std::string::npos)
-	{			
-		
+	{		
 		tab_msg = split(_clts.at(clt_idx).get_msg());		
 		if (tab_msg.size() == 0)
 			return (std::cout << "tab empty" << std::endl, KO); /**************debug here **** */
@@ -237,6 +238,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 		_clts.at(clt_idx).clear_msg();
 		return (OK);
 	}
+	std::cout << std::endl; /******************************* */
 	return (KO);
 }
 // Note
@@ -254,7 +256,9 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 	else if (toUpper(cmd) == "PASS")
 	 	pass(tab_msg, clt_idx, tab_idx);
 	else if (toUpper(cmd) == "USER")
-	 	username(tab_msg, clt_idx, tab_idx);		
+	 	username(tab_msg, clt_idx, tab_idx);
+	// else if (toUpper(cmd) == "QUIT")
+	//  	quit(tab_msg, clt_idx, tab_idx);
 	else if (_clts.at(clt_idx).get_registered() == true)
 	{
 		if (toUpper(cmd) == "PRIVMSG")		
@@ -273,11 +277,13 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 			kick(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "INVITE")
 			invite(tab_msg, clt_idx, tab_idx);
-	}	
-	// reply(COD_UNKNOWNCOMMAND, cmd + std::string(ERR_UNKNOWNCOMMAND), clt_idx);
-		
-	
-	
+		// else if (toUpper(cmd) == "NOTICE")
+		// 	notice(tab_msg, clt_idx, tab_idx);	
+		// else // --> just ignore 
+		// 	reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
+	}
+	// else
+	// 	reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx);
 }
 
 int Server::client_idx(int clt_skt)
@@ -360,7 +366,7 @@ std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_sk
 		struct sockaddr_in *ipv4 = (struct sockaddr_in *)((struct sockaddr *)(&client_addr));
 		if (!inet_ntop(AF_INET, &((*ipv4).sin_addr), ip4, INET_ADDRSTRLEN))			
 			throw (std::runtime_error("inet_ntop (ipv4): " + std::string(strerror(errno))));	
-		std::cout << "New connection from " << ip4 << " on socket " << clt_skt << std::endl;
+		std::cout << "New connection from " << ip4 << " on socket " << clt_skt << std::endl << std::endl;		
 		return(std::string(ip4));
 	}
 	else
@@ -368,7 +374,7 @@ std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_sk
 		struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *)((struct sockaddr *)(&client_addr));
 		if (!inet_ntop(AF_INET6, &((*ipv6).sin6_addr), ip6, INET6_ADDRSTRLEN))
 			throw (std::runtime_error("inet_ntop (ipv6): " + std::string(strerror(errno))));	
-		std::cout << "New connection from " << ip6 << " on socket " << clt_skt << std::endl;
+		std::cout << "New connection from " << ip6 << " on socket " << clt_skt << std::endl << std::endl;
 		return(std::string(ip6));
 	}	
 }

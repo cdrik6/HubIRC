@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 01:33:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 06:11:21 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,10 @@ class Server
 		std::string get_modes(int chnl_idx, int clt_idx);
 		std::string get_plus(std::string modestr);
 		std::string get_minus(std::string modestr);
-		void set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
-		void set_minus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
+		std::string set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
+		std::string set_minus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
 		int nick_in_channel(int chnl_idx, std::string nick);
-		long check_limit(std::string limit);
+		int check_limit(std::string limit);
 		// Topic
 		void topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void update_topic(std::string topic, int chnl_idx, int clt_idx);

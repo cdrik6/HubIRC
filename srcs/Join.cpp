@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 03:07:07 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 04:09:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,12 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     
     // get channels        
     if (i == tab_msg.size())
-        reply(COD_NEEDMOREPARAMS, "JOIN " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
-    // else if (tab_msg.at(i) == "0") //PART of all channels client is a member // but impossible with irssi /JOIN 0 --> /JOIN #0    
+        reply(COD_NEEDMOREPARAMS, "JOIN " + std::string(ERR_NEEDMOREPARAMS), clt_idx);    
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')
         reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " " + ERR_NOSUCHCHANNEL, clt_idx);
     else 
     {        
-        channels = split_char(tab_msg.at(i), ',');        
-        // /***/
-        // for (int j = 0; j < channels.size(); j++) 
-        // {
-        //     std::cout << channels.at(j) << " = channel \n";            
-        // } 
-        // /*** */
+        channels = split_char(tab_msg.at(i), ',');                
         i++;        
         if (i != tab_msg.size())                    
             keys = split_char(tab_msg.at(i), ',');
@@ -57,17 +50,32 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         if (in_channel(k, clt_idx) == -1) // KO not in// check already in the channel --> seems done by irssi, for nc
                         { 
                             // invite, limit, key --> in that order for irssi
-                            
-                            // key + limit
-                            if (keys.at(j) == _chnls.at(k).get_key())
-                                reply_join_add(channels.at(j), k, clt_idx);                        
-                            else
-                                reply(COD_BADCHANNELKEY, channels.at(j) + " " + ERR_BADCHANNELKEY, clt_idx);
-                            break;
-                            
+                            if (_chnls.at(k).get_mode_i() == false)
+                            {                                
+                                if (_chnls.at(k).get_limit() == -1 || _chnls.at(k).get_chnlclts().size() < _chnls.at(k).get_limit())
+                                {                                       
+                                    if (keys.at(j) == _chnls.at(k).get_key())
+                                        reply_join_add(channels.at(j), k, clt_idx);
+                                    else
+                                        reply(COD_BADCHANNELKEY, channels.at(j) + " " + ERR_BADCHANNELKEY, clt_idx);
+                                    break;
+                                }                            
+                                else
+                                    reply(COD_CHANNELISFULL, channels.at(j) + " " + ERR_CHANNELISFULL, clt_idx);
+                                break;    
+                            }        
+                            else // invite-only bypasses limit and key if invitee
+                            {
+                                if (_chnls.at(k).is_invitee(_clts.at(clt_idx).get_nickname()) == true)                                
+                                    reply_join_add(channels.at(j), k, clt_idx);                                
+                                else
+                                    reply(COD_INVITEONLYCHAN, channels.at(j) + " " + ERR_INVITEONLYCHAN, clt_idx);
+                            }                                
+                            break;                            
                         }
                         else
                             reply(COD_USERONCHANNEL, _clts.at(clt_idx).get_nickname() + " " + ERR_USERONCHANNEL, clt_idx);                            
+                        break;    
                     }
                 }
                 if (new_chan == true) // create channel                
@@ -81,13 +89,9 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         }
     }
 }
-
-int Server::check_invite()
-{
-
-    
-}
-
+// Note
+// else if (tab_msg.at(i) == "0")
+// PART of all channels client is a member // but impossible with irssi /JOIN 0 --> /JOIN #0    
 
 //:<nickname>!<user>@<host> JOIN <channel>
 void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
@@ -96,8 +100,8 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     std::string topic = _chnls.at(chnl_idx).get_topic();
     int idx;
     
-    if (_chnls.at(chnl_idx).get_limit() == -1 || _chnls.at(chnl_idx).get_chnlclts().size() < _chnls.at(chnl_idx).get_limit())
-    {    
+    // if (_chnls.at(chnl_idx).get_limit() == -1 || _chnls.at(chnl_idx).get_chnlclts().size() < _chnls.at(chnl_idx).get_limit())
+    // {    
         msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                     + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
         reply(COD_NONE, msg_replied, clt_idx);
@@ -125,9 +129,9 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
         reply(COD_NAMREPLY, msg_replied, clt_idx); // 353 <nickname> = <channel> :<user1> <user2> <user3> ...     
         reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx); // 366 <nickname> <channel> :End of /NAMES list 
         _chnls.at(chnl_idx).set_chnlclts(_clts.at(clt_idx)); // add client to channel // before adding it (--> name list not include the new one)
-    }
-    else
-        reply(COD_CHANNELISFULL, channel + " " + ERR_CHANNELISFULL, clt_idx);
+    // }
+    // else
+    //     reply(COD_CHANNELISFULL, channel + " " + ERR_CHANNELISFULL, clt_idx);
 }
 
 //:<nickname>!<user>@<host> JOIN <channel>     

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/09 22:59:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 04:13:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 // :<kicker>!user@host KICK <channel> <target> :<reason>
 void Server::kick_users(std::vector<std::string> users, std::string reason, int chnl_idx, int clt_idx)
 {
-	std::cout << reason << std::endl;
-	
 	std::string msg_replied;
 	msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " KICK " + _chnls.at(chnl_idx).get_name();                
@@ -78,6 +76,9 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 			{
 				msg_replied = msg_replied + " " + users.at(j) + " " + reason;
 				reply_to_all(msg_replied, chnl_idx);
+				_chnls.at(chnl_idx).rem_client(tgt_idx);
+				_chnls.at(chnl_idx).rem_operator(_clts.at(tgt_idx).get_nickname());
+                _chnls.at(chnl_idx).rem_invitee(_clts.at(tgt_idx).get_nickname());
 			}
 			else
 				reply(COD_USERNOTINCHANNEL, users.at(j) + " " + _chnls.at(chnl_idx).get_name() + " " + ERR_USERNOTINCHANNEL, clt_idx);
