@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/11 04:58:38 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/10 23:19:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,58 +42,78 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 std::string msg_replied; // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
                 msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                             + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name() \
-                            + " ";  
-                
-                std::vector<std::string> modes;
-                std::vector<std::string> args;
-                std::string rpl_modes;
-                std::string rpl_args;
-                bool first = true; 
-                while (i < tab_msg.size())
+                            + " ";                
+                std::string minus = get_minus(tab_msg.at(i)); // "" /*************reprendre */
+                std::string plus = get_plus(tab_msg.at(i)); // ""  /*************reprendre */
+                std::cout << "plus = " << plus << std::endl;
+                std::cout << "minus = " << minus << std::endl;
+                std::vector<std::string> params;                
+                bool need_reply = true;
+
+                int j = i + 1;                
+                while (j < tab_msg.size())
                 {
-                    std::cout << "tab " << i << " = "<< tab_msg.at(i) << std::endl;
-                    parse_mode(tab_msg.at(i), &modes, &args, first);
-                    first = false;
-                    i++;
-                    std::cout << "ici " << tab_msg.size() << std::endl;
+                    params.push_back(tab_msg.at(j));
+                    j++;
                 }
-                /*** debug ***********************/
+                
+                /*** debug */
                 int k = 0;
-                while ( k < modes.size())
+                while ( k < params.size())
                 {
-                    std::cout << "modes " << k <<  " = " <<  modes.at(k) << std::endl;
+                    std::cout << "param1 " << k <<  " = " <<  params.at(k) << std::endl;
                     k++;
                 }
+
+                std::vector<std::string> rpl_plus = set_plus(plus, params, chnl_idx, clt_idx);
+                std::vector<std::string> rpl_minus = set_minus(minus, params, chnl_idx, clt_idx);
+
+                /*** debug */
                 k = 0;
-                while ( k < args.size())
+                while ( k < params.size())
                 {
-                    std::cout << "args " << k <<  " = " <<  args.at(k) << std::endl;
+                    std::cout << "param2 " << k <<  " = " <<  params.at(k) << std::endl;
                     k++;
                 }
-                /********************************** */
                 
-                for (int i = 0; i < modes.size(); i++)
-                {
-                    if (modes.at(i).at(0) == '+')
-                    {
-                        std::vector<std::string> plus = set_plus(modes.at(i).substr(1), args, chnl_idx, clt_idx);
-                        rpl_modes = rpl_modes + plus.at(0);
-                        rpl_args = rpl_args + plus.at(1);
-                    }                        
-                    if (modes.at(i).at(0) == '-')
-                    {
-                        std::vector<std::string> minus = set_minus(modes.at(i).substr(1), args, chnl_idx, clt_idx);
-                        rpl_modes = rpl_modes + minus.at(0);
-                        rpl_args = rpl_args + minus.at(1);
-                    }
+                if (tab_msg.at(i).at(0) == '+')
+                {                
+                    rpl_plus = set_plus(plus, params, chnl_idx, clt_idx);
+                    if (rpl_plus.size() > 0) 
+                        msg_replied = msg_replied + rpl_plus.at(0);
+                    if (rpl_minus.size() > 0)
+                        msg_replied = msg_replied + rpl_minus.at(0);
+                    if (rpl_plus.size() > 1) 
+                        msg_replied = msg_replied + rpl_plus.at(1);
+                    if (rpl_minus.size() > 1) 
+                        msg_replied = msg_replied + rpl_minus.at(1);
+                }    
+                else if (tab_msg.at(i).at(0) == '-')
+                {                    
+                    if (rpl_minus.size() > 0)
+                        msg_replied = msg_replied + rpl_minus.at(0);
+                    if (rpl_plus.size() > 0)
+                        msg_replied = msg_replied + rpl_plus.at(0);  
+                    if (rpl_minus.size() > 1)
+                        msg_replied = msg_replied + rpl_minus.at(1);
+                    if (rpl_plus.size() > 1)
+                        msg_replied = msg_replied + rpl_plus.at(1);                    
                 }
-                if (rpl_modes != "")
-                    reply_to_all(msg_replied + rpl_modes + rpl_args, chnl_idx);
+                else
+                    need_reply = false; // out of scope
+                if (need_reply)
+                    reply_to_all(msg_replied, chnl_idx);
                 
-                std::cout << "rpl_modes = " << rpl_modes << std::endl;
-                std::cout << "rpl_args = " << rpl_args << std::endl;                
+                /*** debug */
+                k = 0;
+                while ( k < params.size())
+                {
+                    std::cout << "param3 " << k <<  " = " <<  params.at(k) << std::endl;
+                    k++;
+                }
+                    
             }
-            else if (tab_msg.at(i) != "b") // ban query from irssi out of scope
+            else if (tab_msg.at(i) != "b") // ban query from irssi out os scope
                 reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);            
         }
         else
@@ -101,66 +121,8 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     }
 }
 
-void Server::parse_mode(std::string modestr, std::vector<std::string> *modes, std::vector<std::string> *args, bool first)
-{
-    // Ignore letters waiting for good format to change mode
-    if (first)
-    {
-        int i = 0;
-        while (i < modestr.length() && modestr.at(i) != '+' && modestr.at(i) != '-')    
-            i++;
-        modestr = modestr.substr(i);
-    }
-    
-    
-    std::cout << "modstr " << modestr << std::endl;
-    
-    // Parsing
-    std::istringstream iss(modestr);
-    std::string token;
-    std::string temp = "";
-    
-    while (iss >> token)
-    {
-        std::cout << "token parsed = [" << token << "]" << std::endl;
-        if ((token.at(0) == '+' || token.at(0) == '-') && token.size() > 1 && !isdigit(token.at(1)))
-        {
-            //int i = token.substr(1).find_first_of("+-");
-            int p = 0;
-            int i = 1;
-            while (i < token.size())
-            {
-                if (token.at(i) == '+' || token.at(i) == '-')
-                {
-                    (*modes).push_back(token.substr(p, i - p));
-                    p = i;
-                }
-                i++;
-            }
-            (*modes).push_back(token.substr(p, i - p));
-        }            
-        else if (token == "+" || token == "-")
-            temp = token;
-        else
-        {
-            if (temp != "")
-            {
-                (*modes).push_back(temp + token);
-                temp = "";
-            }
-            else
-            {
-                std::cout << "arg " << std::endl;
-                (*args).push_back(token);
-                
-            }
-                
-        }            
-    }
-}
-
-// :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
-std::vector<std::string> Server::set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
+ // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
+std::vector<std::string> Server::set_plus(std::string& plus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
 {                       
     std::string allowed = "itkol";
     std::string params_replied = "";
@@ -255,20 +217,17 @@ std::vector<std::string> Server::set_plus(std::string plus, std::vector<std::str
     std::cout << "letters + = " << letters << std::endl;
     std::cout << "param rpl = " << params_replied << std::endl;
     // Format    
-    if (letters != "")    
+    if (letters != "")
+    {
         mode_plus.push_back("+" + letters);
-    else
-        mode_plus.push_back(letters);
-    // if (params_replied != "")
-    //     mode_plus.push_back(params_replied.substr(1));
-    // else
-        mode_plus.push_back(params_replied);        
-    std::cout << "size plus = " << mode_plus.size() << std::endl;    
+        mode_plus.push_back(params_replied);
+        std::cout << "size plus = " << mode_plus.size() << std::endl;
+    }        
     return (mode_plus);
 }
 
  // :toto!~toto@localhost MODE #test +k secret // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
-std::vector<std::string> Server::set_minus(std::string minus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
+std::vector<std::string> Server::set_minus(std::string& minus, std::vector<std::string>& params, int chnl_idx, int clt_idx)
 {            
     std::string allowed = "itkol";
     std::string params_replied = "";
@@ -294,8 +253,7 @@ std::vector<std::string> Server::set_minus(std::string minus, std::vector<std::s
             }                
             if (minus.at(i) == 'k')
             {
-                if (_chnls.at(chnl_idx).get_key() != "")
-                    params_replied = params_replied + " " + _chnls.at(chnl_idx).get_key();
+                params_replied = params_replied + " " + _chnls.at(chnl_idx).get_key();
                 _chnls.at(chnl_idx).set_key("");
                 letters = letters + "k";                
                 // reply_to_all(letters + " -k", chnl_idx);
@@ -336,15 +294,12 @@ std::vector<std::string> Server::set_minus(std::string minus, std::vector<std::s
     std::cout << "letters - = " << letters << std::endl;
     std::cout << "param rpl = " << params_replied << std::endl;
     // Format
-    if (letters != "")    
+    if (letters != "")
+    {
         mode_minus.push_back("-" + letters);
-    else
-        mode_minus.push_back(letters);
-    // if (params_replied != "")
-    //     mode_minus.push_back(params_replied.substr(1));
-    // else
-        mode_minus.push_back(params_replied);    
-    std::cout << "size minus = " << mode_minus.size() << std::endl;    
+        mode_minus.push_back(params_replied);
+        std::cout << "size minus = " << mode_minus.size() << std::endl;
+    }        
     return (mode_minus);
 }
 
@@ -369,38 +324,38 @@ int Server::nick_in_channel(int chnl_idx, std::string nick)
     return (KO);    
 }
 
-// std::string Server::get_plus(std::string modestr)
-// {
-//     std::string plus;
+std::string Server::get_plus(std::string modestr)
+{
+    std::string plus;
 
-//     int i = 0;
-//     while (i < modestr.length() && modestr.at(i) != '+')
-//         i++;    
-//     for (int j = i + 1; j < modestr.length(); j++)  /******************************** reprendre ici -ito-k */
-//     {
-//         if (modestr.at(j) == '-')
-//             break;
-//         plus = plus + modestr.at(j);
-//     }
-//     return (plus);
-// }
+    int i = 0;
+    while (i < modestr.length() && modestr.at(i) != '+')
+        i++;    
+    for (int j = i + 1; j < modestr.length(); j++)  /******************************** reprendre ici -ito-k */
+    {
+        if (modestr.at(j) == '-')
+            break;
+        plus = plus + modestr.at(j);
+    }
+    return (plus);
+}
 
-// std::string Server::get_minus(std::string modestr)
-// {
-//     std::string minus;
+std::string Server::get_minus(std::string modestr)
+{
+    std::string minus;
 
-//     int i = 0;
-//     while (i < modestr.length() && modestr.at(i) != '-')
-//         i++;    
-//     for (int j = i + 1; j < modestr.length(); j++)
-//     // for (int i = 0; i < modestr.length(); i++) /******************************** reprendre ici -ito-k */
-//     {
-//         if (modestr.at(j) == '+')
-//             break;
-//         minus = minus + modestr.at(j);
-//     }
-//     return (minus);
-// }
+    int i = 0;
+    while (i < modestr.length() && modestr.at(i) != '-')
+        i++;    
+    for (int j = i + 1; j < modestr.length(); j++)
+    // for (int i = 0; i < modestr.length(); i++) /******************************** reprendre ici -ito-k */
+    {
+        if (modestr.at(j) == '+')
+            break;
+        minus = minus + modestr.at(j);
+    }
+    return (minus);
+}
 
 // operators are sent with WHO command
 std::string Server::get_modes(int chnl_idx, int clt_idx)
