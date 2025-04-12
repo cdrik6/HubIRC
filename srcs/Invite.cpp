@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:13:27 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 14:37:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:18:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ void Server::let_it_in(int chnl_idx, int clt_idx, int inv_idx)
     // :server.name 341 <inviter> <invitee> <channel> --> to inviter
     reply(COD_INVITING, _clts.at(inv_idx).get_nickname() + " " + _chnls.at(chnl_idx).get_name(), clt_idx);
 
-    // :inviter!user@host INVITE <invitee> :<channel> --> to invitee    
+    // :inviter!user@host INVITE <invitee> <channel> --> to invitee    
     std::string msg_replied;    
     msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " INVITE " + _clts.at(inv_idx).get_nickname() \
-                + ":" + _chnls.at(chnl_idx).get_name();                
+                + " " + _chnls.at(chnl_idx).get_name();                
     reply(COD_NONE, msg_replied, inv_idx);   
 
     // update invitees list // not in the list (otherwise already in channel or delete at Part/Quit step)

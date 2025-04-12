@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/09 22:04:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 03:41:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx);
                     else
                     {
-                        reply(COD_TOPIC, channel + " :" + _chnls.at(chnl_idx).get_topic(), clt_idx);
+                        reply(COD_TOPIC, channel + " " + _chnls.at(chnl_idx).get_topic(), clt_idx);
                         std::stringstream ss;
                         ss << _chnls.at(chnl_idx).get_setat();                        
                         reply(COD_TOPICWHOTIME, channel + " " + _chnls.at(chnl_idx).get_setby() + " " + ss.str(), clt_idx); // 333 <channel> <nick> <setat>
@@ -73,6 +73,10 @@ void Server::update_topic(std::string topic, int chnl_idx, int clt_idx)
 {    
     std::string msg_replied;
     
+    if (topic == ":")
+        topic = "";
+    else if (!topic.empty() && topic.at(0) == ':')
+        topic = topic.substr(1);        
     _chnls.at(chnl_idx).set_topic(topic);
     _chnls.at(chnl_idx).set_setby(_clts.at(clt_idx).get_nickname());
     _chnls.at(chnl_idx).set_setat();    

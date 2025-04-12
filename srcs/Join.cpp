@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 04:09:58 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/11 22:52:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     std::vector<std::string> channels; 
     std::vector<std::string> keys;
     
-    // get channels        
+    // get channels to join or create       
     if (i == tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "JOIN " + std::string(ERR_NEEDMOREPARAMS), clt_idx);    
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')
@@ -47,7 +47,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     if (channels.at(j) == _chnls.at(k).get_name())
                     {                      
                         new_chan = false;
-                        if (in_channel(k, clt_idx) == -1) // KO not in// check already in the channel --> seems done by irssi, for nc
+                        if (in_channel(k, clt_idx) == -1) // KO = not in// check already in the channel --> seems done by irssi, so for nc
                         { 
                             // invite, limit, key --> in that order for irssi
                             if (_chnls.at(k).get_mode_i() == false)
@@ -81,7 +81,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 if (new_chan == true) // create channel                
                 {                    
                     reply_join_new(channels.at(j), clt_idx);                    
-                    add_chnls(_chnls, channels.at(j), keys.at(j), clt_idx); // create and add                    
+                    create_chnl(_chnls, channels.at(j), keys.at(j), clt_idx); // create and add
                 }    
             }
             else
@@ -98,58 +98,61 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
 {
     std::string msg_replied;
     std::string topic = _chnls.at(chnl_idx).get_topic();
-    int idx;
+    int idx;    
     
-    // if (_chnls.at(chnl_idx).get_limit() == -1 || _chnls.at(chnl_idx).get_chnlclts().size() < _chnls.at(chnl_idx).get_limit())
-    // {    
-        msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-                    + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
-        reply(COD_NONE, msg_replied, clt_idx);
-        // for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++) // All other users in #chatroom also receive this
-        //     reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt()));
-        reply_to_all(msg_replied, chnl_idx);
-        //
-        if (topic == "") 
-            reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx); // 331 <nickname> <channel> :No topic set
-        else 
-            reply(COD_TOPIC, channel + " :" + topic, clt_idx); // 332 <nickname> <channel> :<topic>    
-        //    
-        msg_replied = "= " + channel + " :";
-        std::cout << _chnls.at(chnl_idx).get_chnlclts().size() << " = tab clients in channel size\n";
-        for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
-        {
-            idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt());
-            std::cout << idx << " = idx\n";
-            if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
-                msg_replied = msg_replied + "@" + _clts.at(idx).get_nickname() + " ";
-            else     
-                msg_replied = msg_replied + _clts.at(idx).get_nickname() + " ";
-            std::cout << msg_replied << "\n";
-        }    
-        reply(COD_NAMREPLY, msg_replied, clt_idx); // 353 <nickname> = <channel> :<user1> <user2> <user3> ...     
-        reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx); // 366 <nickname> <channel> :End of /NAMES list 
-        _chnls.at(chnl_idx).set_chnlclts(_clts.at(clt_idx)); // add client to channel // before adding it (--> name list not include the new one)
-    // }
-    // else
-    //     reply(COD_CHANNELISFULL, channel + " " + ERR_CHANNELISFULL, clt_idx);
+    // RPL
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+                + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
+    reply(COD_NONE, msg_replied, clt_idx);    
+    reply_to_all(msg_replied, chnl_idx);
+    // TOPIC
+    if (topic == "") 
+        reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx); // 331 <nickname> <channel> :No topic set
+    else
+    { 
+        reply(COD_TOPIC, channel + " " + topic, clt_idx); // 332 <nickname> <channel> :<topic>
+        std::stringstream ss;
+        ss << _chnls.at(chnl_idx).get_setat();                        
+        reply(COD_TOPICWHOTIME, channel + " " + _chnls.at(chnl_idx).get_setby() + " " + ss.str(), clt_idx); // 333 <channel> <nick> <setat>
+    }    
+    // NAMES LIST   
+    msg_replied = "= " + channel + " :";    
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    {
+        idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt());        
+        if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
+            msg_replied = msg_replied + "@" + _clts.at(idx).get_nickname() + " ";
+        else     
+            msg_replied = msg_replied + _clts.at(idx).get_nickname() + " ";        
+    }    
+    reply(COD_NAMREPLY, msg_replied, clt_idx); // 353 <nickname> = <channel> :<user1> <user2> <user3> ...     
+    reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx); // 366 <nickname> <channel> :End of /NAMES list 
+    // ADD
+    _chnls.at(chnl_idx).set_chnlclts(_clts.at(clt_idx)); // add client to channel after (--> names list doesn't include the new one)
 }
+// std::cout << _chnls.at(chnl_idx).get_chnlclts().size() << " = tab clients in channel size\n";
+// std::cout << idx << " = idx\n";
+// std::cout << msg_replied << "\n";
 
 //:<nickname>!<user>@<host> JOIN <channel>     
 void Server::reply_join_new(std::string channel, int clt_idx)
 {
     std::string msg_replied;    
     
+    // RPL 
     msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
     reply(COD_NONE, msg_replied, clt_idx);    
+    // TOPIC
     msg_replied = channel + " " + RPL_NOTOPIC; 
-    reply(COD_NOTOPIC, msg_replied, clt_idx); // 331 <nickname> <channel> :No topic is set    
+    reply(COD_NOTOPIC, msg_replied, clt_idx); // 331 <nickname> <channel> :No topic is set
+    // NAMES LIST
     msg_replied = "= " + channel + " :@" + _clts.at(clt_idx).get_nickname();
     reply(COD_NAMREPLY, msg_replied, clt_idx);  // 353 <nickname> = <channel> :<user1> <user2> <user3> ...      
     reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx); // 366 <nickname> <channel> :End of /NAMES list    
 }
 
-void Server::add_chnls(std::vector<Channel>& chnls, std::string name, std::string key, int clt_idx)
+void Server::create_chnl(std::vector<Channel>& chnls, std::string name, std::string key, int clt_idx)
 {
     Channel new_chan;
 

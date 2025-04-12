@@ -6,13 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/09 22:59:38 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:55:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-// PRIVMSG <msgtarget> <text to be sent>
+// PRIVMSG target1,target2 :msg with spaces --> ":" mandatory
+// PRIVMSG target1,target2 msgwithnospace --> ":" optionnal
 void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {    
     int i = tab_idx;
@@ -20,8 +21,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
     std::string msg;
     std::string msg_replied;
     
-	// while (toUpper(tab_msg.at(i)) != "PRIVMSG")
-    //     i++;    
+    //
 	if (i + 1 == tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "PRVISMSG " + std::string(ERR_NEEDMOREPARAMS), clt_idx); // check by irssi actually, for nc
     else if (i + 2 == tab_msg.size())
@@ -30,12 +30,15 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
             reply(COD_NORECIPIENT, ERR_NORECIPIENT, clt_idx); // check by irssi actually, for nc
         else
             reply(COD_NOTEXTTOSEND, ERR_NOTEXTTOSEND, clt_idx); // check by irssi actually, for nc
+        // Note: PRIVMSG sthgwithnospace --> 411? or 412?
+        // strict RFC logic: <params> = *14( SPACE middle ) [ SPACE ":" trailing ]
+        // IRC only treats something as a trailing message if it’s prefixed with ":" --> so 412
     }        
     else
     {
         msg = tab_msg.at(tab_msg.size() - 1);
         i++;
-        while (tab_msg.at(i).at(0) != ':') // recipients list
+        while (i < tab_msg.size() - 1 && tab_msg.at(i).at(0) != ':') // recipients list
         {
             target = split_char(tab_msg.at(i), ','); // splitted by irssi actually, for nc
             for (int t = 0; t < target.size(); t++)
@@ -61,7 +64,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                             for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
                             {
                                 int idx = client_idx(_chnls.at(k).get_chnlclts().at(j).get_clt_skt());                        
-                                if (idx != clt_idx)
+                                if (idx != clt_idx) // all except itself for channel (itself ok for direct message)
                                     reply(COD_NONE, msg_replied, idx);
                             }
                         } 

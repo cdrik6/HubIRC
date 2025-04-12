@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 05:25:31 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:05:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
     if (send(_clts.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
         throw (std::runtime_error("send: " + std::string(strerror(errno))));
     // Server output
-    std::cout << "Reply sent by socket "<< _clts.at(clt_idx).get_clt_skt() << "\n" << rpl << std::endl;    
+    std::cout << "Replied("<< _clts.at(clt_idx).get_clt_skt() << ") " << rpl << std::endl;    
 }
 
 // PONG: [<server>] <token>

@@ -52,4 +52,4 @@ sleep 1
 echo "PART $CHANNEL"
 sleep 1
 echo "QUIT :Done testing"
-) | nc $SERVER $PORT
+) | nc -C $SERVER $PORT

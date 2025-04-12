@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/11 03:19:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:59:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,12 @@ class Server
 		//
 		int get_srv_skt(void) const;		
 		static void	handle_signal(int signal);
-		void rem_empty_chnl(void);
+		
         // polling
 		int	create_srv_skt(char *port);
 		void polling(void);		
 		void client_connect(void);
-		void client_disconnect(int pfd_idx, int clt_idx);
-		void quit_channels(std::string reason, int clt_idx);
+		void client_disconnect(std::string reason, int pfd_idx, int clt_idx);		
 		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
 		void add_clients(std::vector<Client>& clts, int clt_skt, std::string ip);
@@ -103,12 +102,11 @@ class Server
 		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		void add_chnls(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx);
+		void create_chnl(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx);
 		void reply_join_add(std::string channel, int chnl_idx, int clt_idx);
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);
-		int check_key(std::string key_name);
-		// int check_already(int chnl_idx, int clt_idx);
+		int check_key(std::string key_name);		
 		// Who
 		void who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);				
 		// Part
@@ -116,9 +114,7 @@ class Server
 		void reply_to_all(std::string msg_replied, int chnl_idx);
 		// Mode
 		void mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		std::string get_modes(int chnl_idx, int clt_idx);
-		// std::string get_plus(std::string modestr);
-		// std::string get_minus(std::string modestr);
+		std::string get_modes(int chnl_idx, int clt_idx);		
 		void parse_mode(std::string modestr, std::vector<std::string> *modes, std::vector<std::string> *args, bool first);
 		std::vector<std::string> set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
 		std::vector<std::string> set_minus(std::string minus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
@@ -133,6 +129,11 @@ class Server
 		// Invite
 		void invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void let_it_in(int chnl_idx, int clt_idx, int inv_idx);
+		// Quit
+		void quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void quit_channels(std::string reason, int clt_idx);
+		void rem_empty_chnl(void);
+		
 		//
 		// void ping(std::vector<std::string>& tab_msg, int clt_idx);
 		// void build_message(std::string buffer, int clt_skt);		

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 05:13:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:47:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,16 @@ std::vector<std::string> split(std::string str)
             i = line.find_first_of(":");
             if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
             {
-                msg = line.substr(i);  // msg worst ":\r\n" // keep the ":"
+                msg = line.substr(i);  // msg worst ":\r" // keep the ":"
                 if (msg.at(msg.length() - 1) == '\r')
-                    msg = msg.substr(0, msg.length() - 1); // remove \r\n                
+                    msg = msg.substr(0, msg.length() - 1); // remove \r                
                 std::cout << "msg = [" << msg << "]" << std::endl;
                 if (!msg.empty())
                     is_msg = true;
             }
         }
         
-        // the spit by spaces       
+        // the split by spaces       
         std::istringstream iss(line);
         std::string token;  
         
@@ -97,44 +97,6 @@ std::vector<std::string> split(std::string str)
     std::cout << std::endl; /*************** */    
     return (tab);
 }
-
-// std::vector<std::string> split(std::string str)
-// {
-//     // check / clean the ":"
-//     std::string msg = "";
-//     bool is_msg = false;
-//     int i = 0;
-//     if (!str.empty())
-//     {
-//         if (str.at(0) == ':')
-//             str = str.substr(1);
-//         i = str.find_first_of(":");
-//         if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
-//         {
-//             msg = str.substr(i);  // msg worst ":\r\n" // keep the ":"
-//             msg = msg.substr(0, msg.length() - 2); // remove \r\n
-//             std::cout << "msg = [" << msg << "]" << std::endl;
-//             if (!msg.empty())
-//                 is_msg = true;
-//         }
-//     }
-    
-//     // the spit by spaces    
-//     std::vector<std::string> tab;
-//     std::istringstream iss(str);
-//     std::string token;   
-    
-//     while (iss >> token)
-//     {
-//         if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
-//             break;                        
-//         tab.push_back(token);        
-//         std::cout << "token = [" << token << "]" << std::endl;
-//     }
-//     if (is_msg == true) 
-//         tab.push_back(msg);
-//     return (tab);
-// }
 
 std::vector<std::string> split_char(std::string str, char c)
 {    
@@ -157,24 +119,3 @@ std::string toUpper(const std::string& str)
         UpStr[i] = toupper(UpStr[i]);
     return (UpStr);
 }
-
-// int check_input(char *argv1, char *argv2)
-// {
-//     if (check_port(argv1) == KO)
-//         return (KO);
-//     if (check_pwd(std::string(argv2)) == KO)
-//         return (KO);
-//     return (OK);
-// }
-
-// int check_pwd(std::string pwd)
-// {
-//     std::istringstream iss2(std::string(argv2));
-// }
-
-/**
- * SIGINT = ctrl+c
- * SIGQUIT = ctrl+\
- * ctrl+d = not a signal
-**/ 
-

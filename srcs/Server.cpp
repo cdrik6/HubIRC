@@ -6,11 +6,11 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 05:24:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 05:32:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//Relais pour la causette Internet 
+// Relais pour la causette Internet 
 #include "Server.hpp"
 
 Server::Server(char *port, std::string password)
@@ -23,22 +23,6 @@ Server::Server(char *port, std::string password)
 	std::cout << "Server: waiting for connections...\n";
 	std::cout << "Server: \"stop\" to stop it\n\n";
 }
-
-// Server& Server::operator=(const Server& other)
-// {
-// 	// port and password *************************************************/
-// 	std::cout << "Server copy assignment operator called" << std::endl;
-//     if (this == &other)
-//         return (*this);
-// 	_srv_skt = other._srv_skt;    
-//     return (*this);
-// }
-
-// Server::Server(const Server& other)
-// {
-// 	std::cout << "Server copy constructor of socket: " << other._srv_skt << std::endl;
-//     *this = other;
-// }        
 
 Server::~Server()
 {
@@ -151,44 +135,22 @@ void Server::polling(void)
 				int nbytes = recv(_pfds.at(i).fd, buff, BUFFER_SIZE, 0);
 				int k = client_idx(_pfds.at(i).fd);
 				// Server output
-				std::cout << "Received buffer on socket " << _pfds.at(i).fd << " : [" << buff << "]" << std::endl;
-				std::cout << "(nbytes = " << nbytes << ")" << std::endl;
-				std::cout << std::endl;
+				std::cout << "Received(" << _pfds.at(i).fd << ") [" << buff << "]\n" << std::endl;
+				//std::cout << "(nbytes = " << nbytes << ")\n" << std::endl;				
 				//
 				if (nbytes <= 0) // closed or issues
 				{
-					if (nbytes == 0)
-					{	
-						client_disconnect(i, k);
-						// /*************** close everything with the client *********************/						
-						// std::cout << "Socket " << _pfds.at(i).fd << " closed the connection\n";
-						// close (_pfds.at(i).fd);					
-						// _pfds.erase(_pfds.begin() + i);							
-						// /**********************************************************************/
-					}					
-					if (nbytes == -1) //***** everything MUST be closed at main level then *****/
+					if (nbytes == 0)						
+						client_disconnect("Connection closed by client", i, k);										
+					if (nbytes == -1)
 						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
 				}
-				else // got some data from a client --> to send the others (not srv not sender)
-				{					
-					// std::string line;
-					// std::istringstream iss(buff);
-					// while (std::getline(iss, line))
-					// {
-						// std::cout << "line = " << line << std::endl;
-						if (parse_message(std::string(buff), k) == OK)
-						// if (parse_message(line + "\r\n", k) == OK)
-							if (check_registered(k) == OK)					
-								if (_clts.at(k).get_registered() == false)
-									welcome(k);						
-					// }
-					/*******  Parsing msg received to exec CMD and build RPL to client (irssi) **/
-					// for (int j = 2; j < _pfds.size(); j++)
-					// {
-					// 	if (j != i && send(_pfds[j].fd, buff, nbytes, MSG_NOSIGNAL) == - 1)
-					// 		throw (std::runtime_error("send: " + std::string(strerror(errno))));
-					// 	std::cout << "sendbuff: " << buff << std::endl;
-					// }						
+				else // got some data from a client
+				{				
+					if (parse_message(std::string(buff), k) == OK)						
+						if (check_registered(k) == OK)					
+							if (_clts.at(k).get_registered() == false)
+								welcome(k);											
 				}
 			}
 		} // clients		
@@ -200,9 +162,6 @@ void Server::polling(void)
 
 int Server::check_registered(int clt_idx)
 {
-	// std::cout << "pwd_ok = " << _clients.at(clt_idx).get_pwd_ok() << std::endl;
-	// std::cout << "nick = " << _clients.at(clt_idx).get_nickname() << std::endl;
-	// std::cout << "user = " << _clients.at(clt_idx).get_username() << std::endl;
 	if (_clts.at(clt_idx).get_registered() == true)
 		return (OK);
 	if (_clts.at(clt_idx).get_pwd_ok() == false)
@@ -217,10 +176,7 @@ int Server::check_registered(int clt_idx)
 // RFC 2812: message = [ ":" prefix SPACE ] command [ params ] CRLF
 int Server::parse_message(std::string buffer, int clt_idx)
 {	
-	std::vector<std::string> tab_msg;
-	// int k = client_idx(clt_skt);
-	// std::cout << "client idx = " << k << std::endl;
-	// std::cout << "client fd = " << _clients.at(k).get_clt_skt() << std::endl;
+	std::vector<std::string> tab_msg;	
 	
 	if (clt_idx != -1)	
 		_clts.at(clt_idx).set_msg(buffer);	// build message	
@@ -234,8 +190,11 @@ int Server::parse_message(std::string buffer, int clt_idx)
 			//*********** debug here ***** */
 			std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
 			get_command(tab_msg, tab_msg[i], clt_idx, i);
-		}		
-		_clts.at(clt_idx).clear_msg();
+		}
+		// std::cout << "ici" << std::endl;
+		// if (clt_idx < _clts.size())		
+			_clts.at(clt_idx).clear_msg();
+		// std::cout << "ici2" << std::endl;
 		return (OK);
 	}
 	std::cout << std::endl; /******************************* */
@@ -279,8 +238,8 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 			invite(tab_msg, clt_idx, tab_idx);
 		// else if (toUpper(cmd) == "NOTICE")
 		// 	notice(tab_msg, clt_idx, tab_idx);	
-		// else // --> just ignore 
-		// 	reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
+		else if (tab_idx == 0)
+			reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
 	}
 	// else
 	// 	reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx);
@@ -297,48 +256,16 @@ int Server::client_idx(int clt_skt)
 }
 
 // std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
-void Server::client_disconnect(int pfd_idx, int clt_idx)
+void Server::client_disconnect(std::string reason, int pfd_idx, int clt_idx)
 {
-	quit_channels("Connection closed", clt_idx);
+	quit_channels(reason, clt_idx);
 	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";	
-	close(_pfds.at(pfd_idx).fd);
+	close(_pfds.at(pfd_idx).fd);	
 	_pfds.erase(_pfds.begin() + pfd_idx);	
 	_clts.erase(_clts.begin() + clt_idx);	
 }
 
-// :<nickname>!<user>@<host> QUIT :[optional message]
-void Server::quit_channels(std::string reason, int clt_idx)
-{
-	std::string msg_replied;	
-		
-	for (int i = 0; i < _chnls.size(); i++)	
-	{		
-		int idx = in_channel(i, clt_idx);
-		if (idx != -1)
-		{
-			_chnls.at(i).rem_client(idx);
-			_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
-			_chnls.at(i).rem_invitee(_clts.at(clt_idx).get_nickname());
-			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
-			reply_to_all(msg_replied, i);				
-		}			
-	}
-	rem_empty_chnl();	
-}
 
-void Server::rem_empty_chnl(void)
-{
-	std::vector<Channel>::iterator it;
-	
-	for (it = _chnls.begin(); it != _chnls.end();)
-	{
-		if ((*it).get_chnlclts().size() == 0)
-			it = _chnls.erase(it);  // returns next valid iterator
-		else
-			++it;
-	}
-}
 
 void Server::client_connect(void)
 {
@@ -411,76 +338,11 @@ bool Server::_signal = false; // Definition and initialization here for a static
 
 void Server::handle_signal(int signal)
 {
-    // (void)signal;
-	std::cout << "\nSignal " << signal << " received" << std::endl;
+    std::cout << "\nSignal " << signal << " received" << std::endl;
     _signal = true;
 }
-
-/**** draft ****/
-
-// int	Server::check_pass(std::vector<std::string>& tab_msg, int client_idx)
-// {
-// 	// already set
-// 	if (_clients.at(client_idx).get_password() == _password)
-// 		return (OK);
-// 	// verify and set password	
-// 	for (int i = 0; i < tab_msg.size(); i++)
-// 	{
-// 		std::cout << i << " = " << tab_msg[i] << std::endl;
-// 		if (toUpper(tab_msg[i]) == "PASS")
-// 		{	
-// 			i++;
-//     		if (i == tab_msg.size())
-// 				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISSING, client_idx), KO);
-// 			if (tab_msg.at(i) == _password)
-// 				return(_clients.at(client_idx).set_password(tab_msg.at(i)), OK);
-// 			else
-// 				return(reply(ERR_PASSWDMISMATCH, RPL_PASSWDMISMATCH, client_idx), KO);
-// 		}
-// 		else
-// 			return(reply(ERR_PAtab_msg.size()SSWDMISMATCH, RPL_PASSWDREQUIRED, client_idx), KO);		
-// 	}
-// 	return (KO);
-// }
-
-
-// void Server::build_message(std::string buffer, int clt_skt)
-// {
-// 	int k = client_idx(clt_skt);
-	
-// 	if (k != -1)	
-// 		_clients.at(k).set_msg(buffer);
-// }
-
-
-// // :<nickname>!<user>@<host> QUIT :[optional message]
-// void Server::quit_channels(std::string reason, int clt_idx)
-// {
-// 	std::string msg_replied;	
-		
-// 	for (int i = 0; i < _chnls.size(); i++)	
-// 	{		
-// 		//for (int j = _chnls.at(i).get_chnlclts().size() - 1; j >= 0 ; --j) // reverse not needed due to break;
-// 		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
-// 		{			
-// 			if (client_idx(_chnls.at(i).get_chnlclts().at(j).get_clt_skt()) == clt_idx)
-// 			{
-// 				_chnls.at(i).rem_client(j);
-// 				_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
-// 				msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-// 						+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT :" + reason;              
-// 				reply_to_all(msg_replied, i);
-// 				break;				
-// 			}			
-// 		}	
-// 	}
-// 	rem_empty_chnl();
-// std::cout << "liste des chnls et clients in it" << std::endl;
-// 	for (int i = 0; i < _chnls.size(); i++)	
-// 	{
-// 		for (int j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
-// 		{
-// 			std::cout <<  _chnls.at(i).get_chnlclts().at(j).get_nickname() << " = " <<  _chnls.at(i).get_chnlclts().at(j).get_clt_skt() << std::endl;
-// 		}
-// 	}
-// }
+/**
+ * SIGINT = ctrl+c
+ * SIGQUIT = ctrl+\
+ * ctrl+d = not a signal
+**/
