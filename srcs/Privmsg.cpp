@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 02:55:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:34:26 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
     int i = tab_idx;
     std::vector<std::string> target;    
     std::string msg;
-    std::string msg_replied;
+    std::string msg_replied;    
     
-    //
-	if (i + 1 == tab_msg.size())
+	if (i + 1 >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "PRVISMSG " + std::string(ERR_NEEDMOREPARAMS), clt_idx); // check by irssi actually, for nc
-    else if (i + 2 == tab_msg.size())
+    else if (i + 2 >= tab_msg.size())
     {
         if (tab_msg.at(i + 1).at(0) == ':')
             reply(COD_NORECIPIENT, ERR_NORECIPIENT, clt_idx); // check by irssi actually, for nc
@@ -43,7 +42,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
             target = split_char(tab_msg.at(i), ','); // splitted by irssi actually, for nc
             for (int t = 0; t < target.size(); t++)
             {                   
-                msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+                msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                     + "@" + _clts.at(clt_idx).get_hostname() + " PRIVMSG"; // from
                 msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')

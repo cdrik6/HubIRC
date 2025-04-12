@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 04:33:39 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 22:14:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@
 # define ERR_NEEDMOREPARAMS ":Not enough parameters" //<command>
 # define COD_ALREADYREGISTRED "462"
 # define ERR_ALREADYREGISTRED ":Unauthorized command (already registered)"
+# define COD_INVALIDUSERNAME "468"
+# define ERR_INVALIDUSERNAME ":Invalid username"
 // PRIVMSG
 # define COD_NORECIPIENT "411"
 # define ERR_NORECIPIENT ":No recipient given (PRIVMSG)"

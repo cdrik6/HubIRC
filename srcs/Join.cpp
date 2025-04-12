@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/11 22:52:40 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:33:51 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     std::vector<std::string> keys;
     
     // get channels to join or create       
-    if (i == tab_msg.size())
+    if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "JOIN " + std::string(ERR_NEEDMOREPARAMS), clt_idx);    
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')
         reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " " + ERR_NOSUCHCHANNEL, clt_idx);
@@ -27,7 +27,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     {        
         channels = split_char(tab_msg.at(i), ',');                
         i++;        
-        if (i != tab_msg.size())                    
+        if (i < tab_msg.size())                    
             keys = split_char(tab_msg.at(i), ',');
         while (keys.size() < channels.size())
             keys.push_back("");
@@ -101,7 +101,7 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     int idx;    
     
     // RPL
-    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
     reply(COD_NONE, msg_replied, clt_idx);    
     reply_to_all(msg_replied, chnl_idx);
@@ -140,7 +140,7 @@ void Server::reply_join_new(std::string channel, int clt_idx)
     std::string msg_replied;    
     
     // RPL 
-    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
     reply(COD_NONE, msg_replied, clt_idx);    
     // TOPIC

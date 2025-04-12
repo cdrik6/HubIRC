@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 02:05:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:59:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_id
 }
 // Note
 // std::string rpl = ":" + oldnick + " NICK " + nick + "\r\n"; // simpliest
-// std::string rpl = ":" + oldnick + "!~" + _clients.at(clt_idx).get_username() + "@localhost NICK " + nick + "\r\n"; --> works
+// std::string rpl = ":" + oldnick + "!" + _clients.at(clt_idx).get_username() + "@localhost NICK " + nick + "\r\n"; --> works
 // std::string rpl = "NICK " + nick + "\r\n"; --> wrong issue with oldnick not null
 
 int Server::check_nick(std::string nick)
@@ -111,24 +111,47 @@ int Server::nick_available(std::string nick, int clt_idx)
 // USER <username> 0 * :<realname> // USER  username nickname hostname :realname
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    std::string user;    
-    int i = tab_idx + 1;    
-    
-    if (i >= tab_msg.size())
+    int i = tab_idx;    
+    std::string user;
+    std::string real;    
+        
+    if (i + 4 >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else
     {
-        user = tab_msg.at(i);        
-        if (user != "")
-        {
+        user = tab_msg.at(i + 1);
+        real = tab_msg.at(i + 4);  
+        if (!real.empty() && real.at(0) == ':')
+			real = real.substr(1);        
+        if (check_user(user) == OK)
+        {        
             if (_clts.at(clt_idx).get_username() != "")        
                 reply(COD_ALREADYREGISTRED, ERR_ALREADYREGISTRED, clt_idx);        
-            else            
-                _clts.at(clt_idx).set_username(user);
+            else
+            {
+                _clts.at(clt_idx).set_username("~" + user); // "~" should be before username as no Ident Protocol is in place.
+                _clts.at(clt_idx).set_realname(real);
+            }
         }
-        else // don't happen actually 
-            reply(COD_NEEDMOREPARAMS, "USER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
-    }
+        else
+            reply(COD_INVALIDUSERNAME, ERR_INVALIDUSERNAME, clt_idx);
+    }        
+}
+
+int Server::check_user(std::string user)
+{
+    std::string allowed = "_[]{}\\|";
+    
+    if (user.length() > USERLEN || user.length() == 0)
+        return (KO);
+    if (isdigit(user.at(0)))
+        return (KO);    
+    for (int i = 0; i < user.length(); i++)
+    {           
+        if(!isalnum(user.at(i)) && allowed.find(user.at(i)) == std::string::npos)
+            return (KO);
+    }        
+    return (OK);
 }
 
 void Server::welcome(int clt_idx)

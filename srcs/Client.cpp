@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/05 03:52:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:37:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ _is_op(false),
 _nickname("*"),
 _username(""),
 _hostname(""),
+_realname(""),
 _msg("")
 {}
 
@@ -51,6 +52,11 @@ std::string Client::get_username(void) const
     return(_username);
 }
 
+std::string Client::get_realname(void) const
+{
+    return(_realname);
+}
+
 bool Client::get_pwd_ok(void) const
 {
     return (_pwd_ok);
@@ -71,19 +77,19 @@ void Client::set_clt_skt(int clt_skt)
     _clt_skt = clt_skt;
 }
 
-void Client::set_nickname(std::string nick)
+void Client::set_nickname(std::string nickname)
 {
-    _nickname = nick;
+    _nickname = nickname;
 }
 
-// void Client::set_oldnick(std::string nick)
-// {
-//     _oldnick = nick;
-// }
-
-void Client::set_username(std::string user)
+void Client::set_username(std::string username)
 {
-    _username = user;
+    _username = username;
+}
+
+void Client::set_realname(std::string realname)
+{
+    _realname = realname;
 }
 
 void Client::set_pwd_ok(bool pwd_ok)

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:54:39 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 01:18:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:29:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 msg_replied = msg_replied + " H";
                 if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
                     msg_replied = msg_replied + "@";                
-                msg_replied = msg_replied + " :0";
+                msg_replied = msg_replied + " :0 " + _clts.at(idx).get_realname();
                 if (_chnls.at(chnl_idx).is_invitee(_clts.at(idx).get_nickname()))
                     msg_replied = msg_replied + " invited";
                 reply(COD_WHOREPLY, msg_replied, clt_idx);

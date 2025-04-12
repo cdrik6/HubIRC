@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:13:27 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 02:18:58 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:33:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void Server::invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
     int i = tab_idx + 1; // invitee
     
-    if (i >= tab_msg.size()) // Query invitees list           
+    if (i >= tab_msg.size()) // Query invitees list, out of scope           
         reply(COD_NEEDMOREPARAMS, "INVITE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else
     {
@@ -76,7 +76,7 @@ void Server::let_it_in(int chnl_idx, int clt_idx, int inv_idx)
 
     // :inviter!user@host INVITE <invitee> <channel> --> to invitee    
     std::string msg_replied;    
-    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+    msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " INVITE " + _clts.at(inv_idx).get_nickname() \
                 + " " + _chnls.at(chnl_idx).get_name();                
     reply(COD_NONE, msg_replied, inv_idx);   

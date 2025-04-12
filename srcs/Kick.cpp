@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 04:13:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:33:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 						
 						if (i + 1 < tab_msg.size())
 							reason = tab_msg.at(i + 1);						
+						if (!reason.empty() && reason.at(0) == ':')
+							reason = reason.substr(1);
+						if (!reason.empty())
+							reason = " " + reason;	
+													
 						if (users.size() == 0)
 							reply(COD_NEEDMOREPARAMS, "KICK " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
 						else
@@ -63,7 +68,7 @@ void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 void Server::kick_users(std::vector<std::string> users, std::string reason, int chnl_idx, int clt_idx)
 {
 	std::string msg_replied;
-	msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+	msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " KICK " + _chnls.at(chnl_idx).get_name();                
 	
 	for (int j = 0; j < users.size(); j++)
@@ -74,7 +79,7 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 		{
 			if (in_channel(chnl_idx, tgt_idx) != -1) // user kicked on channel?
 			{
-				msg_replied = msg_replied + " " + users.at(j) + " " + reason;
+				msg_replied = msg_replied + " " + users.at(j) + reason;
 				reply_to_all(msg_replied, chnl_idx);
 				_chnls.at(chnl_idx).rem_client(tgt_idx);
 				_chnls.at(chnl_idx).rem_operator(_clts.at(tgt_idx).get_nickname());

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:13:35 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 01:34:28 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:30:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ class Client
         std::string _nickname;        
         std::string _username;
         std::string _hostname;
+        std::string _realname;
         std::string _msg; //buffer
         
     public:
@@ -36,13 +37,15 @@ class Client
         std::string get_nickname(void) const;
         std::string get_hostname(void) const;
         std::string get_username(void) const;
+        std::string get_realname(void) const;
         bool get_pwd_ok(void) const;
         bool get_is_op(void) const;
         bool get_registered(void) const;
         //
         void set_clt_skt(int clt_skt);
-        void set_nickname(std::string nick);        
+        void set_nickname(std::string nickname);        
         void set_username(std::string username);
+        void set_realname(std::string realname);
         void set_pwd_ok(bool pwd_ok);
         void set_registered(bool registered);
         void set_hostname(std::string ip);
@@ -51,3 +54,4 @@ class Client
 };
 
 #endif
+

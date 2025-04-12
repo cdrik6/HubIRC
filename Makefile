@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/12 04:40:59 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/12 23:49:04 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ SRCS		=	srcs/main.cpp \
 
 CC			=	c++
 
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98 
+CFLAGS		=	-Wall -Wextra -Werror -std=c++98
 
 OBJS		=	$(SRCS:.cpp=.o)
 

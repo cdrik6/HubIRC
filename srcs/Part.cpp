@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 00:12:26 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:34:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 // PART <channel>{,<channel>} [ :<message> ]
 void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx;
+    int i = tab_idx + 1;
     std::string msg_replied;
     std::vector<std::string> channels;
-    std::string reason = "";    
+    std::string reason = "";
     
-    // parse channels from where to leave
-    i++;
-    if (i == tab_msg.size())
+    // parse channels from where to leave    
+    if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "PART " + std::string(ERR_NEEDMOREPARAMS) , clt_idx);
     else if (tab_msg.at(i).at(0) != '#' && tab_msg.at(i).at(0) != '&')        
         reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " " + ERR_NOSUCHCHANNEL, clt_idx);
@@ -31,8 +30,12 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     
     // reason    
     i++;
-    if (i < tab_msg.size())
-        reason = " " + tab_msg.at(i);
+    if (i < tab_msg.size())        
+        reason = tab_msg.at(i);    
+	if (!reason.empty() && reason.at(0) == ':')
+		reason = reason.substr(1);
+    if (!reason.empty())
+        reason = " " + reason;
         
     // check 
     if (!channels.empty())
@@ -46,7 +49,7 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     int idx = in_channel(k, clt_idx);
                     if (idx != -1)
                     {
-                        msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
+                        msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                             + "@" + _clts.at(clt_idx).get_hostname() + " PART " + channels.at(j) + reason;
                         reply_to_all(msg_replied, k); // to all including the leaving                        
                         _chnls.at(k).rem_client(idx);

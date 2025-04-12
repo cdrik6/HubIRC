@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:20:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 19:59:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:34:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ void Server::quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     std::string reason;
     int pfd_idx = -1;
 
-    if (tab_msg.size() > tab_idx + 1)	
+    if (tab_idx + 1 < tab_msg.size())
 		reason = tab_msg.at(tab_idx + 1);
 	if (!reason.empty() && reason.at(0) == ':')
-		reason = reason.substr(1);	        
+		reason = reason.substr(1);
+	if (!reason.empty())
+		reason = " " + reason;
+	
     for (int i = 2; i < _pfds.size(); i++)
     {
         if (_pfds.at(i).fd == _clts.at(clt_idx).get_clt_skt())
@@ -47,8 +50,8 @@ void Server::quit_channels(std::string reason, int clt_idx)
 			_chnls.at(i).rem_client(idx);
 			_chnls.at(i).rem_operator(_clts.at(clt_idx).get_nickname());
 			_chnls.at(i).rem_invitee(_clts.at(clt_idx).get_nickname());
-			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!~" + _clts.at(clt_idx).get_username() \
-					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT " + reason;              
+			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
+					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT" + reason;
 			reply_to_all(msg_replied, i);				
 		}			
 	}
