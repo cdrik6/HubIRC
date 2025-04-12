@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 04:59:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 19:10:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ class Server
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
 		int check_registered(int clt_idx);		
-		void get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx);		
+		int get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx);		
 		// Register
 		void reply(std::string code, std::string msg_replied, int clt_idx);		
 		void ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);

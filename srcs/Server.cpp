@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 05:32:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/12 20:05:36 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void Server::polling(void)
 				int k = client_idx(_pfds.at(i).fd);
 				// Server output
 				std::cout << "Received(" << _pfds.at(i).fd << ") [" << buff << "]\n" << std::endl;
-				//std::cout << "(nbytes = " << nbytes << ")\n" << std::endl;				
+				std::cout << "(nbytes = " << nbytes << ")\n" << std::endl;				
 				//
 				if (nbytes <= 0) // closed or issues
 				{
@@ -189,12 +189,10 @@ int Server::parse_message(std::string buffer, int clt_idx)
 		{
 			//*********** debug here ***** */
 			std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
-			get_command(tab_msg, tab_msg[i], clt_idx, i);
-		}
-		// std::cout << "ici" << std::endl;
-		// if (clt_idx < _clts.size())		
-			_clts.at(clt_idx).clear_msg();
-		// std::cout << "ici2" << std::endl;
+			if (get_command(tab_msg, tab_msg[i], clt_idx, i) == KO)
+				return (KO);
+		}	
+		_clts.at(clt_idx).clear_msg();		
 		return (OK);
 	}
 	std::cout << std::endl; /******************************* */
@@ -206,7 +204,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 // /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
 // /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
-void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx)
+int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx)
 {
 	if (toUpper(cmd) == "PING")
 		ping(tab_msg, clt_idx, tab_idx);
@@ -216,8 +214,8 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 	 	pass(tab_msg, clt_idx, tab_idx);
 	else if (toUpper(cmd) == "USER")
 	 	username(tab_msg, clt_idx, tab_idx);
-	// else if (toUpper(cmd) == "QUIT")
-	//  	quit(tab_msg, clt_idx, tab_idx);
+	else if (toUpper(cmd) == "QUIT")
+	 	return (quit(tab_msg, clt_idx, tab_idx), KO);
 	else if (_clts.at(clt_idx).get_registered() == true)
 	{
 		if (toUpper(cmd) == "PRIVMSG")		
@@ -243,6 +241,7 @@ void Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, in
 	}
 	// else
 	// 	reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx);
+	return (OK);
 }
 
 int Server::client_idx(int clt_skt)
