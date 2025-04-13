@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 00:31:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 01:45:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ class Channel
         std::string _topic;
         std::string _setby;
         time_t _setat;
-        std::vector<std::string> _operators;        
+        int _limit;
         std::vector<Client> _chnlclts;
+        std::vector<std::string> _operators;        
+        std::vector<std::string> _invitees;
         bool _mode_i; // set(true)-remove(false) Invite-only //--> to implement in JOIN / INVITE /************** */
         bool _mode_t; // set(true)-remove(false) restrict TOPIC to _operators //--> to implement in TOPIc /************** */
         // bool _mode_k; // set(true)-remove(false) channel key
         // bool _mode_o; // give(true)-take(false) channel operator privilege
         // bool _mode_l; // set(true)-remove(false) the user limit
-        int _limit;
-        std::vector<std::string> _invitees;
-    
+        
     public:
         Channel();
         ~Channel();
@@ -64,7 +64,7 @@ class Channel
         void add_invitee(std::string nick);
         void rem_invitee(std::string nick);
         bool is_invitee(std::string nick);        
-        void rem_client(int idx);        
+        void rem_chnlclt(int chnlclt_idx);
 };
 
 #endif

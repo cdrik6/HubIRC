@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 00:04:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 03:32:21 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <vector>
 # include <sstream>
 # include <algorithm>
+# include <string>
 //
 # include <netdb.h>
 # include <arpa/inet.h>
@@ -46,8 +47,10 @@
 # define MAX_CHANNEL_LIMIT 1000
 # define NICKLEN 30
 # define TOPICLEN 307
+# define KICKLEN 307
 # define CHANLEN 50
 # define USERLEN 18
+
 
 class Channel;
 
@@ -61,14 +64,14 @@ class Server
 		std::vector<Channel> _chnls;
 		//
 		static bool _signal; // static makes _signal shared across all instances
-		//
-		Server();
-		Server& operator=(const Server& other);
-        Server(const Server& other);
+		//		
+		// Server& operator=(const Server& other);
+        // Server(const Server& other);
 		
-	public:		
-		Server(char *port, std::string password);		
+	public:				
+		Server();
 		~Server();
+		Server(char *port, std::string password);
 		//
 		int get_srv_skt(void) const;		
 		static void	handle_signal(int signal);
@@ -78,9 +81,9 @@ class Server
 		void polling(void);		
 		void client_connect(void);
 		void client_disconnect(std::string reason, int pfd_idx, int clt_idx);		
-		void add_pfds(std::vector<struct pollfd>& pfds, int fd, short events);
+		void add_pfds(std::vector<struct pollfd>* pfds, int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
-		void add_clients(std::vector<Client>& clts, int clt_skt, std::string ip);
+		void add_clients(std::vector<Client>* clts, int clt_skt, std::string ip);
 		int client_idx(int clt_skt);		
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
@@ -99,11 +102,12 @@ class Server
 		// Privmsg
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
-		int target_idx(std::string target);
+		int target_clt_idx(std::string target);
+		int target_chnlclt_idx(std::string target, int chnl_idx);
 		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		void create_chnl(std::vector<Channel>& chans, std::string name, std::string key, int clt_idx);
+		void create_chnl(std::vector<Channel>* chans, std::string name, std::string key, int clt_idx);
 		void reply_join_add(std::string channel, int chnl_idx, int clt_idx);
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);
@@ -134,6 +138,8 @@ class Server
 		void quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		void quit_channels(std::string reason, int clt_idx);
 		void rem_empty_chnl(void);
+		// Notice
+		void notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 00:10:05 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 01:46:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ Channel::Channel(): _name(""), _key(""), _topic(""),_setby(""), _setat(0)
 }
 
 Channel::~Channel()
-{}
+{
+	// std::cout << "Channel destructor called\n";
+}
 
 std::string Channel::get_name(void) const
 {
@@ -180,9 +182,9 @@ bool Channel::is_invitee(std::string nick)
 	return (false);
 }
 
-void Channel::rem_client(int idx)
+void Channel::rem_chnlclt(int chnlclt_idx)
 {
-	_chnlclts.erase(_chnlclts.begin() + idx);
+	_chnlclts.erase(_chnlclts.begin() + chnlclt_idx);
 }
 
 

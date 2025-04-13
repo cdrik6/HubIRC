@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:33:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 03:26:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,13 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         i++;        
         if (i < tab_msg.size())                    
             keys = split_char(tab_msg.at(i), ',');
-        while (keys.size() < channels.size())
+        int ks = keys.size();     
+        while (ks < channels.size())
+        {
             keys.push_back("");
+            ks = keys.size();
+        }
+            
     }
     
     // check existing or create channel   
@@ -81,7 +86,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 if (new_chan == true) // create channel                
                 {                    
                     reply_join_new(channels.at(j), clt_idx);                    
-                    create_chnl(_chnls, channels.at(j), keys.at(j), clt_idx); // create and add
+                    create_chnl(&_chnls, channels.at(j), keys.at(j), clt_idx); // create and add
                 }    
             }
             else
@@ -152,7 +157,7 @@ void Server::reply_join_new(std::string channel, int clt_idx)
     reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx); // 366 <nickname> <channel> :End of /NAMES list    
 }
 
-void Server::create_chnl(std::vector<Channel>& chnls, std::string name, std::string key, int clt_idx)
+void Server::create_chnl(std::vector<Channel>* chnls, std::string name, std::string key, int clt_idx)
 {
     Channel new_chan;
 
@@ -160,7 +165,7 @@ void Server::create_chnl(std::vector<Channel>& chnls, std::string name, std::str
     new_chan.set_key(key);
     new_chan.set_chnlclts(_clts.at(clt_idx));
     new_chan.add_operator(_clts.at(clt_idx).get_nickname()); // Add creator as operator of the channel
-    chnls.push_back(new_chan);
+    (*chnls).push_back(new_chan);
 }
 
 int Server::check_channel(std::string chan_name)

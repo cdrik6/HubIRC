@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:37:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 01:01:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ _msg("")
 {}
 
 Client::~Client()
-{}
+{
+    // std::cout << "Client destructor called\n";
+}
 
 int Client::get_clt_skt(void) const
 {

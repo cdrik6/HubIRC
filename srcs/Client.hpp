@@ -6,13 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:13:35 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:30:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 00:54:09 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
+# include <iostream>
 # include <string>
 
 class Client

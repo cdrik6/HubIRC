@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 20:05:36 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 03:34:11 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,23 @@
 
 Server::Server(char *port, std::string password)
 {
-	add_pfds(_pfds, STDIN_FILENO, POLLIN); // add std_in en 0	
+	add_pfds(&_pfds, STDIN_FILENO, POLLIN); // add std_in en 0	
 	_password = password;
 	_srv_skt = create_srv_skt(port); 
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
-	add_pfds(_pfds, _srv_skt, POLLIN); // server en 1	
+	add_pfds(&_pfds, _srv_skt, POLLIN); // server en 1	
 	std::cout << "Server: waiting for connections...\n";
 	std::cout << "Server: \"stop\" to stop it\n\n";
+}
+
+Server::Server()
+{	
 }
 
 Server::~Server()
 {
 	/***** draft****** */
-	std::cout << "destructor called\n";
+	std::cout << "Server destructor called\n";
 	// close (_srv_skt); // i = 1
 	for (int i = 1; i < _pfds.size(); i++)
 	{
@@ -234,13 +238,11 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 			kick(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "INVITE")
 			invite(tab_msg, clt_idx, tab_idx);
-		// else if (toUpper(cmd) == "NOTICE")
-		// 	notice(tab_msg, clt_idx, tab_idx);	
+		else if (toUpper(cmd) == "NOTICE")
+			notice(tab_msg, clt_idx, tab_idx);	
 		else if (tab_idx == 0)
 			reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
-	}
-	// else
-	// 	reply(COD_NOTREGISTERED, ERR_NOTREGISTERED, clt_idx);
+	}	
 	return (OK);
 }
 
@@ -277,8 +279,8 @@ void Server::client_connect(void)
 		throw (std::runtime_error("accept: " + std::string(strerror(errno))));	
 	if (fcntl(clt_skt, F_SETFL, O_NONBLOCK) == -1)
 		throw (std::runtime_error("fcntl: " + std::string(strerror(errno))));		
-	add_pfds(_pfds, clt_skt, POLLIN | POLLHUP);	
-	add_clients(_clts, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));	
+	add_pfds(&_pfds, clt_skt, POLLIN | POLLHUP);	
+	add_clients(&_clts, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));	
 }
 
 /********* check inet_ntop authorised ***********/
@@ -305,23 +307,23 @@ std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_sk
 	}	
 }
 
-void Server::add_clients(std::vector<Client>& clients, int clt_skt, std::string ip)
+void Server::add_clients(std::vector<Client>* clients, int clt_skt, std::string ip)
 {
 	Client new_clt;
 		
 	new_clt.set_clt_skt(clt_skt);
 	new_clt.set_hostname(ip);
-	clients.push_back(new_clt);		
+	(*clients).push_back(new_clt);		
 }
 
-void Server::add_pfds(std::vector<struct pollfd>& pfds, int fd, short events)
+void Server::add_pfds(std::vector<struct pollfd>* pfds, int fd, short events)
 {
 	struct pollfd new_skt;
 	
 	new_skt.fd = fd;
 	new_skt.events = events;  // POLLIN = Tell me when ready to read
 	new_skt.revents = 0;
-	pfds.push_back(new_skt);	
+	(*pfds).push_back(new_skt);	
 }
 // struct pollfd {
 //     int fd;         // the socket descriptor

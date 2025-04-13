@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:13:27 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:33:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 02:59:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     else
     {
         std::string invitee = tab_msg.at(i);
-        int inv_idx = target_idx(invitee);
+        int inv_idx = target_clt_idx(invitee);
 
         if (inv_idx != -1) // invitee exists?
         {        

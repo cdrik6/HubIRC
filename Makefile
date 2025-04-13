@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/12 23:49:04 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/13 00:24:16 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS		=	srcs/main.cpp \
 				srcs/Topic.cpp \
 				srcs/Kick.cpp \
 				srcs/Invite.cpp \
+				srcs/Notice.cpp \
 				srcs/Quit.cpp \
 				srcs/Part.cpp
 

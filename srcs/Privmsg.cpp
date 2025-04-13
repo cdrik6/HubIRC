@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:34:26 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 02:53:02 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                 msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
-                    int k = target_idx(target.at(t));
+                    int k = target_clt_idx(target.at(t));
                     if (k != -1)                    
                         reply(COD_NONE, msg_replied, k);                
                     else
@@ -89,10 +89,18 @@ int Server::in_channel(int chnl_idx, int clt_idx)
     return (-1);
 }
 
-int Server::target_idx(std::string target)
+int Server::target_clt_idx(std::string target)
 {
     for (int i = 0; i < _clts.size(); i++)       
         if (_clts.at(i).get_nickname() == target)
+            return (i);
+    return (-1);
+}
+
+int Server::target_chnlclt_idx(std::string target, int chnl_idx)
+{
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)       
+        if (_chnls.at(chnl_idx).get_chnlclts().at(i).get_nickname() == target)
             return (i);
     return (-1);
 }

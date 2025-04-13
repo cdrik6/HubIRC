@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:34:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 03:49:35 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,19 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     {
         for (int j = 0; j < channels.size(); j++)        
         {
+            bool is_a_chnl = false;
             for (int k = 0; k < _chnls.size(); k++)
             {                
                 if (channels.at(j) == _chnls.at(k).get_name())
                 {
+                    is_a_chnl = true;
                     int idx = in_channel(k, clt_idx);
                     if (idx != -1)
                     {
                         msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                             + "@" + _clts.at(clt_idx).get_hostname() + " PART " + channels.at(j) + reason;
                         reply_to_all(msg_replied, k); // to all including the leaving                        
-                        _chnls.at(k).rem_client(idx);
+                        _chnls.at(k).rem_chnlclt(idx);
 				        _chnls.at(k).rem_operator(_clts.at(clt_idx).get_nickname());
                         _chnls.at(k).rem_invitee(_clts.at(clt_idx).get_nickname());
                     }
@@ -60,6 +62,8 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         reply(COD_NOTONCHANNEL, channels.at(j) + " " + ERR_NOTONCHANNEL, clt_idx);
                 }
             }
+            if (!is_a_chnl)
+                reply(COD_NOSUCHCHANNEL, channels.at(j) + " " + ERR_NOSUCHCHANNEL, clt_idx);
             rem_empty_chnl();
         }                
     }        
