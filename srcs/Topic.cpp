@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:36:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/13 21:57:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ void Server::update_topic(std::string topic, int chnl_idx, int clt_idx)
     
     if (topic == ":")
         topic = "";
-    else if (!topic.empty() && topic.at(0) == ':')
-        topic = topic.substr(1);
+    // else if (!topic.empty() && topic.at(0) == ':')
+    //     topic = topic.substr(1);
     if (!topic.empty())
         topic = " " + topic;
     _chnls.at(chnl_idx).set_topic(topic);
