@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 03:43:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 04:31:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,8 @@ class Server
 		void notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		// Oper
 		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		// Bot
+		void bot(int clt_idx);
 };
 
 #endif

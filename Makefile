@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/14 04:06:10 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/14 04:37:03 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ SRCS		=	srcs/main.cpp \
 				srcs/Notice.cpp \
 				srcs/Oper.cpp \
 				srcs/Quit.cpp \
-				srcs/Part.cpp
+				srcs/Part.cpp \
+				srcs/Bot.cpp
 
 CC			=	c++
 
