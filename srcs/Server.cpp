@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 03:34:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 04:05:31 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,9 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 		else if (toUpper(cmd) == "INVITE")
 			invite(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "NOTICE")
-			notice(tab_msg, clt_idx, tab_idx);	
+			notice(tab_msg, clt_idx, tab_idx);
+		else if (toUpper(cmd) == "OPER")
+			oper(tab_msg, clt_idx, tab_idx);
 		else if (tab_idx == 0)
 			reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
 	}	
@@ -266,8 +268,6 @@ void Server::client_disconnect(std::string reason, int pfd_idx, int clt_idx)
 	_clts.erase(_clts.begin() + clt_idx);	
 }
 
-
-
 void Server::client_connect(void)
 {
 	int clt_skt;
@@ -283,7 +283,6 @@ void Server::client_connect(void)
 	add_clients(&_clts, clt_skt, std::string(printable_ip(clt_addr, clt_skt)));	
 }
 
-/********* check inet_ntop authorised ***********/
 std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_skt)
 {
 	char ip4[INET_ADDRSTRLEN];  // space to hold the IPv4 string	

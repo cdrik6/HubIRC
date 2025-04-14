@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 21:01:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 03:43:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@
 # define KICKLEN 307
 # define CHANLEN 50
 # define USERLEN 18
+# define NAMEOPER "anybody" // to get OPER usable
+# define PASSOPER "secret" // to get OPER usable
 
 
 class Channel;
@@ -140,6 +142,8 @@ class Server
 		void rem_empty_chnl(void);
 		// Notice
 		void notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		// Oper
+		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 };
 
 #endif

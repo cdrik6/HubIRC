@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 22:14:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 03:49:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,9 @@
 // COMMAND NOT FOUND
 # define COD_UNKNOWNCOMMAND "421"
 # define ERR_UNKNOWNCOMMAND ":Unknown command" // <command>
+// OPER
+# define COD_YOUREOPER "381"
+# define RPL_YOUREOPER ":You are now an IRC operator" //<client>
+
 
 #endif

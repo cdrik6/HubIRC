@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 02:04:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 02:14:02 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 						
 						if (i + 1 < tab_msg.size())
 							reason = tab_msg.at(i + 1);						
-						if (!reason.empty() && reason.at(0) == ':')
-							reason = reason.substr(1);
+						// if (!reason.empty() && reason.at(0) == ':')
+						// 	reason = reason.substr(1);
 						if (!reason.empty())
 							reason = " " + reason;
 						if (reason.length() > KICKLEN)

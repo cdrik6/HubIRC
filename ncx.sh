@@ -2,7 +2,7 @@
 
 HOST="localhost"
 PORT=1024
-NICK="titi"
+NICK="tutu"
 USER="netcat 0 * :real name"
 PASS="toto"
 
@@ -12,4 +12,4 @@ PASS="toto"
 # USER $USER 0 * :Real User
 # EOF
 
-{ echo "PASS $PASS"; echo "NICK $NICK"; echo "USER $USER 0 * :Real Name"; cat; } | nc -C $HOST $PORT
+{ echo "PASS $PASS"; echo "NICK $NICK"; echo "USER $USER"; cat; } | nc -C $HOST $PORT

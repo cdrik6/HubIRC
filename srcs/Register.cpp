@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:59:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 03:58:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     
 	// verify password    
 	if (i >= tab_msg.size())
-        reply(COD_PASSWDMISMATCH, ERR_PASSWDMISSING, clt_idx);
+        reply(COD_NEEDMOREPARAMS, "PASS " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
     else if (tab_msg.at(i) == _password)    
         _clts.at(clt_idx).set_pwd_ok(true);
     else     

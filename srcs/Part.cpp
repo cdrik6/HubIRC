@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 03:49:35 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 02:11:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     i++;
     if (i < tab_msg.size())        
         reason = tab_msg.at(i);    
-	if (!reason.empty() && reason.at(0) == ':')
-		reason = reason.substr(1);
+	// if (!reason.empty() && reason.at(0) == ':')
+	// 	reason = reason.substr(1);
     if (!reason.empty())
         reason = " " + reason;
         
