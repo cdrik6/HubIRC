@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 17:11:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:45:35 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,29 +71,29 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_id
         else
         {         
             std::string oldnick = _clts.at(clt_idx).get_nickname();
-            // change nick in all channels
+            // // change nick in all channels
+            // for (int k = 0; k < _chnls.size(); k++)
+            // {
+            //     for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)
+            //     {
+            //         if (_chnls.at(k).get_chnlclts().at(j).get_nickname() == oldnick)
+            //         {
+            //             std::cout << " je suis la  old = " << oldnick << std::endl;
+            //             _chnls.at(k).getref_chnlclts().at(j).set_nickname(nick);
+            //             break;
+            //         }                        
+            //     }
+            // }
             for (int k = 0; k < _chnls.size(); k++)
             {
                 for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)
                 {
-                    if (_chnls.at(k).get_chnlclts().at(j).get_nickname() == oldnick)
-                    {
-                        std::cout << " je suis la  old = " << oldnick << std::endl;
-                        _chnls.at(k).getref_chnlclts().at(j).set_nickname(nick);
-                        break;
-                    }                        
-                }
-            }
-            for (int k = 0; k < _chnls.size(); k++)
-            {
-                for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)
-                {
-                    if (_chnls.at(k).get_chnlclts().at(j).get_nickname() == oldnick)
-                    {
+                    // if (_chnls.at(k).get_chnlclts().at(j).get_nickname() == oldnick)
+                    // {
                         
-                        std::cout << "nick registered = " << _chnls.at(k).get_chnlclts().at(j).get_nickname() << std::endl; 
+                        std::cout << "nick registered = " << _chnls.at(k).get_chnlclts().at(j)->get_nickname() << std::endl; 
                         
-                    }                        
+                    // }                        
                 }
             }            
             _clts.at(clt_idx).set_nickname(nick);            

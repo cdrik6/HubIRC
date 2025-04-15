@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 17:10:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:36:51 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,12 @@ std::string Channel::get_key(void) const
 	return (_key);
 }
 
-std::vector<Client>& Channel::getref_chnlclts(void) 
-{
-	return (_chnlclts);
-}
+// std::vector<Client>& Channel::getref_chnlclts(void) 
+// {
+// 	return (_chnlclts);
+// }
 
-std::vector<Client> Channel::get_chnlclts(void) const
+std::vector<Client*> Channel::get_chnlclts(void) const
 {
 	return (_chnlclts);
 }
@@ -117,7 +117,7 @@ void Channel::set_key(std::string key)
 	_key = key;
 }
 
-void Channel::set_chnlclts(Client client)
+void Channel::set_chnlclts(Client *client)
 {
 	_chnlclts.push_back(client);
 }

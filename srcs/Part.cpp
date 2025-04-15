@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 02:11:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:43:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,5 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 void Server::reply_to_all(std::string msg_replied, int chnl_idx)
 {
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
-        reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt()));    
+        reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)->get_clt_skt()));    
 }

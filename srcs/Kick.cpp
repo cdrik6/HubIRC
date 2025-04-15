@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 02:14:02 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:40:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 	for (int j = 0; j < users.size(); j++)
 	{
 		int tgt_idx = target_chnlclt_idx(users.at(j), chnl_idx);
-		std::string tgt_nick = _chnls.at(chnl_idx).get_chnlclts().at(tgt_idx).get_nickname();
+		std::string tgt_nick = _chnls.at(chnl_idx).get_chnlclts().at(tgt_idx)->get_nickname();
 		std::cout << "target kicked = " << tgt_nick;
 		
 		if (tgt_idx != -1)

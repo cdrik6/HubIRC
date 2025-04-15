@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/12 23:34:05 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:40:49 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,7 +363,7 @@ int Server::nick_in_channel(int chnl_idx, std::string nick)
 {    
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
-        if (_chnls.at(chnl_idx).get_chnlclts().at(i).get_nickname() == nick)   
+        if (_chnls.at(chnl_idx).get_chnlclts().at(i)->get_nickname() == nick)   
             return (OK);
     }
     return (KO);    

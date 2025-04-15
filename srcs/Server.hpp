@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 17:22:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:51:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ class Server
 		void polling(void);		
 		void client_connect(void);
 		void client_disconnect(std::string reason, int pfd_idx, int clt_idx);		
-		void add_pfds(std::vector<struct pollfd>* pfds, int fd, short events);
+		void add_pfds(int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
-		void add_clients(std::vector<Client>* clts, int clt_skt, std::string ip);
+		void add_clients(int clt_skt, std::string ip);
 		int client_idx(int clt_skt);		
 		// get command
 		int parse_message(std::string buffer, int clt_idx);

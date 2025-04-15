@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 00:24:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 02:50:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:43:18 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         {
                             for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
                             {
-                                int idx = client_idx(_chnls.at(k).get_chnlclts().at(j).get_clt_skt());                        
+                                int idx = client_idx(_chnls.at(k).get_chnlclts().at(j)->get_clt_skt());                        
                                 if (idx != clt_idx) // all except itself for channel (itself ok for direct message)
                                     reply(COD_NONE, msg_replied, idx);
                             }

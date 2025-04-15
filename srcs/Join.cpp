@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 03:26:58 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:39:39 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     msg_replied = "= " + channel + " :";    
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
-        idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i).get_clt_skt());        
+        idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)->get_clt_skt());        
         if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
             msg_replied = msg_replied + "@" + _clts.at(idx).get_nickname() + " ";
         else     
@@ -133,7 +133,7 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     reply(COD_NAMREPLY, msg_replied, clt_idx); // 353 <nickname> = <channel> :<user1> <user2> <user3> ...     
     reply(COD_ENDOFNAMES, channel + " " + RPL_ENDOFNAMES, clt_idx); // 366 <nickname> <channel> :End of /NAMES list 
     // ADD
-    _chnls.at(chnl_idx).set_chnlclts(_clts.at(clt_idx)); // add client to channel after (--> names list doesn't include the new one)
+    _chnls.at(chnl_idx).set_chnlclts(&_clts.at(clt_idx)); // add client to channel after (--> names list doesn't include the new one)
 }
 // std::cout << _chnls.at(chnl_idx).get_chnlclts().size() << " = tab clients in channel size\n";
 // std::cout << idx << " = idx\n";
@@ -163,7 +163,7 @@ void Server::create_chnl(std::vector<Channel>* chnls, std::string name, std::str
 
     new_chan.set_name(name);    
     new_chan.set_key(key);
-    new_chan.set_chnlclts(_clts.at(clt_idx));
+    new_chan.set_chnlclts(&_clts.at(clt_idx));
     new_chan.add_operator(_clts.at(clt_idx).get_nickname()); // Add creator as operator of the channel
     (*chnls).push_back(new_chan);
 }

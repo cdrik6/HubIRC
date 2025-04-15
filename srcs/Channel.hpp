@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 17:15:08 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:36:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Channel
         std::string _setby;
         time_t _setat;
         int _limit;
-        std::vector<Client> _chnlclts;
+        std::vector<Client*> _chnlclts;
         std::vector<std::string> _operators;        
         std::vector<std::string> _invitees;
         bool _mode_i; // set(true)-remove(false) Invite-only
@@ -46,8 +46,8 @@ class Channel
         time_t get_setat(void) const;
         std::vector<std::string> get_operators(void) const;
         std::vector<std::string> get_invitees(void) const;
-        std::vector<Client>& getref_chnlclts(void); // const;
-        std::vector<Client> get_chnlclts(void) const;
+        // std::vector<Client>& getref_chnlclts(void); // const;
+        std::vector<Client*> get_chnlclts(void) const;
         bool get_mode_i(void) const;
         bool get_mode_t(void) const;        
         int get_limit(void) const;
@@ -57,7 +57,7 @@ class Channel
         void set_topic(std::string topic);
         void set_setby(std::string nick);
         void set_setat(void);
-        void set_chnlclts(Client client);
+        void set_chnlclts(Client *client);
         void set_mode_i(bool invite_only);
         void set_mode_t(bool restrict_topic);
         void set_limit(int limit);
