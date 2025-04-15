@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 03:38:36 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 04:03:10 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/14 18:25:02 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ void Server::oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         if (name == NAMEOPER && pass == PASSOPER)  
             reply(COD_YOUREOPER, RPL_YOUREOPER, clt_idx);
         else
-            reply(COD_PASSWDMISMATCH, ERR_PASSWDMISMATCH, clt_idx);	// anycase reply passmismatch for security reason
+            reply(COD_PASSWDMISMATCH, ERR_PASSWDMISMATCH, clt_idx);	// anycase passmismatch to be replied for security reason
     }
 }

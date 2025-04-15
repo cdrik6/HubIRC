@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 01:46:50 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:15:39 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,29 @@ Channel::Channel(): _name(""), _key(""), _topic(""),_setby(""), _setat(0)
 Channel::~Channel()
 {
 	// std::cout << "Channel destructor called\n";
+}
+
+Channel::Channel(const Channel& other)
+{
+    *this = other;
+}
+
+Channel& Channel::operator=(const Channel& other)
+{
+    if (this == &other)
+		return (*this);
+    _name = other._name;
+    _key = other._key;
+    _topic = other._topic;
+    _setby = other._setby;
+    _setat = other._setat;
+    _mode_i = other._mode_i;
+	_mode_t = other._mode_t;
+    _limit = other._limit;
+    _chnlclts = other._chnlclts;
+    _operators = other._operators;
+	_invitees = other._invitees;
+	return (*this);
 }
 
 std::string Channel::get_name(void) const

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 01:45:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:15:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ class Channel
         std::vector<Client> _chnlclts;
         std::vector<std::string> _operators;        
         std::vector<std::string> _invitees;
-        bool _mode_i; // set(true)-remove(false) Invite-only //--> to implement in JOIN / INVITE /************** */
-        bool _mode_t; // set(true)-remove(false) restrict TOPIC to _operators //--> to implement in TOPIc /************** */
+        bool _mode_i; // set(true)-remove(false) Invite-only
+        bool _mode_t; // set(true)-remove(false) restrict TOPIC to _operators
         // bool _mode_k; // set(true)-remove(false) channel key
         // bool _mode_o; // give(true)-take(false) channel operator privilege
         // bool _mode_l; // set(true)-remove(false) the user limit
@@ -36,6 +36,8 @@ class Channel
     public:
         Channel();
         ~Channel();
+        Channel(const Channel& other);
+	    Channel& operator=(const Channel& other);
         //
         std::string get_name(void) const;
         std::string get_key(void) const;

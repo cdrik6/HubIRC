@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 03:58:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 01:36:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // Server --> Client reply
 // RPL Format ":<server_hostname> <code> <nickname> :<message>" CRLF
+// Reply TO clt_idx
 void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 {       
     std::string rpl;

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 04:31:40 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 03:32:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,18 @@ class Server
 		std::vector<Client> _clts;
 		std::vector<struct pollfd> _pfds;
 		std::vector<Channel> _chnls;
-		//
-		static bool _signal; // static makes _signal shared across all instances
 		//		
-		// Server& operator=(const Server& other);
-        // Server(const Server& other);
+		static bool _signal; // static makes _signal shared across all instances
 		
 	public:				
 		Server();
 		~Server();
 		Server(char *port, std::string password);
+		// Server(const Server& other);
+	    // Server& operator=(const Server& other);
 		//
 		int get_srv_skt(void) const;		
-		static void	handle_signal(int signal);
-		
+		static void	handle_signal(int signal);		
         // polling
 		int	create_srv_skt(char *port);
 		void polling(void);		
@@ -146,6 +144,9 @@ class Server
 		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		// Bot
 		void bot(int clt_idx);
+		std::string create_botnick(void);
+		std::string build_sentence(int bot_idx, std::string word);
+		void msg_from_bot(std::string msg, int bot_idx, int clt_idx);
 };
 
 #endif

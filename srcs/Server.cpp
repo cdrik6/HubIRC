@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 04:31:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 02:31:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,24 @@ Server::~Server()
 		close (_pfds.at(i).fd);
 	}
 	/************** */
-}	
+}
+
+// Server::Server(const Server& other)
+// {
+//     *this = other;
+// }
+
+// Server& Server::operator=(const Server& other)
+// {
+//     if (this == &other)
+// 		return (*this);
+//     _srv_skt = other._srv_skt;    
+//     _password = other._password;	
+//     _clts = other._clts;
+//     _pfds = other._pfds;
+//     _chnls = other._chnls;    
+// 	return (*this);
+// }
 
 //
 int Server::get_srv_skt(void) const
