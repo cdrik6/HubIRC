@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 01:15:39 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:10:49 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ std::vector<std::string> Channel::get_invitees(void) const
 std::string Channel::get_key(void) const
 {
 	return (_key);
+}
+
+std::vector<Client>& Channel::getref_chnlclts(void) 
+{
+	return (_chnlclts);
 }
 
 std::vector<Client> Channel::get_chnlclts(void) const

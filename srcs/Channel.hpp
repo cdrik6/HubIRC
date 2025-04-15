@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 01:15:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/15 17:15:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class Channel
         time_t get_setat(void) const;
         std::vector<std::string> get_operators(void) const;
         std::vector<std::string> get_invitees(void) const;
+        std::vector<Client>& getref_chnlclts(void); // const;
         std::vector<Client> get_chnlclts(void) const;
         bool get_mode_i(void) const;
         bool get_mode_t(void) const;        
@@ -66,7 +67,7 @@ class Channel
         void add_invitee(std::string nick);
         void rem_invitee(std::string nick);
         bool is_invitee(std::string nick);        
-        void rem_chnlclt(int chnlclt_idx);
+        void rem_chnlclt(int chnlclt_idx);    
 };
 
 #endif
