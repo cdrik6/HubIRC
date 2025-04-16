@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 03:35:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 01:40:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,10 @@ void Channel::set_key(std::string key)
 	_key = key;
 }
 
-void Channel::set_chnlclts(int clt_idx)
+void Channel::set_chnlclts(int clt_fd)
 {
-	_chnlclts.push_back(clt_idx);
+	if (clt_fd != -1)
+		_chnlclts.push_back(clt_fd);
 }
 
 void Channel::set_mode_i(bool invite_only)
@@ -156,20 +157,21 @@ void Channel::set_setat(void)
 // {
 // 	_operators.push_back(nick);
 // }
-void Channel::add_operator(int clt_idx)
+void Channel::add_operator(int clt_fd)
 {
-	_operators.push_back(clt_idx);
+	if (clt_fd != -1)
+		_operators.push_back(clt_fd);
 }
 // Note
 // An IRCop has full control over channels but does NOT get @ automatically.
 // They must be explicitly given +o to appear as a channel operator.
 // Even without @, they can still override channel protections.
 
-void Channel::rem_operator(int clt_idx)
+void Channel::rem_operator(int clt_fd)
 {
 	for (int i = 0; i < _operators.size(); i++)
 	{
-		if (_operators.at(i) == clt_idx)			
+		if (_operators.at(i) == clt_fd)
 		{
 			_operators.erase(_operators.begin() + i);
 			break;
@@ -177,26 +179,27 @@ void Channel::rem_operator(int clt_idx)
 	}	
 }
 
-bool Channel::is_operator(int clt_idx)
+bool Channel::is_operator(int clt_fd)
 {
 	for (int i = 0; i < _operators.size(); i++)
 	{
-		if (_operators.at(i) == clt_idx)
+		if (_operators.at(i) == clt_fd)
 			return (true);					
 	}
 	return (false);
 }
 
-void Channel::add_invitee(int clt_idx)
+void Channel::add_invitee(int clt_fd)
 {
-	_invitees.push_back(clt_idx);
+	if (clt_fd != -1)
+		_invitees.push_back(clt_fd);
 }
 
-void Channel::rem_invitee(int clt_idx)
+void Channel::rem_invitee(int clt_fd)
 {
 	for (int i = 0; i < _invitees.size(); i++)
 	{
-		if (_invitees.at(i) == clt_idx)
+		if (_invitees.at(i) == clt_fd)
 		{
 			_invitees.erase(_invitees.begin() + i);
 			break;
@@ -204,19 +207,26 @@ void Channel::rem_invitee(int clt_idx)
 	}
 }
 
-bool Channel::is_invitee(int clt_idx)
+bool Channel::is_invitee(int clt_fd)
 {
 	for (int i = 0; i < _invitees.size(); i++)
 	{
-		if (_invitees.at(i) == clt_idx)
+		if (_invitees.at(i) == clt_fd)
 			return (true);					
 	}
 	return (false);
 }
 
-void Channel::rem_chnlclt(int chnlclt_idx)
+void Channel::rem_chnlclt(int chnlclt_fd)
 {
-	_chnlclts.erase(_chnlclts.begin() + chnlclt_idx);
+	for (int i = 0; i < _chnlclts.size(); i++)
+	{
+		if (_chnlclts.at(i) == chnlclt_fd)
+		{
+			_chnlclts.erase(_chnlclts.begin() + i);
+			break;
+		}
+	}		
 }
 
 

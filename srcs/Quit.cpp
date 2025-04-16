@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:20:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 05:17:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:59:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void Server::quit_channels(std::string reason, int clt_idx)
 		int idx = in_channel(i, clt_idx);
 		if (idx != -1)
 		{			
-			_chnls.at(i).rem_operator(clt_idx);
-			_chnls.at(i).rem_invitee(clt_idx);
-			_chnls.at(i).rem_chnlclt(idx);
+			_chnls.at(i).rem_operator(_clts.at(clt_idx).get_clt_skt());
+			_chnls.at(i).rem_invitee(_clts.at(clt_idx).get_clt_skt());
+			_chnls.at(i).rem_chnlclt(_clts.at(clt_idx).get_clt_skt());
 			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
 					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT" + reason;
 			reply_to_all(msg_replied, i);				

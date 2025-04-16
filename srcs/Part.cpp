@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 05:17:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:54:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                         msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                             + "@" + _clts.at(clt_idx).get_hostname() + " PART " + channels.at(j) + reason;
                         reply_to_all(msg_replied, k); // to all including the leaving                                                
-				        _chnls.at(k).rem_operator(clt_idx);
-                        _chnls.at(k).rem_invitee(clt_idx);
-                        _chnls.at(k).rem_chnlclt(idx);
+				        _chnls.at(k).rem_operator(_chnls.at(k).get_chnlclts().at(idx));
+                        _chnls.at(k).rem_invitee(_chnls.at(k).get_chnlclts().at(idx));
+                        _chnls.at(k).rem_chnlclt(_chnls.at(k).get_chnlclts().at(idx));
                     }
                     else
                         reply(COD_NOTONCHANNEL, channels.at(j) + " " + ERR_NOTONCHANNEL, clt_idx);
@@ -72,6 +72,5 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 void Server::reply_to_all(std::string msg_replied, int chnl_idx)
 {
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
-        reply(COD_NONE, msg_replied, _chnls.at(chnl_idx).get_chnlclts().at(i));
-        //reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)->get_clt_skt()));        
+        reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)));        
 }

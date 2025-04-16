@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 03:26:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:58:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,14 @@ class Server
 		std::vector<Channel> _chnls;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
-		
+		//
+		Server(const Server& other);
+	    Server& operator=(const Server& other);	
+			
 	public:				
 		Server();
 		~Server();
-		Server(char *port, std::string password);
-		// Server(const Server& other);
-	    // Server& operator=(const Server& other);
+		Server(char *port, std::string password);		
 		//
 		int get_srv_skt(void) const;		
 		static void	handle_signal(int signal);		
@@ -103,7 +104,9 @@ class Server
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
 		int target_clt_idx(std::string target);
+		int target_clt_fd(std::string target);
 		int target_chnlclt_idx(std::string target, int chnl_idx);
+		int target_chnlclt_fd(std::string target, int chnl_idx);
 		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);

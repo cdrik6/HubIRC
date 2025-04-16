@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:42:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 03:36:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 22:25:51 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Channel
         std::string _setby;
         time_t _setat;
         int _limit;
-        std::vector<int> _chnlclts; //clt_idx
+        std::vector<int> _chnlclts; //clt_fd
         std::vector<int> _operators;        
         std::vector<int> _invitees;
         bool _mode_i; // set(true)-remove(false) Invite-only
@@ -59,16 +59,16 @@ class Channel
         void set_setby(std::string nick);
         void set_setat(void);
         // void set_chnlclts(Client *client);
-        void set_chnlclts(int clt_idx);
+        void set_chnlclts(int clt_fd);
         void set_mode_i(bool invite_only);
         void set_mode_t(bool restrict_topic);
         void set_limit(int limit);
-        void add_operator(int clt_idx);
-        void rem_operator(int clt_idx);
-        bool is_operator(int clt_idx);
-        void add_invitee(int clt_idx);
-        void rem_invitee(int clt_idx);
-        bool is_invitee(int clt_idx);        
+        void add_operator(int clt_fd);
+        void rem_operator(int clt_fd);
+        bool is_operator(int clt_fd);
+        void add_invitee(int clt_fd);
+        void rem_invitee(int clt_fd);
+        bool is_invitee(int clt_fd);        
         void rem_chnlclt(int chnlclt_idx);    
 };
 

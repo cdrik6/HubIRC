@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 04:07:10 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 01:36:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,13 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         {
             i++;
             if (i >= tab_msg.size()) // query by any user            
-                reply(COD_CHANNELMODEIS, channel + " " + get_modes(chnl_idx, clt_idx), clt_idx); // " " + ""            
-            // else if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // check it is a channel oparator
-            else if (_chnls.at(chnl_idx).is_operator(clt_idx)) // check it is a channel oparator
+                reply(COD_CHANNELMODEIS, channel + " " + get_modes(chnl_idx, clt_idx), clt_idx); // " " + ""                        
+            else if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_clt_skt())) // check it is a channel oparator
             {
                 std::string msg_replied; // :<nick>!<user>@<host> MODE <channel> <mode changes> <params>
                 msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                             + "@" + _clts.at(clt_idx).get_hostname() + " MODE " + _chnls.at(chnl_idx).get_name() \
-                            + " ";  
+                            + " ";
                 
                 std::vector<std::string> modes;
                 std::vector<std::string> args;
@@ -111,11 +110,9 @@ void Server::parse_mode(std::string modestr, std::vector<std::string> *modes, st
         while (i < modestr.length() && modestr.at(i) != '+' && modestr.at(i) != '-')    
             i++;
         modestr = modestr.substr(i);
-    }
+    }    
     
-    
-    std::cout << "modstr " << modestr << std::endl;
-    
+    std::cout << "modstr " << modestr << std::endl;    
     // Parsing
     std::istringstream iss(modestr);
     std::string token;
@@ -126,7 +123,6 @@ void Server::parse_mode(std::string modestr, std::vector<std::string> *modes, st
         std::cout << "token parsed = [" << token << "]" << std::endl;
         if ((token.at(0) == '+' || token.at(0) == '-') && token.size() > 1 && !isdigit(token.at(1)))
         {
-            //int i = token.substr(1).find_first_of("+-");
             int p = 0;
             int i = 1;
             while (i < token.size())
@@ -154,8 +150,7 @@ void Server::parse_mode(std::string modestr, std::vector<std::string> *modes, st
                 std::cout << "arg " << std::endl;
                 (*args).push_back(token);
                 
-            }
-                
+            }                
         }            
     }
 }
@@ -176,14 +171,12 @@ std::vector<std::string> Server::set_plus(std::string plus, std::vector<std::str
             if (plus.at(i) == 'i')
             {
                 _chnls.at(chnl_idx).set_mode_i(true);
-                letters = letters + "i";
-                // reply_to_all(letters + " +i", chnl_idx);
+                letters = letters + "i";                
             }                
             if (plus.at(i) == 't')
             {
                 _chnls.at(chnl_idx).set_mode_t(true);
-                letters = letters + "t";
-                // reply_to_all(letters + " +t", chnl_idx);
+                letters = letters + "t";                
             }                
             if (plus.at(i) == 'k')
             {
@@ -193,8 +186,7 @@ std::vector<std::string> Server::set_plus(std::string plus, std::vector<std::str
                     {
                         _chnls.at(chnl_idx).set_key(params.at(0));
                         letters = letters + "k";
-                        params_replied = params_replied + " " + params.at(0);
-                        // reply_to_all(letters + " +k " + params.at(0), chnl_idx);
+                        params_replied = params_replied + " " + params.at(0);                        
                     }                        
                     else
                         reply(COD_INVALIDKEY, _chnls.at(chnl_idx).get_name() + " " + ERR_INVALIDKEY, clt_idx);
@@ -208,15 +200,12 @@ std::vector<std::string> Server::set_plus(std::string plus, std::vector<std::str
                 if (params.size() > 0)
                 {
                     if (nick_in_channel(chnl_idx, params.at(0)) == OK) 
-                    {
-                        // if (!_chnls.at(chnl_idx).is_operator(params.at(0))) // already operator --> do nothing
-                        if (!_chnls.at(chnl_idx).is_operator(target_clt_idx(params.at(0)))) // already operator --> do nothing
+                    {                        
+                        if (!_chnls.at(chnl_idx).is_operator(target_clt_fd(params.at(0)))) // already operator --> do nothing
                         {
-                            //_chnls.at(chnl_idx).add_operator(params.at(0));
-                            _chnls.at(chnl_idx).add_operator(target_clt_idx(params.at(0)));
+                            _chnls.at(chnl_idx).add_operator(target_clt_fd(params.at(0)));
                             letters = letters + "o";
-                            params_replied = params_replied + " " + params.at(0);
-                            // reply_to_all(letters + " +o " + params.at(0), chnl_idx);                            
+                            params_replied = params_replied + " " + params.at(0);                            
                         }                        
                     }                        
                     else
@@ -310,7 +299,7 @@ std::vector<std::string> Server::set_minus(std::string minus, std::vector<std::s
                     if (nick_in_channel(chnl_idx, params.at(0)) == OK)
                     {
                         // _chnls.at(chnl_idx).rem_operator(params.at(0));
-                        _chnls.at(chnl_idx).rem_operator(target_clt_idx(params.at(0)));
+                        _chnls.at(chnl_idx).rem_operator(target_clt_fd(params.at(0)));
                         params_replied = params_replied + " " + params.at(0);
                         letters = letters + "o";
                         // reply_to_all(letters + " -o " + params.at(0), chnl_idx);
@@ -367,8 +356,7 @@ int Server::nick_in_channel(int chnl_idx, std::string nick)
 {    
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
-        //if (_chnls.at(chnl_idx).get_chnlclts().at(i)->get_nickname() == nick)   
-        if (_clts.at(_chnls.at(chnl_idx).get_chnlclts().at(i)).get_nickname() == nick)
+        if (_clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i))).get_nickname() == nick)
             return (OK);
     }
     return (KO);    

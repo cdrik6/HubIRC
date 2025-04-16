@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 03:59:43 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 00:04:28 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,7 @@ void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                             update_topic(tab_msg.at(i), chnl_idx, clt_idx);                        
                         else // restricted
                         {
-                            // if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // only operator can set topic
-                            if (_chnls.at(chnl_idx).is_operator(clt_idx)) // only operator can set topic
+                            if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_clt_skt())) // only operator can set topic
                                 update_topic(tab_msg.at(i), chnl_idx, clt_idx);                            
                             else
                                 reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);                            
