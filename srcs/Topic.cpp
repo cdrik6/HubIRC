@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 00:11:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 03:59:43 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     {
                         reply(COD_TOPIC, channel + _chnls.at(chnl_idx).get_topic(), clt_idx);
                         std::stringstream ss;
-                        ss << _chnls.at(chnl_idx).get_setat();                        
+                        ss << _chnls.at(chnl_idx).get_setat();
                         reply(COD_TOPICWHOTIME, channel + " " + _chnls.at(chnl_idx).get_setby() + " " + ss.str(), clt_idx); // 333 <channel> <nick> <setat>
                     }
                 }
@@ -51,7 +51,8 @@ void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                             update_topic(tab_msg.at(i), chnl_idx, clt_idx);                        
                         else // restricted
                         {
-                            if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // only operator can set topic
+                            // if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // only operator can set topic
+                            if (_chnls.at(chnl_idx).is_operator(clt_idx)) // only operator can set topic
                                 update_topic(tab_msg.at(i), chnl_idx, clt_idx);                            
                             else
                                 reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);                            

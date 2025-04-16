@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 20:51:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 03:26:27 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ class Server
 		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		void create_chnl(std::vector<Channel>* chans, std::string name, std::string key, int clt_idx);
+		void create_chnl(std::string name, std::string key, int clt_idx);
 		void reply_join_add(std::string channel, int chnl_idx, int clt_idx);
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);

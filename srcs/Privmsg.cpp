@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 20:44:22 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 04:56:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                         {
                             for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
                             {
-                                int idx = client_idx(_chnls.at(k).get_chnlclts().at(j)->get_clt_skt());                        
+                                //int idx = client_idx(_chnls.at(k).get_chnlclts().at(j)->get_clt_skt());                        
+                                int idx = _chnls.at(k).get_chnlclts().at(j);
                                 if (idx != clt_idx) // all except itself for channel (itself ok for direct message)
                                     reply(COD_NONE, msg_replied, idx);
                             }
@@ -97,7 +98,8 @@ int Server::in_channel(int chnl_idx, int clt_idx)
 {
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
-        if (_chnls.at(chnl_idx).get_chnlclts().at(i)->get_nickname() == _clts.at(clt_idx).get_nickname())   
+        //if (_chnls.at(chnl_idx).get_chnlclts().at(i)->get_nickname() == _clts.at(clt_idx).get_nickname())   
+        if (_chnls.at(chnl_idx).get_chnlclts().at(i) == clt_idx)
             return (i);
     }
     return (-1);
@@ -111,11 +113,15 @@ int Server::target_clt_idx(std::string target)
     return (-1);
 }
 
+// return index in _chnlclt not the value at _chnlclt(i)
 int Server::target_chnlclt_idx(std::string target, int chnl_idx)
 {
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)       
-        if (_chnls.at(chnl_idx).get_chnlclts().at(i)->get_nickname() == target)
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    {           
+        if ( _clts.at(_chnls.at(chnl_idx).get_chnlclts().at(i)).get_nickname() == target)
             return (i);
+            // return (_chnls.at(chnl_idx).get_chnlclts().at(i)); // return a clt_idx and not the idx in _chnlclts
+    }        
     return (-1);
 }
 

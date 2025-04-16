@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:13:27 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/13 02:59:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 03:54:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void Server::invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                                 let_it_in(chnl_idx, clt_idx, inv_idx);
                             else // restricted --> irssi authorises invite for operators only so mode_i is for 
                             {
-                                if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // only operator can set topic
+                                //if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // only operator can set topic
+                                if (_chnls.at(chnl_idx).is_operator(clt_idx)) // only operator can set topic
                                     let_it_in(chnl_idx, clt_idx, inv_idx);
                                 else
                                     reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);                            
@@ -82,7 +83,8 @@ void Server::let_it_in(int chnl_idx, int clt_idx, int inv_idx)
     reply(COD_NONE, msg_replied, inv_idx);   
 
     // update invitees list // not in the list (otherwise already in channel or delete at Part/Quit step)
-    _chnls.at(chnl_idx).add_invitee(_clts.at(inv_idx).get_nickname());    
+    //_chnls.at(chnl_idx).add_invitee(_clts.at(inv_idx).get_nickname());    
+    _chnls.at(chnl_idx).add_invitee(inv_idx);
 }
 // // add invitee to channel --> no need to JOIN (but with bypass !)
 // _chnls.at(chnl_idx).set_chnlclts(_clts.at(inv_idx));

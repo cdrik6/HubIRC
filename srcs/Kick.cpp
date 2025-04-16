@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 20:40:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 05:21:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         {			
 			if (in_channel(chnl_idx, clt_idx) != -1) // kicker on channel?
 			{
-				if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // kicker operator?
+				//if (_chnls.at(chnl_idx).is_operator(_clts.at(clt_idx).get_nickname())) // kicker operator?
+				if (_chnls.at(chnl_idx).is_operator(clt_idx)) // kicker operator?
 				{
 					i++;		
 					if (i >= tab_msg.size())
@@ -76,18 +77,27 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 	for (int j = 0; j < users.size(); j++)
 	{
 		int tgt_idx = target_chnlclt_idx(users.at(j), chnl_idx);
-		std::string tgt_nick = _chnls.at(chnl_idx).get_chnlclts().at(tgt_idx)->get_nickname();
-		std::cout << "target kicked = " << tgt_nick;
+		//std::string tgt_nick = _chnls.at(chnl_idx).get_chnlclts().at(tgt_idx)->get_nickname();
+		std::string tgt_nick = _clts.at(_chnls.at(chnl_idx).get_chnlclts().at(tgt_idx)).get_nickname();
+		std::cout << "target kicked = " << tgt_nick << std::endl;
 		
 		if (tgt_idx != -1)
 		{
-			if (in_channel(chnl_idx, tgt_idx) != -1) // user kicked on channel?
+			if (in_channel(chnl_idx, tgt_idx) != -1) // user kicked on channel? /************************ pb ici ***********/
 			{
 				msg_replied = msg_replied + " " + users.at(j) + reason;
 				reply_to_all(msg_replied, chnl_idx);
+				
+				// if (is_operator())
+				std::cout << "je suis ici " << std::endl;
+				std::cout << "tgt_idx = "<< tgt_idx << std::endl;
+				std::cout << _chnls.at(chnl_idx).get_chnlclts().at(tgt_idx) << std::endl;				
+				_chnls.at(chnl_idx).rem_operator(_chnls.at(chnl_idx).get_chnlclts().at(tgt_idx));
+				std::cout << "je suis ici la" << std::endl;
+				// if (is_invitee())
+                _chnls.at(chnl_idx).rem_invitee(_chnls.at(chnl_idx).get_chnlclts().at(tgt_idx));
+				std::cout << "je suis encore" << std::endl;
 				_chnls.at(chnl_idx).rem_chnlclt(tgt_idx);
-				_chnls.at(chnl_idx).rem_operator(tgt_nick);
-                _chnls.at(chnl_idx).rem_invitee(tgt_nick);
 			}
 			else
 				reply(COD_USERNOTINCHANNEL, users.at(j) + " " + _chnls.at(chnl_idx).get_name() + " " + ERR_USERNOTINCHANNEL, clt_idx);

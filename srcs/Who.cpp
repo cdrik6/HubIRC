@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:54:39 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 20:45:57 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/16 03:59:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,19 @@ void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             // std::cout << _chnls.at(chnl_idx).get_chnlclts().size() << " = size\n";
             for (int j = 0; j < _chnls.at(chnl_idx).get_chnlclts().size(); j++)
             {
-                int idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(j)->get_clt_skt());
+                //int idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(j)->get_clt_skt());                
+                int idx = _chnls.at(chnl_idx).get_chnlclts().at(j);
                 msg_replied = channel + " " + _clts.at(idx).get_username() + " " + _clts.at(idx).get_hostname();
                 msg_replied = msg_replied + " ircserv " + _clts.at(idx).get_nickname();
                 msg_replied = msg_replied + " H";
-                if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
+                // if (_chnls.at(chnl_idx).is_operator(_clts.at(idx).get_nickname()))
+                if (_chnls.at(chnl_idx).is_operator(idx))
                     msg_replied = msg_replied + "@";                
                 msg_replied = msg_replied + " :0 " + _clts.at(idx).get_realname();
-                if (_chnls.at(chnl_idx).is_invitee(_clts.at(idx).get_nickname()))
+                // if (_chnls.at(chnl_idx).is_invitee(_clts.at(idx).get_nickname()))
+                if (_chnls.at(chnl_idx).is_invitee(idx))
                     msg_replied = msg_replied + " invited";
-                reply(COD_WHOREPLY, msg_replied, clt_idx);
+                reply(COD_WHOREPLY, msg_replied, clt_idx);                                    
             }        
             reply(COD_ENDOFWHO, channel + " " + RPL_ENDOFWHO, clt_idx);
         }
