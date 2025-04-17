@@ -6,7 +6,7 @@
 /*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 16:29:53 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:12:28 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@
 # include "Client.hpp"
 # include "Register.hpp"
 # include "Channel.hpp"
-# include "Data.hpp"
 
 # define OK 0
 # define KO 1
@@ -64,7 +63,6 @@ class Server
 		std::string _password;
 		std::vector<Client> _clts;
 		std::vector<struct pollfd> _pfds;
-		Data _data_bot;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
 		

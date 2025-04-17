@@ -6,7 +6,7 @@
 /*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 16:46:35 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:11:08 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int main(int argc, char **argv)
     {           
         signal(SIGINT, Server::handle_signal);
         signal(SIGQUIT, Server::handle_signal);
+		Server irc(argv[1], std::string(argv[2])); //srv_skt here if ok, exit() if not
         try
         {            
-			Server irc(argv[1], std::string(argv[2])); //srv_skt here if ok, exit() if not
             irc.polling();
         }
         catch (std::exception &e)
