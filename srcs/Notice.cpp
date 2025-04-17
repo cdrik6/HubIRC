@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 00:24:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:57:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:17:12 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,25 @@ void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             for (int t = 0; t < target.size(); t++)
             {                   
                 msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
-                    + "@" + _clts.at(clt_idx).get_hostname() + " PRIVMSG"; // from
+                    + "@" + _clts.at(clt_idx).get_hostname() + " NOTICE"; // from
                 msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
-                    int k = target_clt_idx(target.at(t));
+                    int k = target_clt_idx(target.at(t));                    
                     if (k != -1)                    
                         reply(COD_NONE, msg_replied, k);                
                     else
                         notification(COD_NOSUCHNICK, target.at(t) + " " + ERR_NOSUCHNICK);  
                 }
-                else // #channel
+                else // #channel    
                 {                
-                    int k = channel_idx(target.at(t));                
+                    int k = channel_idx(target.at(t));                     
                     if (k != -1)
                     {           
                         if (in_channel(k, clt_idx) != -1)
                         {
                             for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
-                            {                                
+                            {                                   
                                 int fd = _chnls.at(k).get_chnlclts().at(j);
                                 if (client_idx(fd) != clt_idx) // all except itself for channel (itself ok for direct message)
                                     reply(COD_NONE, msg_replied, client_idx(fd));

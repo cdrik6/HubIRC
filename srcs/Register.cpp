@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 01:33:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:21:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,20 @@
 void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 {       
     std::string rpl;
+    int fd = _clts.at(clt_idx).get_clt_skt();
     
-    if (code == COD_NONE)
-        rpl = msg_replied + "\r\n";
-    else
-        rpl = ":ircserv " + code + " " + _clts.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
-    if (send(_clts.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
-        throw (std::runtime_error("send: " + std::string(strerror(errno))));
-    // Server output
-    std::cout << "Replied("<< _clts.at(clt_idx).get_clt_skt() << ") " << rpl << std::endl;    
+    if (fd >= 0)    
+    {
+        if (code == COD_NONE)
+            rpl = msg_replied + "\r\n";
+        else
+            rpl = ":ircserv " + code + " " + _clts.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
+        
+            if (send(fd, rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
+                throw (std::runtime_error("send: " + std::string(strerror(errno))));
+        // Server output
+        std::cout << "Replied(" << fd << ") " << rpl << std::endl;    
+    }
 }
 
 // PONG: [<server>] <token>
