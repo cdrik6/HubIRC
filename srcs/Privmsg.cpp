@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:38:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 02:43:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,13 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                 {
                     std::cout << "target = " << target.at(t) << std::endl;
                     int k = target_clt_idx(target.at(t));
+                    std::cout << "k = " << k << std::endl;
                     if (k != -1)
                     {                        
                         /**************************** */    
                         if (_clts.at(k).get_is_bot()) // the bot
                         {                                                      
+                            std::cout << "je suis pas la " << std::endl;
                             msg = build_sentence(k, msg.substr(1));                            
                             msg_replied = ":" + _clts.at(k).get_nickname() + "!" + _clts.at(k).get_username() \
                             + "@" + _clts.at(k).get_hostname() + " PRIVMSG"; // from   
@@ -62,7 +64,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                         }
                         /********************** */
                         else                            
-                            reply(COD_NONE, msg_replied, k); // sent from clt_idx to target = k
+                            reply(COD_NONE, msg_replied, k); // sent from clt_idx(bot_idx) to target = k
                     }                        
                     else
                         reply(COD_NOSUCHNICK, target.at(t) + " " + ERR_NOSUCHNICK, clt_idx);  

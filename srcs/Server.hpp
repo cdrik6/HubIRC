@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:58:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 03:35:38 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,12 @@ class Server
 		// Bot
 		void bot(int clt_idx);
 		std::string create_botnick(void);
+		std::string create_botchan_name(void);
+		int create_bot_skt(void);
+		void bot_join(std::string botchan, int clt_idx);
+		void bot_topic(std::string topic, std::string botchan, int clt_idx);
 		std::string build_sentence(int bot_idx, std::string word);
-		void msg_from_bot(std::string msg, int bot_idx, int clt_idx);
+		void msg_from_bot(std::string msg, std::string botchan, int bot_idx);
 };
 
 #endif

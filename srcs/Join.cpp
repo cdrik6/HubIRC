@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:03:02 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 03:51:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         reply(COD_NOSUCHCHANNEL, tab_msg.at(i) + " " + ERR_NOSUCHCHANNEL, clt_idx);
     else 
     {        
-        channels = split_char(tab_msg.at(i), ',');                
+        channels = split_char(tab_msg.at(i), ',');
+        /**************bot */            
+        if (channels.at(0).substr(0,4) == "#bot")        
+            channels.at(0) = create_botchan_name();                    
+        /**************bot */                
         i++;        
         if (i < tab_msg.size())                    
             keys = split_char(tab_msg.at(i), ',');
@@ -34,8 +38,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         {
             keys.push_back("");
             ks = keys.size();
-        }
-            
+        }            
     }
     
     // check existing or create channel   
@@ -72,8 +75,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                                 break;    
                             }        
                             else // invite-only bypasses limit and key if invitee // not invite-only + invitee = bypass anyway
-                            {
-                                // if (_chnls.at(k).is_invitee(_clts.at(clt_idx).get_nickname()) == true)                                
+                            {                                
                                 if (_chnls.at(k).is_invitee(_clts.at(clt_idx).get_clt_skt()) == true)
                                     reply_join_add(channels.at(j), k, clt_idx);                                
                                 else
