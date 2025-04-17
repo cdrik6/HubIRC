@@ -22,7 +22,7 @@ void trimSpaces(std::string &line)
 }
 
 
-void Data::loadData(std::string csv_name, std::vector<std::string> vec)
+void Data::loadData(std::string csv_name, std::vector<std::string> &vec)
 {
 	std::ifstream	dataFile(csv_name.c_str());
 	std::string line;
@@ -36,6 +36,9 @@ void Data::loadData(std::string csv_name, std::vector<std::string> vec)
 			continue;
 		vec.push_back(line);
 	}
+	if (vec.empty())
+		throw (std::runtime_error("Data.cpp : the file is empty " + csv_name));
+
 	// std::cout << csv_name << std::endl;
 	// for (std::vector<std::string>::iterator it = vec.begin(); it != vec.end(); ++it)
 	// 	std::cout << *it << std::endl;

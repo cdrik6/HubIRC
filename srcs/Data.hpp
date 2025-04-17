@@ -14,5 +14,5 @@ class Data
 	public:
 		Data();
 		~Data();
-		void loadData(std::string csv_name, std::vector<std::string> vec);
+		void loadData(std::string csv_name, std::vector<std::string> &vec);
 };
