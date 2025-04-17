@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
+#    By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/14 04:37:03 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/17 16:40:08 by alexandm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SRCS		=	srcs/main.cpp \
 				srcs/Oper.cpp \
 				srcs/Quit.cpp \
 				srcs/Part.cpp \
-				srcs/Bot.cpp
+				srcs/Bot.cpp \
+				srcs/Data.cpp
 
 CC			=	c++
 

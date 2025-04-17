@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 03:32:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:29:53 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # include "Client.hpp"
 # include "Register.hpp"
 # include "Channel.hpp"
+# include "Data.hpp"
 
 # define OK 0
 # define KO 1
@@ -63,7 +64,7 @@ class Server
 		std::string _password;
 		std::vector<Client> _clts;
 		std::vector<struct pollfd> _pfds;
-		std::vector<Channel> _chnls;
+		Data _data_bot;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
 		

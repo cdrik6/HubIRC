@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 02:31:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 17:00:03 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ Server::Server(char *port, std::string password)
 	_password = password;
 	_srv_skt = create_srv_skt(port); 
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
-	add_pfds(&_pfds, _srv_skt, POLLIN); // server en 1	
+	add_pfds(&_pfds, _srv_skt, POLLIN); // server en 1
+	std::cout << "Server: data loaded \n";
 	std::cout << "Server: waiting for connections...\n";
 	std::cout << "Server: \"stop\" to stop it\n\n";
 }
