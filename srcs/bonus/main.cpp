@@ -3,27 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aoberon <aoberon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 04:55:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:21:29 by aoberon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "Bot.hpp"
 
 int main(int argc, char **argv)
 {    
-    if (argc != 3)
-        return(std::cerr << "Usage: ./bot localhost <port>" << std::endl, OK);       
-	if (check_port(argv[2]) == OK && (std::string(argv[1]) == "localhost" || std::string(argv[1]) == "127.0.0.1"))
+    if (argc != 4)
+        return(std::cerr << "Usage: ./bot <botname> <port> <password>" << std::endl, OK);       
+	if (strlen(argv[1]) > 0 && strlen(argv[1]) < 31 && check_port(argv[2]) == OK && strlen(argv[3]) > 0 && strlen(argv[3]) < 31)
     {           
-        signal(SIGINT, Client::handle_signal);
-        signal(SIGQUIT, Client::handle_signal);
-		Client bot(argv[2]); // clt_skt here if ok, exit() if not
+        // signal(SIGINT, Client::handle_signal);
+        // signal(SIGQUIT, Client::handle_signal);
+		// Client bot(argv[2]); // clt_skt here if ok, exit() if not
+        Bot bot;
         try
-        {            
-            bot.polling();
+        {         
+            bot.initialize_connection( std::string(argv[1]), atoi(argv[2]), std::string(argv[3]) );   
+            bot.connect_to_server();
+            // bot.routine();
         }
         catch (std::exception &e)
         {            
