@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:21:15 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 02:12:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:16:58 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Server.hpp"
 
 // IAMBOT keybot
-void Server::bot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {       
     int i = tab_idx + 1;
     

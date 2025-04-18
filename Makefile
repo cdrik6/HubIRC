@@ -6,7 +6,7 @@
 #    By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/18 16:05:51 by alexandm         ###   ########.fr        #
+#    Updated: 2025/04/18 16:18:28 by alexandm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ SRCS		=	srcs/main.cpp \
 				srcs/Oper.cpp \
 				srcs/Quit.cpp \
 				srcs/Part.cpp \
-				srcs/bot.cpp
+				srcs/iambot.cpp
 				
 CC			=	c++
 

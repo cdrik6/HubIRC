@@ -6,7 +6,7 @@
 /*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 16:06:11 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:17:20 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,8 @@ class Server
 		void notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		// Oper
 		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		// Bot
-		void bot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		// IamBot
+		void iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 };
 
 #endif
