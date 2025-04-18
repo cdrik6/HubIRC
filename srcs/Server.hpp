@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 03:35:38 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 00:32:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@
 # define CHANLEN 50
 # define USERLEN 18
 # define NAMEOPER "anybody" // to get OPER usable
-# define PASSOPER "secret" // to get OPER usable
+# define PASSOPER "1234" // to get OPER usable
+# define BOTKEY "robot"
 
 
 class Channel;
@@ -146,14 +147,7 @@ class Server
 		// Oper
 		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		// Bot
-		void bot(int clt_idx);
-		std::string create_botnick(void);
-		std::string create_botchan_name(void);
-		int create_bot_skt(void);
-		void bot_join(std::string botchan, int clt_idx);
-		void bot_topic(std::string topic, std::string botchan, int clt_idx);
-		std::string build_sentence(int bot_idx, std::string word);
-		void msg_from_bot(std::string msg, std::string botchan, int bot_idx);
+		void bot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 };
 
 #endif

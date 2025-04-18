@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 00:24:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 20:17:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:49:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             target = split_char(tab_msg.at(i), ','); // splitted by irssi actually, for nc
             for (int t = 0; t < target.size(); t++)
             {                   
-                msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
-                    + "@" + _clts.at(clt_idx).get_hostname() + " NOTICE"; // from
-                msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
+                msg_replied = ":ircserv NOTICE " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
                     int k = target_clt_idx(target.at(t));                    

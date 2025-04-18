@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 00:02:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 01:06:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,8 +259,8 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 			notice(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "OPER")
 			oper(tab_msg, clt_idx, tab_idx);
-		else if (toUpper(cmd) == "BOT")
-			bot(clt_idx);
+		else if (toUpper(cmd) == "IAMBOT")
+			bot(tab_msg, clt_idx, tab_idx);
 		else if (tab_idx == 0)
 			reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
 	}	

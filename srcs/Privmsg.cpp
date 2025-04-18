@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 02:43:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 02:05:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,25 +47,9 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                 msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
-                    std::cout << "target = " << target.at(t) << std::endl;
-                    int k = target_clt_idx(target.at(t));
-                    std::cout << "k = " << k << std::endl;
-                    if (k != -1)
-                    {                        
-                        /**************************** */    
-                        if (_clts.at(k).get_is_bot()) // the bot
-                        {                                                      
-                            std::cout << "je suis pas la " << std::endl;
-                            msg = build_sentence(k, msg.substr(1));                            
-                            msg_replied = ":" + _clts.at(k).get_nickname() + "!" + _clts.at(k).get_username() \
-                            + "@" + _clts.at(k).get_hostname() + " PRIVMSG"; // from   
-                            msg_replied = msg_replied + " " + _clts.at(clt_idx).get_nickname() + " " + msg; // to                            
-                            reply(COD_NONE, msg_replied, clt_idx); // sent from bot = k to clt_idx
-                        }
-                        /********************** */
-                        else                            
-                            reply(COD_NONE, msg_replied, k); // sent from clt_idx(bot_idx) to target = k
-                    }                        
+                    int k = target_clt_idx(target.at(t));                    
+                    if (k != -1)                                        
+                        reply(COD_NONE, msg_replied, k);                                            
                     else
                         reply(COD_NOSUCHNICK, target.at(t) + " " + ERR_NOSUCHNICK, clt_idx);  
                 }
