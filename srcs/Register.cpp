@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 01:36:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/17 20:21:01 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,20 @@
 void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 {       
     std::string rpl;
+    int fd = _clts.at(clt_idx).get_clt_skt();
     
-    if (code == COD_NONE)
-        rpl = msg_replied + "\r\n";
-    else
-        rpl = ":ircserv " + code + " " + _clts.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
-    if (send(_clts.at(clt_idx).get_clt_skt(), rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
-        throw (std::runtime_error("send: " + std::string(strerror(errno))));
-    // Server output
-    std::cout << "Replied("<< _clts.at(clt_idx).get_clt_skt() << ") " << rpl << std::endl;    
+    if (fd >= 0)    
+    {
+        if (code == COD_NONE)
+            rpl = msg_replied + "\r\n";
+        else
+            rpl = ":ircserv " + code + " " + _clts.at(clt_idx).get_nickname() + " " + msg_replied + "\r\n";
+        
+            if (send(fd, rpl.c_str(), rpl.length(), MSG_NOSIGNAL) == - 1)
+                throw (std::runtime_error("send: " + std::string(strerror(errno))));
+        // Server output
+        std::cout << "Replied(" << fd << ") " << rpl << std::endl;    
+    }
 }
 
 // PONG: [<server>] <token>
@@ -71,7 +76,20 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_id
         else
         {         
             std::string oldnick = _clts.at(clt_idx).get_nickname();            
-            _clts.at(clt_idx).set_nickname(nick);
+            // std::cout << "_chnls.size() = " << _chnls.size() << std::endl; 
+            // for (int k = 0; k < _chnls.size(); k++)
+            // {
+            //     std::cout << "k = " << k << std::endl; 
+            //     std::cout << "_chnls.at(k).get_chnlclts().size() = " << _chnls.at(k).get_chnlclts().size() << std::endl; 
+            //     for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)
+            //     {                  
+                    
+            //         std::cout << "j = " << j << std::endl; 
+            //         std::cout << "fd registered = " << (_chnls.at(k).get_chnlclts().at(j)) << std::endl; 
+            //         std::cout << "nick registered = " << _clts.at(client_idx(_chnls.at(k).get_chnlclts().at(j))).get_nickname() << std::endl; 
+            //     }   
+            // }            
+            _clts.at(clt_idx).set_nickname(nick);            
             reply(COD_NONE, ":" + oldnick + " NICK " + nick, clt_idx);
         }
     }

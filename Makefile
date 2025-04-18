@@ -6,7 +6,7 @@
 #    By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/17 16:40:08 by alexandm         ###   ########.fr        #
+#    Updated: 2025/04/18 16:05:51 by alexandm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,9 +28,8 @@ SRCS		=	srcs/main.cpp \
 				srcs/Oper.cpp \
 				srcs/Quit.cpp \
 				srcs/Part.cpp \
-				srcs/Bot.cpp \
-				srcs/Data.cpp
-
+				srcs/bot.cpp
+				
 CC			=	c++
 
 CFLAGS		=	-Wall -Wextra -Werror -std=c++98

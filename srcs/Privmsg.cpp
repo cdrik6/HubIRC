@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/15 03:25:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/18 02:05:48 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,23 +47,9 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                 msg_replied = msg_replied + " " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
-                    std::cout << "target = " << target.at(t) << std::endl;
-                    int k = target_clt_idx(target.at(t));
-                    if (k != -1)
-                    {                        
-                        /**************************** */    
-                        if (_clts.at(k).get_is_bot()) // the bot
-                        {                                                      
-                            msg = build_sentence(k, msg.substr(1));                            
-                            msg_replied = ":" + _clts.at(k).get_nickname() + "!" + _clts.at(k).get_username() \
-                            + "@" + _clts.at(k).get_hostname() + " PRIVMSG"; // from   
-                            msg_replied = msg_replied + " " + _clts.at(clt_idx).get_nickname() + " " + msg; // to                            
-                            reply(COD_NONE, msg_replied, clt_idx); // sent from bot = k to clt_idx
-                        }
-                        /********************** */
-                        else                            
-                            reply(COD_NONE, msg_replied, k); // sent from clt_idx to target = k
-                    }                        
+                    int k = target_clt_idx(target.at(t));                    
+                    if (k != -1)                                        
+                        reply(COD_NONE, msg_replied, k);                                            
                     else
                         reply(COD_NOSUCHNICK, target.at(t) + " " + ERR_NOSUCHNICK, clt_idx);  
                 }
@@ -75,10 +61,10 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                         if (in_channel(k, clt_idx) != -1)
                         {
                             for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
-                            {
-                                int idx = client_idx(_chnls.at(k).get_chnlclts().at(j).get_clt_skt());                        
-                                if (idx != clt_idx) // all except itself for channel (itself ok for direct message)
-                                    reply(COD_NONE, msg_replied, idx);
+                            {                                
+                                int fd = _chnls.at(k).get_chnlclts().at(j);
+                                if (client_idx(fd) != clt_idx) // all except itself for channel (itself ok for direct message)
+                                    reply(COD_NONE, msg_replied, client_idx(fd));
                             }
                         } 
                         else
@@ -93,16 +79,18 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
     }
 }
 
+// return where is clt_fd in _chnlclts 
 int Server::in_channel(int chnl_idx, int clt_idx)
 {
     for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
-    {
-        if (_chnls.at(chnl_idx).get_chnlclts().at(i).get_nickname() == _clts.at(clt_idx).get_nickname())   
+    {        
+        if (_chnls.at(chnl_idx).get_chnlclts().at(i) == _clts.at(clt_idx).get_clt_skt())
             return (i);
     }
     return (-1);
 }
 
+// return clt_idx
 int Server::target_clt_idx(std::string target)
 {
     for (int i = 0; i < _clts.size(); i++)       
@@ -111,11 +99,34 @@ int Server::target_clt_idx(std::string target)
     return (-1);
 }
 
+// return clt_fd
+int Server::target_clt_fd(std::string target)
+{
+    for (int i = 0; i < _clts.size(); i++)       
+        if (_clts.at(i).get_nickname() == target)
+            return (_clts.at(i).get_clt_skt());
+    return (-1);
+}
+
+// return index in _chnlclt not the value at _chnlclt(i)
 int Server::target_chnlclt_idx(std::string target, int chnl_idx)
 {
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)       
-        if (_chnls.at(chnl_idx).get_chnlclts().at(i).get_nickname() == target)
-            return (i);
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    {           
+        if ( _clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i))).get_nickname() == target)
+            return (i);            
+    }        
+    return (-1);
+}
+
+// return clt_fd in the channel
+int Server::target_chnlclt_fd(std::string target, int chnl_idx)
+{
+    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    {           
+        if ( _clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i))).get_nickname() == target)
+            return (_chnls.at(chnl_idx).get_chnlclts().at(i));            
+    }        
     return (-1);
 }
 

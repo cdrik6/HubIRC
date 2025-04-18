@@ -6,7 +6,7 @@
 /*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 16:02:29 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:06:11 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@
 # define CHANLEN 50
 # define USERLEN 18
 # define NAMEOPER "anybody" // to get OPER usable
-# define PASSOPER "secret" // to get OPER usable
+# define PASSOPER "1234" // to get OPER usable
+# define BOTKEY "robot"
 
 
 class Channel;
@@ -66,13 +67,14 @@ class Server
 		std::vector<Channel> _chnls;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
-		
+		//
+		Server(const Server& other);
+	    Server& operator=(const Server& other);	
+			
 	public:				
 		Server();
 		~Server();
-		Server(char *port, std::string password);
-		// Server(const Server& other);
-	    // Server& operator=(const Server& other);
+		Server(char *port, std::string password);		
 		//
 		int get_srv_skt(void) const;		
 		static void	handle_signal(int signal);		
@@ -81,9 +83,9 @@ class Server
 		void polling(void);		
 		void client_connect(void);
 		void client_disconnect(std::string reason, int pfd_idx, int clt_idx);		
-		void add_pfds(std::vector<struct pollfd>* pfds, int fd, short events);
+		void add_pfds(int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
-		void add_clients(std::vector<Client>* clts, int clt_skt, std::string ip);
+		void add_clients(int clt_skt, std::string ip);
 		int client_idx(int clt_skt);		
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
@@ -103,11 +105,13 @@ class Server
 		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
 		int target_clt_idx(std::string target);
+		int target_clt_fd(std::string target);
 		int target_chnlclt_idx(std::string target, int chnl_idx);
+		int target_chnlclt_fd(std::string target, int chnl_idx);
 		int channel_idx(std::string channel);
 		// Join
 		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		void create_chnl(std::vector<Channel>* chans, std::string name, std::string key, int clt_idx);
+		void create_chnl(std::string name, std::string key, int clt_idx);
 		void reply_join_add(std::string channel, int chnl_idx, int clt_idx);
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);
@@ -143,10 +147,7 @@ class Server
 		// Oper
 		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 		// Bot
-		void bot(int clt_idx);
-		std::string create_botnick(void);
-		std::string build_sentence(int bot_idx, std::string word);
-		void msg_from_bot(std::string msg, int bot_idx, int clt_idx);
+		void bot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
 };
 
 #endif
