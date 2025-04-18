@@ -6,7 +6,7 @@
 /*   By: aoberon <aoberon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/18 17:23:06 by aoberon          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:28:00 by aoberon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	Bot::connect_to_server( void )
 	if (connect(this->_socketfd, (sockaddr*)&(this->_address), sizeof(this->_address)))
         throw (std::runtime_error("connect: " + std::string(strerror(errno))));
 
-	std::string msg = "PASS " + this->_password + "\r\n" + "NICK " + this->_botnickname + "\r\n" + "USER " + this->_botusername + " 0 * " + this->_botusername + "\r\n"; 
+	std::string msg = "PASS " + this->_password + "\r\n" + "NICK " + this->_botnickname + "\r\n" + "USER " + this->_botusername + " 0 * :" + this->_botusername + "\r\n"; 
 
 	if (send(this->_socketfd, msg.c_str(), msg.length(), MSG_NOSIGNAL) == -1)
 	{
