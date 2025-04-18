@@ -6,7 +6,7 @@
 /*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 20:12:28 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/18 16:02:29 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ class Server
 		std::string _password;
 		std::vector<Client> _clts;
 		std::vector<struct pollfd> _pfds;
+		std::vector<Channel> _chnls;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
 		
