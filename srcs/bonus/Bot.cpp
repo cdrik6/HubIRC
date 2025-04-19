@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 23:28:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 23:44:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,12 +133,19 @@ void Bot::check_privmsg(void)
 				word = _tab_recv.at(i + 2);
 		}							
 	}		
-	if (word == "cadavre exquis" && _chan_game[channel].get_step() == 0)
-		_chan_game[channel].set_step(1);
+	if (word == "cadavre exquis" && _chan_game[channel].is_OFF() == true)
+		// _chan_game[channel].set_step(1);--> on et a 1 
+		_chan_game[channel].fait_le_debut_dujeu(1);
+	else if (word.find(DB) == true && _chan_game[channel].is_ON() == true)	
+	{
+		// moderation 
+	}
 	else if (word != "")
 	{
-		_chan_game[channel].set_word(word);
-		_chan_game[channel].set_step(_chan_game[channel].get_step() + 1);
+		// _chan_game[channel].set_word(word);
+		_chan_game[channel].continue_le_jeu(word); // 1er mot upadte 2 emsg // 2e mot + database + phrase
+		// _chan_game[channel].set_step(_chan_game[channel].get_step() + 1);		
+
 	}		
 }
 
