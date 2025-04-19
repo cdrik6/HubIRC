@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoberon <aoberon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 17:21:29 by aoberon          ###   ########.fr       */
+/*   Updated: 2025/04/19 02:35:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ int main(int argc, char **argv)
 {    
     if (argc != 4)
         return(std::cerr << "Usage: ./bot <botname> <port> <password>" << std::endl, OK);       
-	if (strlen(argv[1]) > 0 && strlen(argv[1]) < 31 && check_port(argv[2]) == OK && strlen(argv[3]) > 0 && strlen(argv[3]) < 31)
+	if (strlen(argv[1]) > 0 && strlen(argv[1]) < PASSLEN && check_port(argv[2]) == OK && strlen(argv[3]) > 0 && strlen(argv[3]) < PASSLEN)
     {           
         // signal(SIGINT, Client::handle_signal);
-        // signal(SIGQUIT, Client::handle_signal);
-		// Client bot(argv[2]); // clt_skt here if ok, exit() if not
+        // signal(SIGQUIT, Client::handle_signal);		
         Bot bot;
         try
         {         

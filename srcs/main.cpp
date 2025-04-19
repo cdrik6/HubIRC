@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 20:11:08 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/19 00:53:32 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 {    
     if (argc != 3)
         return(std::cerr << "Usage: ./ircserv <port> <password>" << std::endl, OK);       
-	if (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < 31)
+	if (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < PASSLEN)
     {           
         signal(SIGINT, Server::handle_signal);
         signal(SIGQUIT, Server::handle_signal);

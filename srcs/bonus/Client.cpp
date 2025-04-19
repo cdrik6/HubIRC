@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 04:54:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 01:24:50 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	Client::create_clt_skt(char *port)
 		exit (KO); // res not allocated in case of error, no need to free
 	}
 	// socket + connect
-	for (p = res; p; p = (*res).ai_next)
+	for (p = res; p; p = (*p).ai_next)
 	{
 		clt_skt = socket((*p).ai_family, (*p).ai_socktype, (*p).ai_protocol);
 		if (clt_skt < 0)

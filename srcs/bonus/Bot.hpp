@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoberon <aoberon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:53 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/18 17:13:06 by aoberon          ###   ########.fr       */
+/*   Updated: 2025/04/19 01:32:33 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <errno.h>
+
+# define OK 0
+# define KO 1
+# define PASSLEN 31
 
 class Bot
 {

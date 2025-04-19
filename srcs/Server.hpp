@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 16:17:20 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/19 02:03:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define BACKLOG 10 // pending connections before the kernel starts rejecting new ones
 # define BUFFER_SIZE 1024 //512 //510
 # define MAX_CHANNEL_LIMIT 1000
+# define PASSLEN 31
 # define NICKLEN 30
 # define TOPICLEN 307
 # define KICKLEN 307
@@ -65,6 +66,7 @@ class Server
 		std::vector<Client> _clts;
 		std::vector<struct pollfd> _pfds;
 		std::vector<Channel> _chnls;
+		std::vector<int> _fails;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
 		//
@@ -86,7 +88,8 @@ class Server
 		void add_pfds(int fd, short events);
 		std::string printable_ip(struct sockaddr_storage client_addr, int clt_skt);
 		void add_clients(int clt_skt, std::string ip);
-		int client_idx(int clt_skt);		
+		int client_idx(int clt_skt);
+		void clean_fails(void);
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
 		int check_registered(int clt_idx);		

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoberon <aoberon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 17:17:08 by aoberon          ###   ########.fr       */
+/*   Updated: 2025/04/19 03:27:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ int	Server::create_srv_skt(char *port)
 	{
 		std::cerr << "getaddrinfo error: " << gai_strerror(status) << std::endl;
 		exit (KO); // res not allocated in case of error, no need to free
-	}
+	}	
 	// socket + allowing reuse a port + non-blocking + bind
 	for (p = res; p; p = (*res).ai_next)
-	{
+	{		
 		srv_skt = socket((*p).ai_family, (*p).ai_socktype, (*p).ai_protocol);
 		if (srv_skt < 0)
 			continue;
@@ -95,7 +95,7 @@ int	Server::create_srv_skt(char *port)
 		if (fcntl(srv_skt, F_SETFL, O_NONBLOCK) == -1)
 			(perror("fcntl"), freeaddrinfo(res), exit (KO));
 		if (bind(srv_skt, (*p).ai_addr, (*p).ai_addrlen) < 0)
-			continue;
+			continue; // (perror("bind"), freeaddrinfo(res), exit (KO));
 		break;
 	}
 	freeaddrinfo(res);	
@@ -131,7 +131,7 @@ void Server::polling(void)
 		// if STD_IN got data to read
 		if (_pfds.at(0).revents & POLLIN)
 		{				
-			char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
+			char buff[BUFFER_SIZE + 1] = {0};
 			int nbytes = read(STDIN_FILENO, buff, BUFFER_SIZE);
 			if (nbytes == -1)
 				throw (std::runtime_error("read: " + std::string(strerror(errno))));
@@ -152,13 +152,12 @@ void Server::polling(void)
 		{
 			if (_pfds.at(i).revents & (POLLIN | POLLHUP)) // if got one ready to read
 			{
-				char buff[BUFFER_SIZE + 1] = {0}; //memset(buff, 0, sizeof(buff));
+				char buff[BUFFER_SIZE + 1] = {0};
 				int nbytes = recv(_pfds.at(i).fd, buff, BUFFER_SIZE, 0);
 				int k = client_idx(_pfds.at(i).fd);
 				// Server output
 				std::cout << "Received(" << _pfds.at(i).fd << ") [" << buff << "]\n" << std::endl;
-				std::cout << "(nbytes = " << nbytes << ")\n" << std::endl;				
-				//
+				// std::cout << "(nbytes = " << nbytes << ")\n" << std::endl;
 				if (nbytes <= 0) // closed or issues
 				{
 					if (nbytes == 0)						
@@ -168,14 +167,15 @@ void Server::polling(void)
 				}
 				else // got some data from a client
 				{				
-					if (parse_message(std::string(buff), k) == OK)						
-						if (check_registered(k) == OK)					
+					if (parse_message(std::string(buff), k) == OK)
+						if (check_registered(k) == OK)
 							if (_clts.at(k).get_registered() == false)
-								welcome(k);											
-				}
+								welcome(k);					 			
+				}				
 			}
-		} // clients		
-	} // loop	
+		} // clients				
+		// _fails.clear(); //clean_fails();
+	} // loop while
 } // close fds in destructor here
 // Note: flag in send ()
 // if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
@@ -205,18 +205,16 @@ int Server::parse_message(std::string buffer, int clt_idx)
 	{		
 		tab_msg = split(_clts.at(clt_idx).get_msg());		
 		if (tab_msg.size() == 0)
-			return (std::cout << "tab empty" << std::endl, KO); /**************debug here **** */
+			return (std::cout << "tab empty" << std::endl, KO);
 		for (int i = 0; i < tab_msg.size(); i++)
-		{
-			//*********** debug here ***** */
-			std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
+		{			
+			// std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
 			if (get_command(tab_msg, tab_msg[i], clt_idx, i) == KO)
 				return (KO);
 		}	
 		_clts.at(clt_idx).clear_msg();		
 		return (OK);
-	}
-	std::cout << std::endl; /******************************* */
+	}	
 	return (KO);
 }
 // Note
@@ -263,7 +261,7 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 			iambot(tab_msg, clt_idx, tab_idx);
 		else if (tab_idx == 0)
 			reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
-	}	
+	}
 	return (OK);
 }
 
@@ -323,6 +321,36 @@ std::string Server::printable_ip(struct sockaddr_storage client_addr, int clt_sk
 		std::cout << "New connection from " << ip6 << " on socket " << clt_skt << std::endl << std::endl;
 		return(std::string(ip6));
 	}	
+}
+
+void Server::clean_fails(void)
+{
+	int clt_idx = -1;
+	int pfd_idx = -1;
+	
+	for (int i = 0; i < _fails.size(); i++)
+	{		
+		for (int j = 0; j < _chnls.size(); j++)
+		{
+			_chnls.at(j).rem_operator(_fails.at(i));
+			_chnls.at(j).rem_invitee(_fails.at(i));
+			_chnls.at(j).rem_chnlclt(_fails.at(i));
+		}
+		clt_idx = client_idx(_fails.at(i));
+		if (clt_idx != -1)		
+			_clts.erase(_clts.begin() + clt_idx);					
+		for (int j = 2; j < _pfds.size(); j++)
+    	{
+        	if (_pfds.at(j).fd == _fails.at(i))
+        	{
+            	pfd_idx = j;
+            	break;
+        	}            
+    	}    
+    	if (pfd_idx != -1)
+			_pfds.erase(_pfds.begin() + pfd_idx);		
+	}	
+	_fails.clear();	
 }
 
 void Server::add_clients(int clt_skt, std::string ip)
