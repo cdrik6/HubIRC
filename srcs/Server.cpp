@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 03:27:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 04:08:28 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	Server::create_srv_skt(char *port)
 		exit (KO); // res not allocated in case of error, no need to free
 	}	
 	// socket + allowing reuse a port + non-blocking + bind
-	for (p = res; p; p = (*res).ai_next)
+	for (p = res; p; p = (*p).ai_next)
 	{		
 		srv_skt = socket((*p).ai_family, (*p).ai_socktype, (*p).ai_protocol);
 		if (srv_skt < 0)
@@ -163,7 +163,14 @@ void Server::polling(void)
 					if (nbytes == 0)						
 						client_disconnect("Connection closed by client", i, k);										
 					if (nbytes == -1)
-						throw (std::runtime_error("recv: " + std::string(strerror(errno))));
+					{
+						// std::cout << "fd = " << _pfds.at(i).fd << std::endl;
+						std::vector<int>::iterator it = std::find(_fails.begin(), _fails.end(), _pfds.at(i).fd);
+            			if (it == _fails.end())
+                			_fails.push_back(_pfds.at(i).fd);
+						// throw (std::runtime_error("recv: " + std::string(strerror(errno))));
+					}
+						
 				}
 				else // got some data from a client
 				{				
@@ -173,10 +180,13 @@ void Server::polling(void)
 								welcome(k);					 			
 				}				
 			}
-		} // clients				
-		// _fails.clear(); //clean_fails();
-	} // loop while
-} // close fds in destructor here
+		}
+		// for (int j = 0; j < _fails.size(); j++)
+		// 	std::cout << "fd = " << _fails.at(j) << std::endl;
+		_fails.clear(); //clean_fails();
+	}
+}
+// close fds in destructor here
 // Note: flag in send ()
 // if the socket has been closed by either side, the process calling send() will get the signal SIGPIPE.
 // Unless send() was called with the MSG_NOSIGNAL flag.
