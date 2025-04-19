@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:53 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 22:59:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 23:25:38 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,13 @@
 # include <netinet/in.h>
 # include <errno.h>
 # include <vector>
+# include <map>
 #include <sys/unistd.h>
 #include <sys/fcntl.h>
 #include <map>
+#include <sys/select.h>
+
+#include "Game.hpp"
 
 
 # define OK 0
@@ -31,8 +35,6 @@
 # define PASSLEN 31
 # define BUFFER_SIZE 1024
 
-//# include "Game.hpp"
-class Game;
 
 class Bot
 {
@@ -46,6 +48,9 @@ class Bot
 		void	check_join(void);
 		void	reply(std::string msg);
 		void 	check_privmsg(void);
+		int	check_invite(std::string *channel_to_join);
+		void	select_initialisation();
+		bool	fd_ready_for_recv();
 		// void	routine(void);
 		
 		static void	handle_signal(int signal);
@@ -62,6 +67,8 @@ class Bot
 		std::vector<std::string> _channel_joined;
 		std::vector<std::string> _tab_recv;
 		std::map<std::string, Game> _chan_game;
+		fd_set _currentfds, _readfds;
+		// std::map<std::string, Game> _map_game; fill this map when the bot join a channel, use game constructor Game(Bot* bot)
 };
 
 std::vector<std::string> split(std::string str);
