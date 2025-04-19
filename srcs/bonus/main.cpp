@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 05:56:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:10:46 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ int main(int argc, char **argv)
         {         
             bot.initialize_connection(std::string(argv[1]), atoi(argv[2]), std::string(argv[3]));   
             bot.connect_to_server();            
-            while (bot.get_signal() == false)
+            // while (bot.get_signal() == false)
+            while (1)
             {
                 bot.received_from_server();    
             }
-            std::cout<< std::boolalpha << bot.get_signal() << std::endl; // ******** probleme ici **********
+            // std::cout<< std::boolalpha << bot.get_signal() << std::endl;
             // bot.routine();
         }
         catch (std::exception &e)
@@ -80,7 +81,7 @@ std::vector<std::string> split(std::string str)
                 msg = line.substr(i);  // msg worst ":\r" // keep the ":"
                 if (msg.at(msg.length() - 1) == '\r')
                     msg = msg.substr(0, msg.length() - 1); // remove \r                
-                std::cout << "msg = [" << msg << "]" << std::endl;
+                // std::cout << "msg = [" << msg << "]" << std::endl;
                 if (!msg.empty())
                     is_msg = true;
             }
@@ -95,11 +96,11 @@ std::vector<std::string> split(std::string str)
             if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
                 break;                        
             tab.push_back(token);        
-            std::cout << "token = [" << token << "]" << std::endl;
+            // std::cout << "token = [" << token << "]" << std::endl;
         }
         if (is_msg == true) 
             tab.push_back(msg);        
     }
-    std::cout << std::endl; /*************** */    
+    // std::cout << std::endl; /*************** */    
     return (tab);
 }

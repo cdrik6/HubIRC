@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:53 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 05:46:26 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 15:54:23 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <netinet/in.h>
 # include <errno.h>
 # include <vector>
+#include <sys/unistd.h>
+#include <sys/fcntl.h>
+
 
 # define OK 0
 # define KO 1

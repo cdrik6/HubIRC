@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 05:46:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 16:06:53 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	Bot::initialize_connection(std::string name, int port, std::string password
 
 void	Bot::connect_to_server( void )
 {
-	this->_socketfd = socket(AF_INET, SOCK_STREAM, 0);
+	this->_socketfd = socket(AF_INET, SOCK_STREAM, 0);	
 	if (this->_socketfd == -1)
         throw (std::runtime_error("socket: " + std::string(strerror(errno))));
 	if (connect(this->_socketfd, (sockaddr*)&(this->_address), sizeof(this->_address)) == -1)
@@ -64,6 +64,7 @@ void	Bot::connect_to_server( void )
         throw (std::runtime_error("send: " + std::string(strerror(errno))));
 	
     std::cout << "Send:\n" + msg << std::endl;
+	
 }
 
 void	Bot::received_from_server()
@@ -87,9 +88,9 @@ void	Bot::received_from_server()
 		if (check_invite(&channel_to_join) == OK)
 		{
 			if (channel_to_join != "")
-			{
-				// join /********* a continuer ici */
+			{				
 				std::cout << channel_to_join << std::endl;
+				// join /********* a continuer ici */
 			}				
 		}
 		// _received.clear();			
