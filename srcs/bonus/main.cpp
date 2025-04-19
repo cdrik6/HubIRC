@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 16:10:46 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 22:18:04 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ int main(int argc, char **argv)
         try
         {         
             bot.initialize_connection(std::string(argv[1]), atoi(argv[2]), std::string(argv[3]));   
-            bot.connect_to_server();            
-            // while (bot.get_signal() == false)
-            while (1)
-            {
-                bot.received_from_server();    
-            }
+            bot.connect_to_server();
+			bot.select_initialisation();   
+            while (bot.get_signal() == false)
+			{
+				if (bot.fd_ready_for_recv() == false)
+					break;
+                bot.received_from_server();
+			}
             // std::cout<< std::boolalpha << bot.get_signal() << std::endl;
             // bot.routine();
         }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 16:06:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:45:05 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,30 @@ int Bot::check_invite(std::string *channel)
 				else
 					*channel = "";
 				return (OK);
-			}				
+			}
 		}		
 		return (KO);
 	}	
 	return (KO);
 }
 
+void Bot::select_initialisation()
+{
+	FD_ZERO(&_currentfds);
+	FD_SET(this->_socketfd, &_currentfds);
+}
+
+bool Bot::fd_ready_for_recv()
+{
+	int ret;
+
+	_readfds = _currentfds;
+	ret = select(_socketfd + 1, &_readfds, NULL, NULL, NULL);
+	if (_signal == true)
+		return (false);
+	if (ret == -1)
+			throw (std::runtime_error("select: " + std::string(strerror(errno))));
+	if (FD_ISSET(this->_socketfd, &_readfds))
+		return (true);
+	return (false);
+}

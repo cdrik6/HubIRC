@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:53 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 15:54:23 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 21:25:01 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@
 # include <vector>
 #include <sys/unistd.h>
 #include <sys/fcntl.h>
+#include <sys/select.h>
 
 
 # define OK 0
 # define KO 1
 # define PASSLEN 31
 # define BUFFER_SIZE 1024
+
 
 class Bot
 {
@@ -39,6 +41,8 @@ class Bot
 		void	connect_to_server(void);
 		void	received_from_server(void);
 		int	check_invite(std::string *channel_to_join);
+		void	select_initialisation();
+		bool	fd_ready_for_recv();
 		// void	routine(void);
 		
 		static void	handle_signal(int signal);
@@ -53,6 +57,7 @@ class Bot
 		static bool _signal;
 		std::string	_received;
 		std::vector<std::string> _channel_joined;
+		fd_set _currentfds, _readfds;
 };
 
 std::vector<std::string> split(std::string str);
