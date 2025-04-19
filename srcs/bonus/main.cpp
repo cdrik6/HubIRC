@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 16:10:46 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 20:59:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ std::vector<std::string> split(std::string str)
             if (line.at(0) == ':')
                 line = line.substr(1);
             i = line.find_first_of(":");
-            if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
+            if (i != std::string::npos) // worst case  "... :\r\n"
             {
                 msg = line.substr(i);  // msg worst ":\r" // keep the ":"
                 if (msg.at(msg.length() - 1) == '\r')

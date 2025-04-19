@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 16:06:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/19 23:06:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,7 @@ void	Bot::connect_to_server( void )
         throw (std::runtime_error("socket: " + std::string(strerror(errno))));
 	if (connect(this->_socketfd, (sockaddr*)&(this->_address), sizeof(this->_address)) == -1)
         throw (std::runtime_error("connect: " + std::string(strerror(errno))));
-
-	std::string msg = "PASS " + this->_password + "\r\n" + "NICK " + this->_botnickname + "\r\n" + "USER " + this->_botusername + " 0 * :" + this->_botusername + "\r\n"; 
-
-	if (send(this->_socketfd, msg.c_str(), msg.length(), MSG_NOSIGNAL) == -1)	
-        throw (std::runtime_error("send: " + std::string(strerror(errno))));
-	
-    std::cout << "Send:\n" + msg << std::endl;
-	
+	reply("PASS " + this->_password + "\r\n" + "NICK " + this->_botnickname + "\r\n" + "USER " + this->_botusername + " 0 * :" + this->_botusername + "\r\n");
 }
 
 void	Bot::received_from_server()
@@ -82,43 +75,76 @@ void	Bot::received_from_server()
 	}
 	else // got some data from server
 	{
-		std::string channel_to_join;
 		_received = _received + std::string(buff);
-		
-		if (check_invite(&channel_to_join) == OK)
+		if (_received.find("\r\n") != std::string::npos)
 		{
-			if (channel_to_join != "")
-			{				
-				std::cout << channel_to_join << std::endl;
-				// join /********* a continuer ici */
-			}				
+			_tab_recv.clear();
+			_tab_recv = split(_received);	
+			_received.clear();			
 		}
-		// _received.clear();			
 	}
 }
 
-int Bot::check_invite(std::string *channel)
-{	
-	std::vector<std::string> tab_recv;
+void Bot::check_invite(void)
+{		
+	std::string channel_to_join;
 		
-	if (_received.find("\r\n") != std::string::npos)
-	{		
-		tab_recv = split(_received);
-		if (tab_recv.size() == 0)
-			return (std::cout << "tab empty" << std::endl, KO);
-		for (int i = 0; i < tab_recv.size(); i++)
-		{			
-			if (tab_recv.at(i) == "INVITE")	
-			{
-				if (i + 2 < tab_recv.size())
-					*channel = tab_recv.at(i + 2);
-				else
-					*channel = "";
-				return (OK);
-			}				
-		}		
-		return (KO);
-	}	
-	return (KO);
+	for (int i = 0; i < _tab_recv.size(); i++)
+	{			
+		if (_tab_recv.at(i) == "INVITE")			
+			if (i + 2 < _tab_recv.size())
+				channel_to_join = _tab_recv.at(i + 2);
+	}		
+	if (channel_to_join != "")
+	{				
+		std::cout << channel_to_join << std::endl;		
+		reply("JOIN " + channel_to_join + "\r\n"); 
+	}
 }
 
+void Bot::check_join(void)
+{		
+	std::string channel_joined;
+	
+	for (int i = 0; i < _tab_recv.size(); i++)
+	{			
+		// if (_tab_recv.at(i).find(_botnickname) != std::string::npos)
+		// if (i + 1 < _tab_recv.size())
+		if (_tab_recv.at(i) == "JOIN")			
+			if (i + 1 < _tab_recv.size())
+				channel_joined = _tab_recv.at(i + 1);
+	}		
+	if (channel_joined != "")					
+		_chan_game[channel_joined].set_step(0);
+}
+
+void Bot::check_privmsg(void)
+{		
+	std::string channel;
+	std::string word;
+	
+	for (int i = 0; i < _tab_recv.size(); i++)
+	{			
+		if (_tab_recv.at(i) == "PRIVMSG")
+		{
+			if (i + 1 < _tab_recv.size())
+				channel = _tab_recv.at(i + 1);
+			if (i + 2 < _tab_recv.size())
+				word = _tab_recv.at(i + 2);
+		}							
+	}		
+	if (word == "cadavre exquis" && _chan_game[channel].get_step() == 0)
+		_chan_game[channel].set_step(1);
+	else if (word != "")
+	{
+		_chan_game[channel].set_word(word);
+		_chan_game[channel].set_step(_chan_game[channel].get_step() + 1);
+	}		
+}
+
+void Bot::reply(std::string msg)
+{	
+	if (send(this->_socketfd, msg.c_str(), msg.length(), MSG_NOSIGNAL) == -1)	
+        throw (std::runtime_error("send: " + std::string(strerror(errno))));	
+    std::cout << "Send:\n" + msg << std::endl;
+}
