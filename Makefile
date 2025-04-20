@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+         #
+#    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/18 16:18:28 by alexandm         ###   ########.fr        #
+#    Updated: 2025/04/20 01:32:26 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,17 +17,17 @@ SRCS		=	srcs/main.cpp \
 				srcs/Client.cpp \
 				srcs/Register.cpp \
 				srcs/Channel.cpp \
-				srcs/Privmsg.cpp \
-				srcs/Join.cpp \
-				srcs/Who.cpp \
-				srcs/Mode.cpp \
-				srcs/Topic.cpp \
-				srcs/Kick.cpp \
-				srcs/Invite.cpp \
-				srcs/Notice.cpp \
-				srcs/Oper.cpp \
-				srcs/Quit.cpp \
-				srcs/Part.cpp \
+				srcs/privmsg.cpp \
+				srcs/join.cpp \
+				srcs/who.cpp \
+				srcs/mode.cpp \
+				srcs/topic.cpp \
+				srcs/kick.cpp \
+				srcs/invite.cpp \
+				srcs/notice.cpp \
+				srcs/oper.cpp \
+				srcs/quit.cpp \
+				srcs/part.cpp \
 				srcs/iambot.cpp
 				
 CC			=	c++

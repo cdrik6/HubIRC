@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 04:08:28 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 03:47:42 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ void Server::polling(void)
 				if (nbytes <= 0) // closed or issues
 				{
 					if (nbytes == 0)						
-						client_disconnect("Connection closed by client", i, k);										
+						client_disconnect(":Connection closed by client", i, k);
 					if (nbytes == -1)
 					{
 						// std::cout << "fd = " << _pfds.at(i).fd << std::endl;
@@ -288,6 +288,7 @@ int Server::client_idx(int clt_skt)
 // std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
 void Server::client_disconnect(std::string reason, int pfd_idx, int clt_idx)
 {
+	
 	quit_channels(reason, clt_idx);
 	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";	
 	close(_pfds.at(pfd_idx).fd);	

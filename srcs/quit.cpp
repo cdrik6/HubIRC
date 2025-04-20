@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Quit.cpp                                           :+:      :+:    :+:   */
+/*   quit.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:20:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:59:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 03:47:02 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,7 @@ void Server::quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     int pfd_idx = -1;
 
     if (tab_idx + 1 < tab_msg.size())
-		reason = tab_msg.at(tab_idx + 1);
-	// if (!reason.empty() && reason.at(0) == ':')
-	// 	reason = reason.substr(1);
-	if (!reason.empty())
-		reason = " " + reason;
+		reason = tab_msg.at(tab_idx + 1);		
 	
     for (int i = 2; i < _pfds.size(); i++)
     {
@@ -40,7 +36,10 @@ void Server::quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 // :<nickname>!<user>@<host> QUIT :[optional message]
 void Server::quit_channels(std::string reason, int clt_idx)
 {
-	std::string msg_replied;	
+	std::string msg_replied;
+	
+	if (!reason.empty())
+		reason = " " + reason;	
 		
 	for (int i = 0; i < _chnls.size(); i++)	
 	{		

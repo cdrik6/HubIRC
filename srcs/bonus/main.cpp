@@ -6,12 +6,13 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 23:27:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 03:35:14 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Client.hpp"
+#include "Game.hpp"
 #include "Bot.hpp"
+#include "Data.hpp"
 
 int main(int argc, char **argv)
 {    
@@ -22,6 +23,7 @@ int main(int argc, char **argv)
         signal(SIGINT, Bot::handle_signal);
         signal(SIGQUIT, Bot::handle_signal);		
         Bot bot;
+        Data data;
         try
         {         
             bot.initialize_connection(std::string(argv[1]), atoi(argv[2]), std::string(argv[3]));   
@@ -31,10 +33,8 @@ int main(int argc, char **argv)
 			{
 				if (bot.fd_ready_for_recv() == false)
 					break;
-                bot.received_from_server();
-			}
-            // std::cout<< std::boolalpha << bot.get_signal() << std::endl;
-            // bot.routine();
+                bot.routine(data);                
+			}            
         }
         catch (std::exception &e)
         {            
@@ -103,6 +103,6 @@ std::vector<std::string> split(std::string str)
         if (is_msg == true) 
             tab.push_back(msg);        
     }
-    // std::cout << std::endl; /*************** */    
+    // std::cout << std::endl;
     return (tab);
 }

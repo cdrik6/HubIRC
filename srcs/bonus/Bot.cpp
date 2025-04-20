@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/19 23:44:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 04:08:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,13 @@ void	Bot::received_from_server()
 	std::cout << "Received:\n[" << buff << "]\n" << std::endl;	
 	if (nbytes <= 0) // closed or issues
 	{
-		if (nbytes == 0)						
+		if (nbytes == 0)
+		{
+			_signal = true;
+			// close(_socketfd)
 			std::cout << "Server closed the connection" << std::endl;
+		}						
+			
 		if (nbytes == -1)			
 			throw (std::runtime_error("recv: " + std::string(strerror(errno))));			
 	}
@@ -105,6 +110,7 @@ void Bot::check_invite(void)
 void Bot::check_join(void)
 {		
 	std::string channel_joined;
+	Game botgame(this);
 	
 	for (int i = 0; i < _tab_recv.size(); i++)
 	{			
@@ -114,11 +120,11 @@ void Bot::check_join(void)
 			if (i + 1 < _tab_recv.size())
 				channel_joined = _tab_recv.at(i + 1);
 	}		
-	if (channel_joined != "")					
-		_chan_game[channel_joined].set_step(0);
+	if (channel_joined != "")	
+		_map_game[channel_joined] = botgame;
 }
 
-void Bot::check_privmsg(void)
+void Bot::check_privmsg(Data& data)
 {		
 	std::string channel;
 	std::string word;
@@ -130,23 +136,21 @@ void Bot::check_privmsg(void)
 			if (i + 1 < _tab_recv.size())
 				channel = _tab_recv.at(i + 1);
 			if (i + 2 < _tab_recv.size())
-				word = _tab_recv.at(i + 2);
+				word = _tab_recv.at(i + 2).substr(1);
 		}							
 	}		
-	if (word == "cadavre exquis" && _chan_game[channel].is_OFF() == true)
-		// _chan_game[channel].set_step(1);--> on et a 1 
-		_chan_game[channel].fait_le_debut_dujeu(1);
-	else if (word.find(DB) == true && _chan_game[channel].is_ON() == true)	
+	if (word == "cadavre exquis" && _map_game[channel].getGameOn() == false)
 	{
-		// moderation 
-	}
-	else if (word != "")
-	{
-		// _chan_game[channel].set_word(word);
-		_chan_game[channel].continue_le_jeu(word); // 1er mot upadte 2 emsg // 2e mot + database + phrase
-		// _chan_game[channel].set_step(_chan_game[channel].get_step() + 1);		
-
+		_map_game[channel].setGameOn(true);
+		std::cout << "je suis ici " << std::endl;
+		_map_game[channel].startGame(channel);
 	}		
+	// else if (word.find(DB) == true && _map_game[channel].getGameOn() == true)	
+	// {
+	// 	// moderation 
+	// }
+	else if (word != "" && _map_game[channel].getGameOn() == true)			
+		_map_game[channel].playing(data, channel, word); // 1er mot upadte 2 emsg // 2e mot + database + phrase
 }
 
 void Bot::reply(std::string msg)
@@ -175,4 +179,12 @@ bool Bot::fd_ready_for_recv()
 	if (FD_ISSET(this->_socketfd, &_readfds))
 		return (true);
 	return (false);
+}
+
+void Bot::routine(Data& data)
+{
+	received_from_server();
+	check_invite();
+	check_join();		
+	check_privmsg(data);
 }

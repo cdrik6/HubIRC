@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Data.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:42:24 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/18 15:42:41 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/20 03:38:42 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ Data::Data()
 {
 	loadData("data/subjects.csv", this->_subjects);
 	loadData("data/verbs.csv", this->_verbs);
-	loadData("data/cc.csv", this->_co);
-	loadData("data/co.csv", this->_cc);
+	loadData("data/adj.csv", this->_adj);
+	loadData("data/cc.csv", this->_cc);
 	loadData("data/forbidden_words.csv", this->_forbidden_words);
+	srand(static_cast<unsigned int>(time(NULL)));
 }
 
 Data::~Data()
@@ -55,4 +56,18 @@ void Data::loadData(std::string csv_name, std::vector<std::string> &vec)
 	// std::cout << csv_name << std::endl;
 	// for (std::vector<std::string>::iterator it = vec.begin(); it != vec.end(); ++it)
 	// 	std::cout << *it << std::endl;
+}
+
+std::string Data::get_adj(void)
+{
+	if (_adj.size() != 0)
+		return (_adj.at(rand()%_adj.size()));
+	return("");
+}
+
+std::string Data::get_cc(void)
+{
+	if (_cc.size() != 0)
+		return (_cc.at(rand()%_cc.size()));	
+	return("");	
 }
