@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Game.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:54:15 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 04:12:53 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:28:00 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Game.hpp"
 
-Game::Game(Bot *bot) : _bot(bot), _game_on(false)
+Game::Game(Bot *bot, std::string channel) : _bot(bot), _game_on(false), _channel(channel)
 {
 }
 
@@ -34,13 +34,13 @@ bool Game::getGameOn() const
 	return (this->_game_on);
 }
 
-void Game::startGame(std::string channel)
+void Game::startGame()
 {
 	std::cout << "je suis la " << std::endl;
-	_bot->reply("PRIVMSG " + channel + " :Donnez-moi le sujet de la phrase (ex: le chat)" + "\r\n");			
+	_bot->reply("PRIVMSG " + _channel + " :Donnez-moi le sujet de la phrase (ex: le chat)" + "\r\n");			
 }
 
-void Game::playing(Data& data, std::string channel, std::string word)
+void Game::playing(Data& data, std::string word)
 {		
 	if (_words.size() == 0)	
 	{
@@ -49,7 +49,7 @@ void Game::playing(Data& data, std::string channel, std::string word)
 		
 		_words.push_back(word);
 		_words.push_back(adj);
-		_bot->reply("PRIVMSG " + channel + " :Donnez-moi le verbe 3e p.s. de la phrase (ex: boit)" + "\r\n");
+		_bot->reply("PRIVMSG " + _channel + " :Donnez-moi le verbe 3e p.s. de la phrase (ex: boit)" + "\r\n");
 	}
 	else if (_words.size() == 2)
 	{
@@ -62,8 +62,10 @@ void Game::playing(Data& data, std::string channel, std::string word)
 		if (_words.size() == 4)
 		{
 			std::string sentence = _words.at(0) + " " + _words.at(1) + " " + _words.at(2) + " " + _words.at(3) + ".";
-			_bot->reply("PRIVMSG " + channel + " :" + sentence + "\r\n");
+			_bot->reply("PRIVMSG " + _channel + " :" + sentence + "\r\n");
+			
 		}
+		_words.clear();
 		_game_on = false;
 	}
 }

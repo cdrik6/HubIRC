@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Game.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:24:54 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 02:40:30 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:25:42 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ class Bot;
 class Game
 {
 	public:
-		Game(Bot *bot);
+		Game(Bot *bot, std::string channel);
 		Game();
 		~Game();
 		void setGameOn(bool); // ou init 
 		bool getGameOn() const;
-		void startGame(std::string channel);
-		void playing(Data& data, std::string channel, std::string word);
+		void startGame();
+		void playing(Data& data, std::string word);
 		// void continueGame(std::string word); use this input to continue the game , will do the reply thanks to ptr bot
 		// void reset(); // reset all member variable to initial state or function to restart the game ???
 		
@@ -38,6 +38,7 @@ class Game
 		Bot *_bot;
 		bool _game_on;
 		std::vector<std::string> _words;
+		std::string _channel;
 		// int	 _step; // maybe useless if we use _words.size to know which step we are on
 		
 };

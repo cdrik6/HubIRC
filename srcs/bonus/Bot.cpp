@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 13:54:12 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 18:30:05 by alexandm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,20 +111,22 @@ void Bot::check_join(void)
 {		
 	std::string channel_to_join;
 	bool new_channel = false;
-	Game botgame(this);
 	
 	for (int i = 0; i < _tab_recv.size(); i++)
 	{			
 		// if (_tab_recv.at(i).find(_botnickname) != std::string::npos)
 		// if (i + 1 < _tab_recv.size())
 		if (_tab_recv.at(i) == "JOIN")			
-			if (i + 1 < _tab_recv.size())
-				channel_to_join = _tab_recv.at(i + 1);
+		if (i + 1 < _tab_recv.size())
+		channel_to_join = _tab_recv.at(i + 1);
 	}	
     // if (find(_channel_joined.begin(), _channel_joined.end(), channel_to_join) == _channel_joined.end())
 	// 	new_channel == true;
-	if (channel_to_join != "") // && new_channel == true)	
+	if (channel_to_join != "") // && new_channel == true)
+	{
+		Game botgame(this, channel_to_join);
 		_map_game[channel_to_join] = botgame;
+	}	
 }
 
 void Bot::check_privmsg(Data& data)
@@ -151,14 +153,14 @@ void Bot::check_privmsg(Data& data)
 		{
 			_map_game[channel].setGameOn(true);
 			
-			_map_game[channel].startGame(channel);
+			_map_game[channel].startGame();
 		}		
 		// else if (word.find(DB) == true && _map_game[channel].getGameOn() == true)	
 		// {
 		// 	// moderation 
 		// }
 		else if (word != "" && _map_game[channel].getGameOn() == true)			
-			_map_game[channel].playing(data, channel, word); // 1er mot upadte 2 emsg // 2e mot + database + phrase		
+			_map_game[channel].playing(data, word); // 1er mot upadte 2 emsg // 2e mot + database + phrase		
 	}	
 }
 
