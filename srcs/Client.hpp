@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:13:35 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 00:42:01 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:10:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ class Client
         std::string _hostname;
         std::string _realname;
         std::string _msg; //buffer
-        bool _is_bot;
-        // int _bot_step;
+        bool _is_bot;        
         std::vector<std::string> _words;
         
     public:
@@ -46,8 +45,7 @@ class Client
         std::string get_realname(void) const;
         bool get_pwd_ok(void) const;        
         bool get_registered(void) const;
-        bool get_is_bot(void) const;
-        // int get_bot_step(void) const;
+        bool get_is_bot(void) const;        
         std::vector<std::string> get_words(void) const;
         //
         void set_clt_skt(int clt_skt);
@@ -58,8 +56,7 @@ class Client
         void set_registered(bool registered);
         void set_hostname(std::string ip);
         void set_msg(std::string buffer);
-        void set_is_bot(bool is_bot);
-        // void set_bot_step(int step);
+        void set_is_bot(bool is_bot);        
         void add_word(std::string word);
         void clear_msg(void);
         void clear_words(void);

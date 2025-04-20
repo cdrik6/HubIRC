@@ -6,14 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 23:15:28 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 00:44:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:11:38 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
 Client::Client() : _clt_skt(-1), _registered(false), _pwd_ok(false), _nickname("*"), \
-                   _username(""), _hostname(""), _realname(""), _msg(""), _is_bot(false) // , _bot_step(0)
+                   _username(""), _hostname(""), _realname(""), _msg(""), _is_bot(false) 
 {
     
 }
@@ -40,8 +40,7 @@ Client& Client::operator=(const Client& other)
     _hostname = other._hostname;    
     _realname = other._realname;
     _msg = other._msg;
-    _is_bot = other._is_bot;
-    // _bot_step = other._bot_step;    
+    _is_bot = other._is_bot;    
     _words = other._words;
 	return (*this);
 }
@@ -91,11 +90,6 @@ bool Client::get_is_bot(void) const
     return (_is_bot);
 }
 
-// int Client::get_bot_step(void) const
-// {
-//     return (_bot_step);
-// }
-
 std::vector<std::string> Client::get_words(void) const
 {
     return (_words);
@@ -130,11 +124,6 @@ void Client::set_is_bot(bool is_bot)
 {
     _is_bot = is_bot;
 }
-
-// void Client::set_bot_step(int step)
-// {
-//     _bot_step = step;
-// }
 
 void Client::set_registered(bool registered)
 {

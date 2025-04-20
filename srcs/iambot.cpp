@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bot.cpp                                            :+:      :+:    :+:   */
+/*   iambot.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:21:15 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 16:16:58 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:37:41 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ void Server::iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     {        
         std::string key = tab_msg.at(i);       
         std::string botnick = _clts.at(clt_idx).get_nickname();
-        _clts.at(clt_idx).set_is_bot(true); /*****************************to do what ? *********/
+        _clts.at(clt_idx).set_is_bot(true); 
         
         if (key == BOTKEY)        
         {            
-            std::string msg = ":Je suis " + botnick + " ton bot !\n Message cadavre exquis pour jouer.";
+            std::string msg = ":Je suis " + botnick + " ton bot ! Invite moi et tape @" + botnick + " pour jouer.";
             std::string msg_bot = ":Salut le bot !";
             std::string msg_replied;            
             
@@ -48,9 +48,3 @@ void Server::iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             reply(COD_PASSWDMISMATCH, key + " " + ERR_PASSWDMISMATCH, clt_idx);
     }
 }
-// std::vector<std::string> bot_msg;
-// bot_msg.push_back("PRIVMSG");
-// bot_msg.push_back(_clts.at(i).get_nickname());
-// bot_msg.push_back(":Je suis " + botnick + " ton bot ! Tape cadavre exquis pour jouer.");
-// privmsg(bot_msg, i, 0); // from bot to target                 
-// bot_msg.clear();

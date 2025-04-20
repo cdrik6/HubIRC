@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 20:26:02 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:28:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	Bot::initialize_connection(std::string name, int port, std::string password
 	this->_address.sin_port = htons(port);
 }
 
-void	Bot::connect_to_server( void )
+void	Bot::connect_to_server(void)
 {
 	this->_socketfd = socket(AF_INET, SOCK_STREAM, 0);	
 	if (this->_socketfd == -1)
@@ -58,6 +58,7 @@ void	Bot::connect_to_server( void )
 	if (connect(this->_socketfd, (sockaddr*)&(this->_address), sizeof(this->_address)) == -1)
         throw (std::runtime_error("connect: " + std::string(strerror(errno))));
 	reply("PASS " + this->_password + "\r\n" + "NICK " + this->_botnickname + "\r\n" + "USER " + this->_botusername + " 0 * :" + this->_botusername + "\r\n");
+	reply("IAMBOT robot\r\n");
 }
 
 void	Bot::received_from_server()
@@ -102,7 +103,7 @@ void Bot::check_invite(void)
 	}		
 	if (channel_to_join != "")
 	{				
-		std::cout << channel_to_join << std::endl;		
+		// std::cout << channel_to_join << std::endl;		
 		reply("JOIN " + channel_to_join + "\r\n"); 
 	}
 }
@@ -117,8 +118,8 @@ void Bot::check_join(void)
 		// if (_tab_recv.at(i).find(_botnickname) != std::string::npos)
 		// if (i + 1 < _tab_recv.size())
 		if (_tab_recv.at(i) == "JOIN")			
-		if (i + 1 < _tab_recv.size())
-		channel_to_join = _tab_recv.at(i + 1);
+			if (i + 1 < _tab_recv.size())
+				channel_to_join = _tab_recv.at(i + 1);
 	}	
     // if (find(_channel_joined.begin(), _channel_joined.end(), channel_to_join) == _channel_joined.end())
 	// 	new_channel == true;
@@ -147,18 +148,14 @@ void Bot::check_privmsg(Data& data)
 					word = _tab_recv.at(i + 2).substr(1);			
 		}							
 	}		
-	if (_map_game.find(channel) != _map_game.end())
+	if (_map_game.find(channel) != _map_game.end() && word.at(0) == '@')
 	{			
-		if (word == "!bot" && _map_game[channel].getGameOn() == false)
+		word = word.substr(1);			
+		if (word == _botnickname && _map_game[channel].getGameOn() == false)
 		{
-			_map_game[channel].setGameOn(true);
-			
+			_map_game[channel].setGameOn(true);			
 			_map_game[channel].startGame();
-		}		
-		// else if (word.find(DB) == true && _map_game[channel].getGameOn() == true)	
-		// {
-		// 	// moderation 
-		// }
+		}
 		else if (word != "" && _map_game[channel].getGameOn() == true)			
 			_map_game[channel].playing(data, word); // 1er mot upadte 2 emsg // 2e mot + database + phrase		
 	}	

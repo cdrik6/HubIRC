@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:54:15 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 20:31:44 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 22:43:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ bool Game::getGameOn() const
 
 void Game::startGame()
 {
-	_scenario = rand()%2;
-	std::cout << _scenario << std::endl;
-	if (_scenario == 0)
+	_scenario = rand()%3;
+	// std::cout << _scenario << std::endl;
+	if (_scenario % 2 == 0)
 		_bot->reply("PRIVMSG " + _channel + " :Donnez-moi le sujet de la phrase (ex: le chat)" + "\r\n");			
 	else
 	{		
@@ -51,7 +51,7 @@ void Game::playing(Data& data, std::string word)
 {		
 	if (_words.size() == 0)	
 	{
-		if (_scenario == 0)
+		if (_scenario % 2 == 0)
 		{
 			_words.push_back(word);
 			_words.push_back(data.get_adj());
@@ -66,7 +66,7 @@ void Game::playing(Data& data, std::string word)
 	}
 	else if (_words.size() == 2)
 	{
-		if (_scenario == 0)
+		if (_scenario % 2== 0)
 		{
 			
 			_words.push_back(word);

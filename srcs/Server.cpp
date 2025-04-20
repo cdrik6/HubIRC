@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 03:47:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:38:21 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,6 +245,8 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 	 	username(tab_msg, clt_idx, tab_idx);
 	else if (toUpper(cmd) == "QUIT")
 	 	return (quit(tab_msg, clt_idx, tab_idx), KO);
+	else if (toUpper(cmd) == "IAMBOT")
+		iambot(tab_msg, clt_idx, tab_idx);
 	else if (_clts.at(clt_idx).get_registered() == true)
 	{
 		if (toUpper(cmd) == "PRIVMSG")		
@@ -266,9 +268,7 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 		else if (toUpper(cmd) == "NOTICE")
 			notice(tab_msg, clt_idx, tab_idx);
 		else if (toUpper(cmd) == "OPER")
-			oper(tab_msg, clt_idx, tab_idx);
-		else if (toUpper(cmd) == "IAMBOT")
-			iambot(tab_msg, clt_idx, tab_idx);
+			oper(tab_msg, clt_idx, tab_idx);		
 		else if (tab_idx == 0)
 			reply(COD_UNKNOWNCOMMAND, cmd + " " + ERR_UNKNOWNCOMMAND, clt_idx);
 	}

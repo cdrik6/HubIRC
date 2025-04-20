@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 03:35:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 21:36:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int main(int argc, char **argv)
         {         
             bot.initialize_connection(std::string(argv[1]), atoi(argv[2]), std::string(argv[3]));   
             bot.connect_to_server();
-			bot.select_initialisation();   
+			bot.select_initialisation();            
             while (bot.get_signal() == false)
 			{
 				if (bot.fd_ready_for_recv() == false)
 					break;
-                bot.routine(data);                
+                bot.routine(data);
 			}            
         }
         catch (std::exception &e)
