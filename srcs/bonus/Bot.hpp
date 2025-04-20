@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:53 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 03:36:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 13:24:34 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/select.h>
 # include <vector>
 # include <map>
+#include <algorithm>
 
 # include "Game.hpp"
 # include "Data.hpp"
