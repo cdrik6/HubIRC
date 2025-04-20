@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 18:30:05 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:26:02 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,15 +141,15 @@ void Bot::check_privmsg(Data& data)
 			if (i + 1 < _tab_recv.size())
 				channel = _tab_recv.at(i + 1);
 			if (i + 2 < _tab_recv.size())
-				word = _tab_recv.at(i + 2).substr(1);
+				word = _tab_recv.at(i + 2);
+			if (!word.empty())			
+				if (word.at(0) == ':')
+					word = _tab_recv.at(i + 2).substr(1);			
 		}							
-	}	
-	if (_map_game.empty() )
-		std::cout << "je suis vide " << std::endl;
-	if (!_map_game.empty() && _map_game.find(channel) != _map_game.end())
-	{
-		std::cout << "je suis ici " << std::endl;
-		if (word == "cadavre exquis" && _map_game[channel].getGameOn() == false)
+	}		
+	if (_map_game.find(channel) != _map_game.end())
+	{			
+		if (word == "!bot" && _map_game[channel].getGameOn() == false)
 		{
 			_map_game[channel].setGameOn(true);
 			

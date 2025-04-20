@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:42:24 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 03:38:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:44:24 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,18 @@ std::string Data::get_cc(void)
 	if (_cc.size() != 0)
 		return (_cc.at(rand()%_cc.size()));	
 	return("");	
+}
+
+std::string Data::get_verbs(void)
+{
+	if (_verbs.size() != 0)
+		return (_verbs.at(rand()%_verbs.size()));
+	return("");
+}
+
+std::string Data::get_subjects(void)
+{
+	if (_subjects.size() != 0)
+		return (_subjects.at(rand()%_subjects.size()));
+	return("");
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Game.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:24:54 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 18:25:42 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:00:18 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class Game
 		bool _game_on;
 		std::vector<std::string> _words;
 		std::string _channel;
+		int _scenario;
 		// int	 _step; // maybe useless if we use _words.size to know which step we are on
 		
 };

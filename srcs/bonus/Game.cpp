@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Game.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandm <alexandm@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:54:15 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 18:28:00 by alexandm         ###   ########.fr       */
+/*   Updated: 2025/04/20 20:31:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,47 @@ bool Game::getGameOn() const
 
 void Game::startGame()
 {
-	std::cout << "je suis la " << std::endl;
-	_bot->reply("PRIVMSG " + _channel + " :Donnez-moi le sujet de la phrase (ex: le chat)" + "\r\n");			
+	_scenario = rand()%2;
+	std::cout << _scenario << std::endl;
+	if (_scenario == 0)
+		_bot->reply("PRIVMSG " + _channel + " :Donnez-moi le sujet de la phrase (ex: le chat)" + "\r\n");			
+	else
+	{		
+		_bot->reply("PRIVMSG " + _channel + " :Donnez-moi un adjectif (ex: aride)" + "\r\n");
+	} 	
+		
 }
 
 void Game::playing(Data& data, std::string word)
 {		
 	if (_words.size() == 0)	
 	{
-		std::string adj = data.get_adj();
-		std::cout << "adj = " << adj << std::endl;
-		
-		_words.push_back(word);
-		_words.push_back(adj);
-		_bot->reply("PRIVMSG " + _channel + " :Donnez-moi le verbe 3e p.s. de la phrase (ex: boit)" + "\r\n");
+		if (_scenario == 0)
+		{
+			_words.push_back(word);
+			_words.push_back(data.get_adj());
+			_bot->reply("PRIVMSG " + _channel + " :Donnez-moi un verbe 3e p.s. de la phrase (ex: se saoule)" + "\r\n");
+		}			
+		else 	
+		{
+			_words.push_back(data.get_subjects());
+			_words.push_back(word);
+			_bot->reply("PRIVMSG " + _channel + " :Donnez-moi un complement de la phrase (ex: a cause de la pluie)" + "\r\n");
+		}
 	}
 	else if (_words.size() == 2)
 	{
-		std::string cc = data.get_cc();
-		std::cout << "cc = " << cc << std::endl;
-		
-		_words.push_back(word);
-		_words.push_back(cc);
+		if (_scenario == 0)
+		{
+			
+			_words.push_back(word);
+			_words.push_back(data.get_cc());
+		}
+		else
+		{
+			_words.push_back(data.get_verbs());
+			_words.push_back(word);
+		}
 
 		if (_words.size() == 4)
 		{

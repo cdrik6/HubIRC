@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:37:38 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 03:18:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 19:18:29 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ class Data
 		void loadData(std::string csv_name, std::vector<std::string> &vec);
 		std::string get_adj(void);
 		std::string get_cc(void);
+		std::string get_verbs(void);
+		std::string get_subjects(void);
 };
 
 #endif
