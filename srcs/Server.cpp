@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 21:38:21 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/21 00:28:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,32 +30,10 @@ Server::Server()
 
 Server::~Server()
 {
-	/***** draft****** */
-	std::cout << "Server destructor called\n";
-	// close (_srv_skt); // i = 1
-	for (int i = 1; i < _pfds.size(); i++)
-	{
+	std::cout << "Server destructor called\n";	
+	for (int i = 1; i < _pfds.size(); i++)	
 		close (_pfds.at(i).fd);
-	}
-	/************** */
 }
-
-// Server::Server(const Server& other)
-// {
-//     *this = other;
-// }
-
-// Server& Server::operator=(const Server& other)
-// {
-//     if (this == &other)
-// 		return (*this);
-//     _srv_skt = other._srv_skt;    
-//     _password = other._password;	
-//     _clts = other._clts;
-//     _pfds = other._pfds;
-//     _chnls = other._chnls;    
-// 	return (*this);
-// }
 
 //
 int Server::get_srv_skt(void) const
@@ -163,8 +141,7 @@ void Server::polling(void)
 					if (nbytes == 0)						
 						client_disconnect(":Connection closed by client", i, k);
 					if (nbytes == -1)
-					{
-						// std::cout << "fd = " << _pfds.at(i).fd << std::endl;
+					{						
 						std::vector<int>::iterator it = std::find(_fails.begin(), _fails.end(), _pfds.at(i).fd);
             			if (it == _fails.end())
                 			_fails.push_back(_pfds.at(i).fd);
@@ -180,9 +157,7 @@ void Server::polling(void)
 								welcome(k);					 			
 				}				
 			}
-		}
-		// for (int j = 0; j < _fails.size(); j++)
-		// 	std::cout << "fd = " << _fails.at(j) << std::endl;
+		}		
 		_fails.clear(); //clean_fails();
 	}
 }
@@ -282,10 +257,9 @@ int Server::client_idx(int clt_skt)
 		if (_clts.at(i).get_clt_skt() == clt_skt)			
 			return (i);		
 	}	
-	return (-1); // disconnected in between or error ?
+	return (-1); // disconnected in between or error 
 }
 
-// std::cout << "Socket " << _clients.at(clt_idx).get_clt_skt() << " closed the connection\n";	
 void Server::client_disconnect(std::string reason, int pfd_idx, int clt_idx)
 {
 	

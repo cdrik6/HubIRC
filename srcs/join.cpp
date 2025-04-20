@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Join.cpp                                           :+:      :+:    :+:   */
+/*   join.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 02:16:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:54:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,9 +136,6 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     // ADD
     _chnls.at(chnl_idx).set_chnlclts(_clts.at(clt_idx).get_clt_skt()); // add client to channel after (--> names list doesn't include the new one)
 }
-// std::cout << _chnls.at(chnl_idx).get_chnlclts().size() << " = tab clients in channel size\n";
-// std::cout << idx << " = idx\n";
-// std::cout << msg_replied << "\n";
 
 //:<nickname>!<user>@<host> JOIN <channel>     
 void Server::reply_join_new(std::string channel, int clt_idx)
@@ -163,10 +160,8 @@ void Server::create_chnl(std::string name, std::string key, int clt_idx)
     Channel new_chan;
 
     new_chan.set_name(name);    
-    new_chan.set_key(key);
-    // new_chan.set_chnlclts(&_clts.at(clt_idx));
-    new_chan.set_chnlclts(_clts.at(clt_idx).get_clt_skt());
-    // new_chan.add_operator(_clts.at(clt_idx).get_nickname()); // Add creator as operator of the channel
+    new_chan.set_key(key);    
+    new_chan.set_chnlclts(_clts.at(clt_idx).get_clt_skt());    
     new_chan.add_operator(_clts.at(clt_idx).get_clt_skt()); // Add creator as operator of the channel
     _chnls.push_back(new_chan);
 }

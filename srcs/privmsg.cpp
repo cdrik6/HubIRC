@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Privmsg.cpp                                        :+:      :+:    :+:   */
+/*   privmsg.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 02:05:48 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:42:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
                     int k = target_clt_idx(target.at(t));                    
-                    if (k != -1)                                        
-                        reply(COD_NONE, msg_replied, k);                                            
+                    if (k != -1 && _clts.at(k).get_registered())
+                        reply(COD_NONE, msg_replied, k);                                                            
                     else
                         reply(COD_NOSUCHNICK, target.at(t) + " " + ERR_NOSUCHNICK, clt_idx);  
                 }

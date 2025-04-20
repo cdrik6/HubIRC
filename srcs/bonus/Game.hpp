@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:24:54 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 19:00:18 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:01:33 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ class Game
 		Game(Bot *bot, std::string channel);
 		Game();
 		~Game();
-		void setGameOn(bool); // ou init 
+		void setGameOn(bool);
 		bool getGameOn() const;
 		void startGame();
 		void playing(Data& data, std::string word);
-		// void continueGame(std::string word); use this input to continue the game , will do the reply thanks to ptr bot
-		// void reset(); // reset all member variable to initial state or function to restart the game ???
 		
 	private:
 		Bot *_bot;
@@ -40,8 +38,6 @@ class Game
 		std::vector<std::string> _words;
 		std::string _channel;
 		int _scenario;
-		// int	 _step; // maybe useless if we use _words.size to know which step we are on
-		
 };
 
 #endif

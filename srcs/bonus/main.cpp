@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 21:36:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:04:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ std::vector<std::string> split(std::string str)
         
         while (iss >> token)
         {
-            if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
+            if (token.at(0) == ':')
                 break;                        
             tab.push_back(token);        
             // std::cout << "token = [" << token << "]" << std::endl;

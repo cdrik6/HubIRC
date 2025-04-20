@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 03:53:31 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:55:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,29 +74,14 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
                 + "@" + _clts.at(clt_idx).get_hostname() + " KICK " + _chnls.at(chnl_idx).get_name();                
 	
 	for (int j = 0; j < users.size(); j++)
-	{
-		// int tgt_idx = target_chnlclt_idx(users.at(j), chnl_idx);		
-		// std::cout << "tgt idx = " << tgt_idx << std::endl;
-		// std::string tgt_nick = _clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(tgt_idx))).get_nickname();		
-		// std::cout << "target kicked = " << tgt_nick << std::endl;
-		int tgt_fd = target_chnlclt_fd(users.at(j), chnl_idx);
-		// std::cout << "tgt fd = " << tgt_fd << std::endl;
-		// std::string tgt_nick = _clts.at(client_idx(tgt_fd)).get_nickname();
-		// std::cout << "target kicked = " << tgt_nick << std::endl;
-		// std::cout << "in_channel = " << in_channel(chnl_idx, tgt_idx) << std::endl;
-		
+	{		
+		int tgt_fd = target_chnlclt_fd(users.at(j), chnl_idx);		
 		if (tgt_fd != -1)
 		{			
 			msg_replied = msg_replied + " " + users.at(j) + reason;
-			reply_to_all(msg_replied, chnl_idx);			
-			// if (is_operator())
-			// std::cout << "je suis ici " << std::endl;
-			// std::cout << "tgt_fd = "<< tgt_fd << std::endl;				
-			_chnls.at(chnl_idx).rem_operator(tgt_fd);
-			// std::cout << "je suis ici la" << std::endl;
-			// if (is_invitee())
-			_chnls.at(chnl_idx).rem_invitee(tgt_fd);
-			// std::cout << "je suis encore" << std::endl;
+			reply_to_all(msg_replied, chnl_idx);
+			_chnls.at(chnl_idx).rem_operator(tgt_fd);			
+			_chnls.at(chnl_idx).rem_invitee(tgt_fd);			
 			_chnls.at(chnl_idx).rem_chnlclt(tgt_fd);			
 		}
 		else

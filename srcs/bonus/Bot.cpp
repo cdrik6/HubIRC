@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 22:28:34 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:10:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	Bot::connect_to_server(void)
 	if (connect(this->_socketfd, (sockaddr*)&(this->_address), sizeof(this->_address)) == -1)
         throw (std::runtime_error("connect: " + std::string(strerror(errno))));
 	reply("PASS " + this->_password + "\r\n" + "NICK " + this->_botnickname + "\r\n" + "USER " + this->_botusername + " 0 * :" + this->_botusername + "\r\n");
-	reply("IAMBOT robot\r\n");
+	reply("IAMBOT " + std::string(BOTKEY) + "\r\n");
 }
 
 void	Bot::received_from_server()
@@ -101,29 +101,21 @@ void Bot::check_invite(void)
 			if (i + 2 < _tab_recv.size())
 				channel_to_join = _tab_recv.at(i + 2);
 	}		
-	if (channel_to_join != "")
-	{				
-		// std::cout << channel_to_join << std::endl;		
-		reply("JOIN " + channel_to_join + "\r\n"); 
-	}
+	if (channel_to_join != "")		
+		reply("JOIN " + channel_to_join + "\r\n");	
 }
 
 void Bot::check_join(void)
 {		
-	std::string channel_to_join;
-	bool new_channel = false;
+	std::string channel_to_join;	
 	
 	for (int i = 0; i < _tab_recv.size(); i++)
-	{			
-		// if (_tab_recv.at(i).find(_botnickname) != std::string::npos)
-		// if (i + 1 < _tab_recv.size())
+	{		
 		if (_tab_recv.at(i) == "JOIN")			
 			if (i + 1 < _tab_recv.size())
 				channel_to_join = _tab_recv.at(i + 1);
-	}	
-    // if (find(_channel_joined.begin(), _channel_joined.end(), channel_to_join) == _channel_joined.end())
-	// 	new_channel == true;
-	if (channel_to_join != "") // && new_channel == true)
+	}	    
+	if (channel_to_join != "")
 	{
 		Game botgame(this, channel_to_join);
 		_map_game[channel_to_join] = botgame;

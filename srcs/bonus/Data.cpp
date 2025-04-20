@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:42:24 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 19:44:24 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:03:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ Data::Data()
 	loadData("data/subjects.csv", this->_subjects);
 	loadData("data/verbs.csv", this->_verbs);
 	loadData("data/adj.csv", this->_adj);
-	loadData("data/cc.csv", this->_cc);
-	loadData("data/forbidden_words.csv", this->_forbidden_words);
+	loadData("data/cc.csv", this->_cc);	
 	srand(static_cast<unsigned int>(time(NULL)));
 }
 

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 00:53:32 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:57:04 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ int main(int argc, char **argv)
             irc.polling();
         }
         catch (std::exception &e)
-        {
-            // **** destructor called (otherwise would need to close fds) *** /
-            // return (std::cerr << "main exception: " << e.what() << std::endl, KO); // destructor
+        {            
             std::cerr << "main exception: " << e.what() << std::endl;
         }        
     }
@@ -69,12 +67,12 @@ std::vector<std::string> split(std::string str)
             if (line.at(0) == ':')
                 line = line.substr(1);
             i = line.find_first_of(":");
-            if (i != std::string::npos) // && i + 1 < str.length()) // worst case  "... :\r\n"
+            if (i != std::string::npos) // worst case  "... :\r\n"
             {
                 msg = line.substr(i);  // msg worst ":\r" // keep the ":"
                 if (msg.at(msg.length() - 1) == '\r')
                     msg = msg.substr(0, msg.length() - 1); // remove \r                
-                std::cout << "msg = [" << msg << "]" << std::endl;
+                // std::cout << "msg = [" << msg << "]" << std::endl;
                 if (!msg.empty())
                     is_msg = true;
             }
@@ -86,15 +84,15 @@ std::vector<std::string> split(std::string str)
         
         while (iss >> token)
         {
-            if (token.at(0) == ':') //&& token.at(0) != str.at(0))            
+            if (token.at(0) == ':')
                 break;                        
             tab.push_back(token);        
-            std::cout << "token = [" << token << "]" << std::endl;
+            // std::cout << "token = [" << token << "]" << std::endl;
         }
         if (is_msg == true) 
             tab.push_back(msg);        
     }
-    std::cout << std::endl; /*************** */    
+    // std::cout << std::endl;
     return (tab);
 }
 

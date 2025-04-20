@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:37:38 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 19:18:29 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:02:43 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ class Data
 		std::vector<std::string> _subjects;
 		std::vector<std::string> _verbs;
 		std::vector<std::string> _adj;
-		std::vector<std::string> _cc;
-		std::vector<std::string> _forbidden_words;
+		std::vector<std::string> _cc;		
 	
 	public:
 		Data();

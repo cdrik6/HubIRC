@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:21:15 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 22:37:41 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:49:37 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Server::iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             
             for (int i = 0; i < _clts.size(); i++) 
             {
-                if (_clts.at(i).get_registered()) /***************************** correction to do in Notice and Prvmsg as well *********/
+                if (_clts.at(i).get_registered())
                 {
                     msg_replied = ":ircserv NOTICE " + _clts.at(i).get_nickname();
                     if (i != clt_idx)                                                

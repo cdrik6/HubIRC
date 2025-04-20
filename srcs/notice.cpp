@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Notice.cpp                                         :+:      :+:    :+:   */
+/*   notice.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 00:24:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 01:49:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/20 23:42:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
                 {
                     int k = target_clt_idx(target.at(t));                    
-                    if (k != -1)                    
+                    if (k != -1 && _clts.at(k).get_registered())
                         reply(COD_NONE, msg_replied, k);                
                     else
                         notification(COD_NOSUCHNICK, target.at(t) + " " + ERR_NOSUCHNICK);  
