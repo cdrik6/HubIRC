@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 23:10:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:31:05 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void Bot::check_join(void)
 	{
 		Game botgame(this, channel_to_join);
 		_map_game[channel_to_join] = botgame;
+		reply("IAMBOT " + std::string(BOTKEY) + "\r\n");
 	}	
 }
 
