@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 21:01:31 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:57:04 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/23 06:02:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 int main(int argc, char **argv)
 {    
     if (argc != 3)
-        return(std::cerr << "Usage: ./ircserv <port> <password>" << std::endl, OK);       
+    {
+        return(std::cerr << "Usage: ./ircserv <port> <password>" << std::endl, OK);
+    }        
 	if (check_port(argv[1]) == OK && strlen(argv[2]) > 0 && strlen(argv[2]) < PASSLEN)
     {           
         signal(SIGINT, Server::handle_signal);
@@ -61,7 +63,7 @@ std::vector<std::string> split(std::string str)
         // check / clean the ":"
         std::string msg = "";
         bool is_msg = false;
-        int i = 0;        
+        size_t i = 0;        
         if (!line.empty())
         {
             if (line.at(0) == ':')

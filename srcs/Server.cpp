@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/21 00:28:40 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/23 06:05:51 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 Server::Server(char *port, std::string password)
 {
-	add_pfds(STDIN_FILENO, POLLIN); // add std_in en 0	
 	_password = password;
-	_srv_skt = create_srv_skt(port); 
+	_srv_skt = create_srv_skt(port); // exit inside the functionhere in case of failing
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
+	add_pfds(STDIN_FILENO, POLLIN); // add std_in en 0	
 	add_pfds(_srv_skt, POLLIN); // server en 1	
 	std::cout << "Server: waiting for connections...\n";
 	std::cout << "Server: \"stop\" to stop it\n\n";
@@ -31,7 +31,7 @@ Server::Server()
 Server::~Server()
 {
 	std::cout << "Server destructor called\n";	
-	for (int i = 1; i < _pfds.size(); i++)	
+	for (size_t i = 1; i < _pfds.size(); i++)	
 		close (_pfds.at(i).fd);
 }
 
@@ -117,7 +117,7 @@ void Server::polling(void)
 				break;
 			// check sockets in use
 			if (std::string(buff, nbytes) == "socket\n")			
-				for (int i = 0; i < _pfds.size(); i++)				
+				for (size_t i = 0; i < _pfds.size(); i++)				
 					std::cout << "Socket " << _pfds.at(i).fd << " is connected\n";
 		}		
 		
@@ -126,7 +126,7 @@ void Server::polling(void)
 			client_connect();
 			
 		// ckeck revents of clients 
-		for (int i = 2; i < _pfds.size(); i++)
+		for (size_t i = 2; i < _pfds.size(); i++)
 		{
 			if (_pfds.at(i).revents & (POLLIN | POLLHUP)) // if got one ready to read
 			{
@@ -191,7 +191,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 		tab_msg = split(_clts.at(clt_idx).get_msg());		
 		if (tab_msg.size() == 0)
 			return (std::cout << "tab empty" << std::endl, KO);
-		for (int i = 0; i < tab_msg.size(); i++)
+		for (size_t i = 0; i < tab_msg.size(); i++)
 		{			
 			// std::cout << i << " = [" << tab_msg[i] << "]" << std::endl;
 			if (get_command(tab_msg, tab_msg[i], clt_idx, i) == KO)
@@ -252,7 +252,7 @@ int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int
 
 int Server::client_idx(int clt_skt)
 {
-	for (int i = 0; i < _clts.size(); i++)
+	for (size_t i = 0; i < _clts.size(); i++)
 	{		
 		if (_clts.at(i).get_clt_skt() == clt_skt)			
 			return (i);		
@@ -313,9 +313,9 @@ void Server::clean_fails(void)
 	int clt_idx = -1;
 	int pfd_idx = -1;
 	
-	for (int i = 0; i < _fails.size(); i++)
+	for (size_t i = 0; i < _fails.size(); i++)
 	{		
-		for (int j = 0; j < _chnls.size(); j++)
+		for (size_t j = 0; j < _chnls.size(); j++)
 		{
 			_chnls.at(j).rem_operator(_fails.at(i));
 			_chnls.at(j).rem_invitee(_fails.at(i));
@@ -324,7 +324,7 @@ void Server::clean_fails(void)
 		clt_idx = client_idx(_fails.at(i));
 		if (clt_idx != -1)		
 			_clts.erase(_clts.begin() + clt_idx);					
-		for (int j = 2; j < _pfds.size(); j++)
+		for (size_t j = 2; j < _pfds.size(); j++)
     	{
         	if (_pfds.at(j).fd == _fails.at(i))
         	{

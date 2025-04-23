@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/20 01:27:48 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/23 05:58:29 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,14 @@ SRCS		=	main.cpp \
 				Game.cpp \
 				Bot.cpp
 
-CC			=	c++
+CXX			=	c++
 
-CFLAGS		=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
 OBJS		=	$(SRCS:.cpp=.o)
+
+%.o:%.cpp		
+			$(CXX) $(CXXFLAGS) -c $< -o $(<:.cpp=.o)
 
 $(NAME):	$(OBJS)			
 			$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
