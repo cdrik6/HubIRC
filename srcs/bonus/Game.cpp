@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/19 22:54:15 by alexandm          #+#    #+#             */
-/*   Updated: 2025/04/20 23:00:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:30:19 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void Game::startGame()
 	_scenario = rand()%3;
 	// std::cout << _scenario << std::endl;
 	if (_scenario % 2 == 0)
-		_bot->reply("PRIVMSG " + _channel + " :Donne moi le sujet de la phrase (ex: le chat)" + "\r\n");			
+		_bot->reply("PRIVMSG " + _channel + " :Donne moi le sujet de la phrase (ex: @le chat)" + "\r\n");			
 	else
 	{		
-		_bot->reply("PRIVMSG " + _channel + " :Donne moi un adjectif (ex: aride)" + "\r\n");
+		_bot->reply("PRIVMSG " + _channel + " :Donne moi un adjectif (ex: @aride)" + "\r\n");
 	} 	
 		
 }
@@ -55,13 +55,13 @@ void Game::playing(Data& data, std::string word)
 		{
 			_words.push_back(word);
 			_words.push_back(data.get_adj());
-			_bot->reply("PRIVMSG " + _channel + " :Donne moi un verbe a la 3e p.s. (ex: se saoule)" + "\r\n");
+			_bot->reply("PRIVMSG " + _channel + " :Donne moi un verbe a la 3e p.s. (ex: @se saoule)" + "\r\n");
 		}			
 		else 	
 		{
 			_words.push_back(data.get_subjects());
 			_words.push_back(word);
-			_bot->reply("PRIVMSG " + _channel + " :Donne moi un complement ou un adverbe (ex: a cause de la pluie)" + "\r\n");
+			_bot->reply("PRIVMSG " + _channel + " :Donne moi un complement ou un adverbe (ex: @a cause de la pluie)" + "\r\n");
 		}
 	}
 	else if (_words.size() == 2)

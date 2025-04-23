@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/20 23:10:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/21 15:39:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,8 @@ void Bot::check_join(void)
 	if (channel_to_join != "")
 	{
 		Game botgame(this, channel_to_join);
-		_map_game[channel_to_join] = botgame;
+		_map_game[channel_to_join] = botgame;		
+		reply("PRIVMSG " + channel_to_join + " :Je suis " + _botnickname + " ton bot ! Invite moi et tape @" + _botnickname + " pour jouer." + "\r\n");
 	}	
 }
 
