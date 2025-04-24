@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Invite.cpp                                         :+:      :+:    :+:   */
+/*   invite.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 15:13:27 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:20:19 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:06:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // :inviter INVITE <invitee> <channel> // INVITE no parameter --> not standard
 void Server::invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1; // invitee
+    size_t i = tab_idx + 1; // invitee
     
     if (i >= tab_msg.size()) // Query invitees list, out of scope           
         reply(COD_NEEDMOREPARAMS, "INVITE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);

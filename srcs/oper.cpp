@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Oper.cpp                                           :+:      :+:    :+:   */
+/*   oper.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 03:38:36 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/14 18:25:02 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:06:58 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // OPER <name> <password>
 void Server::oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {       
-    int i = tab_idx + 1;    
+    size_t i = tab_idx + 1;    
     
     if (i + 1 >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "OPER " + std::string(ERR_NEEDMOREPARAMS), clt_idx);    

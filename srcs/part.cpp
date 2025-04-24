@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Part.cpp                                           :+:      :+:    :+:   */
+/*   part.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/16 23:54:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:09:17 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // PART <channel>{,<channel>} [ :<message> ]
 void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     std::string msg_replied;
     std::vector<std::string> channels;
     std::string reason = "";
@@ -40,10 +40,10 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     // check 
     if (!channels.empty())
     {
-        for (int j = 0; j < channels.size(); j++)        
+        for (size_t j = 0; j < channels.size(); j++)        
         {
             bool is_a_chnl = false;
-            for (int k = 0; k < _chnls.size(); k++)
+            for (size_t k = 0; k < _chnls.size(); k++)
             {                
                 if (channels.at(j) == _chnls.at(k).get_name())
                 {
@@ -71,6 +71,6 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 
 void Server::reply_to_all(std::string msg_replied, int chnl_idx)
 {
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
         reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)));        
 }

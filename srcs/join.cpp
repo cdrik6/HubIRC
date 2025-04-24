@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:54:20 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:01:22 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     std::vector<std::string> channels; 
     std::vector<std::string> keys;
     
@@ -29,7 +29,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         i++;        
         if (i < tab_msg.size())                    
             keys = split_char(tab_msg.at(i), ',');
-        int ks = keys.size();     
+        size_t ks = keys.size();     
         while (ks < channels.size())
         {
             keys.push_back("");
@@ -41,12 +41,12 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
     bool new_chan;    
     if (channels.size() != 0)
     {
-        for (int j = 0; j < channels.size(); j++)
+        for (size_t j = 0; j < channels.size(); j++)
         {            
             if (check_channel(channels.at(j).substr(1)) == OK && check_key(keys.at(j)) == OK)
             {
                 new_chan = true;
-                for (int k = 0; k < _chnls.size(); k++)
+                for (size_t k = 0; k < _chnls.size(); k++)
                 {
                     if (channels.at(j) == _chnls.at(k).get_name())
                     {                      
@@ -56,7 +56,7 @@ void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                             // invite, limit, key --> in that order for irssi
                             if (_chnls.at(k).get_mode_i() == false) // not invite-only
                             {                                
-                                if (_chnls.at(k).get_limit() == -1 || _chnls.at(k).get_chnlclts().size() < _chnls.at(k).get_limit())
+                                if (_chnls.at(k).get_limit() == -1 || (int)_chnls.at(k).get_chnlclts().size() < _chnls.at(k).get_limit())
                                 {                                       
                                     if (keys.at(j) == _chnls.at(k).get_key())
                                         reply_join_add(channels.at(j), k, clt_idx);
@@ -123,7 +123,7 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
     }    
     // NAMES LIST   
     msg_replied = "= " + channel + " :";    
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {        
         fd = _chnls.at(chnl_idx).get_chnlclts().at(i);        
         if (_chnls.at(chnl_idx).is_operator(fd))
@@ -172,7 +172,7 @@ int Server::check_channel(std::string chan_name)
     
     if (chan_name.length() > CHANLEN || chan_name.length() == 0)
         return (KO);    
-    for (int i = 0; i < chan_name.length(); i++)
+    for (size_t i = 0; i < chan_name.length(); i++)
     {           
         if(!isalnum(chan_name.at(i)) && allowed.find(chan_name.at(i)) == std::string::npos)
             return (KO);
@@ -190,7 +190,7 @@ int Server::check_key(std::string key_name)
         return (OK);
     if (key_name.length() > 32)
         return (KO);    
-    for (int i = 0; i < key_name.length(); i++)
+    for (size_t i = 0; i < key_name.length(); i++)
     {           
         if(!isalnum(key_name.at(i)) && allowed.find(key_name.at(i)) == std::string::npos)
             return (KO);

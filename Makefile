@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/23 05:58:01 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/24 17:03:45 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,9 +30,9 @@ SRCS		=	srcs/main.cpp \
 				srcs/part.cpp \
 				srcs/iambot.cpp
 				
-CXX			=	c++
+CXX			=	g++
 
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
 
 OBJS		=	$(SRCS:.cpp=.o)
 
@@ -40,7 +40,7 @@ OBJS		=	$(SRCS:.cpp=.o)
 			$(CXX) $(CXXFLAGS) -c $< -o $(<:.cpp=.o)
 
 $(NAME):	$(OBJS)			
-			$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+			$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 			
 all:		$(NAME)
 

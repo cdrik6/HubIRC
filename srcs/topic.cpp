@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Topic.cpp                                          :+:      :+:    :+:   */
+/*   topic.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/17 00:04:28 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:05:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // Topic #test : --> clear the topic
 void Server::topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "TOPIC " + std::string(ERR_NEEDMOREPARAMS), clt_idx);

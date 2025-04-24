@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/21 00:18:36 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:04:44 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // IRC_ops are not channel operator by default (they must use froce to get it)
 void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {       
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "MODE " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
@@ -55,7 +55,7 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     first = false;
                     i++;                 
                 }                                
-                for (int i = 0; i < modes.size(); i++)
+                for (size_t i = 0; i < modes.size(); i++)
                 {
                     if (modes.at(i).at(0) == '+')
                     {
@@ -86,7 +86,7 @@ void Server::parse_mode(std::string modestr, std::vector<std::string> *modes, st
     // Ignore letters waiting for good format to change mode
     if (first)
     {
-        int i = 0;
+        size_t i = 0;
         while (i < modestr.length() && modestr.at(i) != '+' && modestr.at(i) != '-')    
             i++;
         modestr = modestr.substr(i);
@@ -102,8 +102,8 @@ void Server::parse_mode(std::string modestr, std::vector<std::string> *modes, st
         // std::cout << "token parsed = [" << token << "]" << std::endl;
         if ((token.at(0) == '+' || token.at(0) == '-') && token.size() > 1 && !isdigit(token.at(1)))
         {
-            int p = 0;
-            int i = 1;
+            size_t p = 0;
+            size_t i = 1;
             while (i < token.size())
             {
                 if (token.at(i) == '+' || token.at(i) == '-')
@@ -138,7 +138,7 @@ std::vector<std::string> Server::set_plus(std::string plus, std::vector<std::str
     std::string letters = "";
     std::vector<std::string> mode_plus;
     
-    int i = 0;    
+    size_t i = 0;    
     while (i < plus.length())
     {
         if (allowed.find(plus.at(i)) != std::string::npos)
@@ -235,7 +235,7 @@ std::vector<std::string> Server::set_minus(std::string minus, std::vector<std::s
     std::string letters = "";
     std::vector<std::string> mode_minus;
         
-    int i = 0;    
+    size_t i = 0;    
     while (i < minus.length())
     {
         if (allowed.find(minus.at(i)) != std::string::npos)
@@ -310,7 +310,7 @@ int Server::check_limit(std::string limit)
 
 int Server::nick_in_channel(int chnl_idx, std::string nick)
 {    
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {
         if (_clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i))).get_nickname() == nick)
             return (OK);

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:55:58 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:05:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // <channel> <user> *( "," <user> ) [:<comment>]
 void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "KICK " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
@@ -73,7 +73,7 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 	msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                 + "@" + _clts.at(clt_idx).get_hostname() + " KICK " + _chnls.at(chnl_idx).get_name();                
 	
-	for (int j = 0; j < users.size(); j++)
+	for (size_t j = 0; j < users.size(); j++)
 	{		
 		int tgt_fd = target_chnlclt_fd(users.at(j), chnl_idx);		
 		if (tgt_fd != -1)

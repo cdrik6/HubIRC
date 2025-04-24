@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 15:50:24 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:23:46 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:55:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void Channel::add_operator(int clt_fd)
 
 void Channel::rem_operator(int clt_fd)
 {
-	for (int i = 0; i < _operators.size(); i++)
+	for (size_t i = 0; i < _operators.size(); i++)
 	{
 		if (_operators.at(i) == clt_fd)
 		{
@@ -172,7 +172,7 @@ void Channel::rem_operator(int clt_fd)
 
 bool Channel::is_operator(int clt_fd)
 {
-	for (int i = 0; i < _operators.size(); i++)
+	for (size_t i = 0; i < _operators.size(); i++)
 	{
 		if (_operators.at(i) == clt_fd)
 			return (true);					
@@ -188,7 +188,7 @@ void Channel::add_invitee(int clt_fd)
 
 void Channel::rem_invitee(int clt_fd)
 {
-	for (int i = 0; i < _invitees.size(); i++)
+	for (size_t i = 0; i < _invitees.size(); i++)
 	{
 		if (_invitees.at(i) == clt_fd)
 		{
@@ -200,7 +200,7 @@ void Channel::rem_invitee(int clt_fd)
 
 bool Channel::is_invitee(int clt_fd)
 {
-	for (int i = 0; i < _invitees.size(); i++)
+	for (size_t i = 0; i < _invitees.size(); i++)
 	{
 		if (_invitees.at(i) == clt_fd)
 			return (true);					
@@ -210,7 +210,7 @@ bool Channel::is_invitee(int clt_fd)
 
 void Channel::rem_chnlclt(int chnlclt_fd)
 {
-	for (int i = 0; i < _chnlclts.size(); i++)
+	for (size_t i = 0; i < _chnlclts.size(); i++)
 	{
 		if (_chnlclts.at(i) == chnlclt_fd)
 		{

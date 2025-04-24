@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:42:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:57:49 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // PRIVMSG target1,target2 msgwithnospace --> ":" optionnal
 void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {    
-    int i = tab_idx;
+    size_t i = tab_idx;
     std::vector<std::string> target;    
     std::string msg;
     std::string msg_replied;    
@@ -40,7 +40,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
         while (i < tab_msg.size() - 1 && tab_msg.at(i).at(0) != ':') // recipients list
         {
             target = split_char(tab_msg.at(i), ','); // splitted by irssi actually, for nc
-            for (int t = 0; t < target.size(); t++)
+            for (size_t t = 0; t < target.size(); t++)
             {                   
                 msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
                     + "@" + _clts.at(clt_idx).get_hostname() + " PRIVMSG"; // from
@@ -60,7 +60,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
                     {           
                         if (in_channel(k, clt_idx) != -1)
                         {
-                            for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
+                            for (size_t j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
                             {                                
                                 int fd = _chnls.at(k).get_chnlclts().at(j);
                                 if (client_idx(fd) != clt_idx) // all except itself for channel (itself ok for direct message)
@@ -82,7 +82,7 @@ void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx
 // return where is clt_fd in _chnlclts 
 int Server::in_channel(int chnl_idx, int clt_idx)
 {
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {        
         if (_chnls.at(chnl_idx).get_chnlclts().at(i) == _clts.at(clt_idx).get_clt_skt())
             return (i);
@@ -93,7 +93,7 @@ int Server::in_channel(int chnl_idx, int clt_idx)
 // return clt_idx
 int Server::target_clt_idx(std::string target)
 {
-    for (int i = 0; i < _clts.size(); i++)       
+    for (size_t i = 0; i < _clts.size(); i++)       
         if (_clts.at(i).get_nickname() == target)
             return (i);
     return (-1);
@@ -102,7 +102,7 @@ int Server::target_clt_idx(std::string target)
 // return clt_fd
 int Server::target_clt_fd(std::string target)
 {
-    for (int i = 0; i < _clts.size(); i++)       
+    for (size_t i = 0; i < _clts.size(); i++)       
         if (_clts.at(i).get_nickname() == target)
             return (_clts.at(i).get_clt_skt());
     return (-1);
@@ -111,7 +111,7 @@ int Server::target_clt_fd(std::string target)
 // return index in _chnlclt not the value at _chnlclt(i)
 int Server::target_chnlclt_idx(std::string target, int chnl_idx)
 {
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {           
         if ( _clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i))).get_nickname() == target)
             return (i);            
@@ -122,7 +122,7 @@ int Server::target_chnlclt_idx(std::string target, int chnl_idx)
 // return clt_fd in the channel
 int Server::target_chnlclt_fd(std::string target, int chnl_idx)
 {
-    for (int i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
+    for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
     {           
         if ( _clts.at(client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i))).get_nickname() == target)
             return (_chnls.at(chnl_idx).get_chnlclts().at(i));            
@@ -132,7 +132,7 @@ int Server::target_chnlclt_fd(std::string target, int chnl_idx)
 
 int Server::channel_idx(std::string channel)
 {
-	for (int i = 0; i < _chnls.size(); i++)
+	for (size_t i = 0; i < _chnls.size(); i++)
 	{		
 		if (_chnls.at(i).get_name() == channel)			
 			return (i);		

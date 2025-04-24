@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 00:24:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:42:54 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:06:42 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void notification(std::string code, std::string error);
 // NOTICE target1,target2 msgwithnospace --> ":" optionnal
 void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {    
-    int i = tab_idx;
+    size_t i = tab_idx;
     std::vector<std::string> target;    
     std::string msg;
     std::string msg_replied;    
@@ -39,7 +39,7 @@ void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         while (i < tab_msg.size() - 1 && tab_msg.at(i).at(0) != ':') // recipients list
         {
             target = split_char(tab_msg.at(i), ','); // splitted by irssi actually, for nc
-            for (int t = 0; t < target.size(); t++)
+            for (size_t t = 0; t < target.size(); t++)
             {                   
                 msg_replied = ":ircserv NOTICE " + target.at(t) + " " + msg; // to            
                 if (target.at(t).at(0) != '#' && target.at(t).at(0) != '&')
@@ -57,7 +57,7 @@ void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
                     {           
                         if (in_channel(k, clt_idx) != -1)
                         {
-                            for (int j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
+                            for (size_t j = 0; j < _chnls.at(k).get_chnlclts().size(); j++)                    
                             {                                   
                                 int fd = _chnls.at(k).get_chnlclts().at(j);
                                 if (client_idx(fd) != clt_idx) // all except itself for channel (itself ok for direct message)

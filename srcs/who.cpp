@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:54:39 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/21 00:29:14 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:01:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // :irc.local 352 request-toto #test listed-user1 listed-host1 irc.local listed-nick-titi H :0 Titi Realname
 void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {       
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "WHO " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
@@ -30,7 +30,7 @@ void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         
         if (chnl_idx != -1)        
         {
-            for (int j = 0; j < _chnls.at(chnl_idx).get_chnlclts().size(); j++)
+            for (size_t j = 0; j < _chnls.at(chnl_idx).get_chnlclts().size(); j++)
             {
                 int idx = client_idx(_chnls.at(chnl_idx).get_chnlclts().at(j));
                 msg_replied = channel + " " + _clts.at(idx).get_username() + " " + _clts.at(idx).get_hostname();

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/19 03:20:31 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:54:52 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 // PONG: [<server>] <token>
 void Server::ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
         
 	if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "PING " + std::string(ERR_NEEDMOREPARAMS), clt_idx);
@@ -50,7 +50,7 @@ void Server::ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 
 void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {    
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     
 	// verify password    
 	if (i >= tab_msg.size())
@@ -64,7 +64,7 @@ void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 // NICK command is used to give user a nickname or change the existing one
 void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     std::string nick;    
         
     if (i >= tab_msg.size())
@@ -97,7 +97,7 @@ int Server::check_nick(std::string nick)
         return (KO);
     if (isdigit(nick.at(0)))
         return (KO);    
-    for (int i = 0; i < nick.length(); i++)
+    for (size_t i = 0; i < nick.length(); i++)
     {           
         if(!isalnum(nick.at(i)) && allowed.find(nick.at(i)) == std::string::npos)
             return (KO);
@@ -107,9 +107,9 @@ int Server::check_nick(std::string nick)
 
 int Server::nick_available(std::string nick, int clt_idx)
 {    
-    for (int i = 0; i < _clts.size(); i++)
+    for (size_t i = 0; i < _clts.size(); i++)
     {
-        if (i != clt_idx)
+        if ((int)i != clt_idx)      
             if (toUpper(_clts.at(i).get_nickname()) == toUpper(nick))
                 return (KO);
     }
@@ -120,7 +120,7 @@ int Server::nick_available(std::string nick, int clt_idx)
 // USER <username> 0 * :<realname> // USER  username nickname hostname :realname
 void Server::username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {
-    int i = tab_idx;    
+    size_t i = tab_idx;    
     std::string user;
     std::string real;    
         
@@ -155,7 +155,7 @@ int Server::check_user(std::string user)
         return (KO);
     if (isdigit(user.at(0)))
         return (KO);    
-    for (int i = 0; i < user.length(); i++)
+    for (size_t i = 0; i < user.length(); i++)
     {           
         if(!isalnum(user.at(i)) && allowed.find(user.at(i)) == std::string::npos)
             return (KO);

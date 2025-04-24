@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 00:21:15 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:49:37 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 15:11:03 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // IAMBOT keybot
 void Server::iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 {       
-    int i = tab_idx + 1;
+    size_t i = tab_idx + 1;
     
     if (i >= tab_msg.size())
         reply(COD_NEEDMOREPARAMS, "IAMBOT " + std::string(ERR_NEEDMOREPARAMS), clt_idx);    
@@ -31,12 +31,12 @@ void Server::iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
             std::string msg_bot = ":Salut le bot !";
             std::string msg_replied;            
             
-            for (int i = 0; i < _clts.size(); i++) 
+            for (size_t i = 0; i < _clts.size(); i++) 
             {
                 if (_clts.at(i).get_registered())
                 {
                     msg_replied = ":ircserv NOTICE " + _clts.at(i).get_nickname();
-                    if (i != clt_idx)                                                
+                    if ((int)i != clt_idx)                                                
                         msg_replied = msg_replied + " " + msg;
                     else 
                         msg_replied = msg_replied + " " + msg_bot;
