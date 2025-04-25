@@ -6,14 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 03:38:36 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 15:06:58 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:23:05 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // OPER <name> <password>
-void Server::oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::oper(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {       
     size_t i = tab_idx + 1;    
     

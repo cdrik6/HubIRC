@@ -6,14 +6,14 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 15:05:47 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:22:43 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Server.hpp"
 
 // <channel> <user> *( "," <user> ) [:<comment>]
-void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::kick(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {
     size_t i = tab_idx + 1;
     

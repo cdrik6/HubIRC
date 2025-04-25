@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:55:26 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/18 00:43:10 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/25 01:05:57 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 # define COD_YOURHOST "002"
 # define RPL_YOURHOST ":Your host is localhost, running version causette-0.1"
 # define COD_CREATED "003"
-# define RPL_CREATED ":This server was created over March 2025"
+# define RPL_CREATED ":This server was created over March and April 2025"
 # define COD_MYINFO "004"
 # define RPL_MYINFO ":ircserv 0.1" // <available user modes> <available channel modes>
 // MOTD

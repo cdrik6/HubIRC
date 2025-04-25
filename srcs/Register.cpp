@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 14:54:52 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/25 03:09:18 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Server::reply(std::string code, std::string msg_replied, int clt_idx)
 }
 
 // PONG: [<server>] <token>
-void Server::ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::ping(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {
     size_t i = tab_idx + 1;
         
@@ -48,7 +48,7 @@ void Server::ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
         reply(COD_NONE, "PONG " + tab_msg.at(i), clt_idx);            
 }
 
-void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {    
     size_t i = tab_idx + 1;
     
@@ -62,7 +62,7 @@ void Server::pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
 }
 
 // NICK command is used to give user a nickname or change the existing one
-void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {
     size_t i = tab_idx + 1;
     std::string nick;    
@@ -81,6 +81,22 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_id
             std::string oldnick = _clts.at(clt_idx).get_nickname();
             _clts.at(clt_idx).set_nickname(nick);
             reply(COD_NONE, ":" + oldnick + " NICK " + nick, clt_idx);
+            
+            // // inform others in the same channel // :oldnick!user@host NICK newnick
+            // for (size_t i = 0; i < _chnls.size(); i++)
+            // {
+            //     if (in_channel(i, clt_idx) != -1)
+            //     {
+            //         for (size_t j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+            //         {
+            //             if (client_idx(_chnls.at(i).get_chnlclts().at(j)) != clt_idx)
+            //             {
+            //                 reply(COD_NONE, ":" + oldnick + "!" + _clts.at(clt_idx).get_username() + "@" + _clts.at(clt_idx).get_hostname() + 
+            //                                 " NICK " + nick, client_idx(_chnls.at(i).get_chnlclts().at(j)));                            
+            //             }
+            //         }
+            //     }                
+            // }            
         }
     }
 }
@@ -118,7 +134,7 @@ int Server::nick_available(std::string nick, int clt_idx)
 
 // USER command is used at the beginning of connection to specify the username, hostname and realname of a new user
 // USER <username> 0 * :<realname> // USER  username nickname hostname :realname
-void Server::username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::username(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {
     size_t i = tab_idx;    
     std::string user;

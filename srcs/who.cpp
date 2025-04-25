@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:54:39 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 15:01:52 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:24:08 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // WHO only for #channel (only one !) and for Here clients, invited if case instead of Realname
 // :irc.local 352 request-toto #test listed-user1 listed-host1 irc.local listed-nick-titi H :0 Titi Realname
-void Server::who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::who(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {       
     size_t i = tab_idx + 1;
     

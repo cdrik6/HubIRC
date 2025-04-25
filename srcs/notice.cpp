@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 00:24:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 15:06:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:22:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void notification(std::string code, std::string error);
 
 // NOTICE target1,target2 :msg with spaces --> ":" mandatory
 // NOTICE target1,target2 msgwithnospace --> ":" optionnal
-void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::notice(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {    
     size_t i = tab_idx;
     std::vector<std::string> target;    

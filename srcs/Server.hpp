@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/23 05:52:16 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:22:00 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,19 +93,19 @@ class Server
 		// get command
 		int parse_message(std::string buffer, int clt_idx);
 		int check_registered(int clt_idx);		
-		int get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx);		
+		int get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, size_t tab_idx);		
 		// Register
 		void reply(std::string code, std::string msg_replied, int clt_idx);		
-		void ping(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		void pass(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
-		void nickname(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);		
+		void ping(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
+		void pass(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
+		void nickname(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);		
 		int check_nick(std::string nick);
 		int nick_available(std::string nick, int clt_idx);
-		void username(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void username(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		int check_user(std::string user);
 		void welcome(int clt_idx);		
 		// Privmsg
-		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void privmsg(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		int in_channel(int chnl_idx, int clt_idx);
 		int target_clt_idx(std::string target);
 		int target_clt_fd(std::string target);
@@ -113,19 +113,19 @@ class Server
 		int target_chnlclt_fd(std::string target, int chnl_idx);
 		int channel_idx(std::string channel);
 		// Join
-		void join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void join(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		void create_chnl(std::string name, std::string key, int clt_idx);
 		void reply_join_add(std::string channel, int chnl_idx, int clt_idx);
 		void reply_join_new(std::string channel, int clt_idx);
 		int check_channel(std::string chan_name);
 		int check_key(std::string key_name);		
 		// Who
-		void who(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);				
+		void who(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);				
 		// Part
-		void part(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void part(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		void reply_to_all(std::string msg_replied, int chnl_idx);
 		// Mode
-		void mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void mode(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		std::string get_modes(int chnl_idx, int clt_idx);		
 		void parse_mode(std::string modestr, std::vector<std::string> *modes, std::vector<std::string> *args, bool first);
 		std::vector<std::string> set_plus(std::string plus, std::vector<std::string>& params, int chnl_idx, int clt_idx);
@@ -133,24 +133,24 @@ class Server
 		int nick_in_channel(int chnl_idx, std::string nick);
 		int check_limit(std::string limit);
 		// Topic
-		void topic(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void topic(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		void update_topic(std::string topic, int chnl_idx, int clt_idx);
 		// Kick
-		void kick(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void kick(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		void kick_users(std::vector<std::string> users, std::string reason, int chnl_idx, int clt_idx);
 		// Invite
-		void invite(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void invite(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		void let_it_in(int chnl_idx, int clt_idx, int inv_idx);
 		// Quit
-		void quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void quit(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		void quit_channels(std::string reason, int clt_idx);
 		void rem_empty_chnl(void);
 		// Notice
-		void notice(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void notice(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		// Oper
-		void oper(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void oper(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 		// IamBot
-		void iambot(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx);
+		void iambot(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx);
 };
 
 #endif

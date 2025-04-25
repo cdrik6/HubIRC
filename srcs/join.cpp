@@ -6,13 +6,13 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 15:01:22 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:41:55 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void Server::join(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::join(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {
     size_t i = tab_idx + 1;
     std::vector<std::string> channels; 

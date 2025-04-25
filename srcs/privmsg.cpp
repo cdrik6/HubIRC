@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:52:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 14:57:49 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:23:16 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // PRIVMSG target1,target2 :msg with spaces --> ":" mandatory
 // PRIVMSG target1,target2 msgwithnospace --> ":" optionnal
-void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::privmsg(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {    
     size_t i = tab_idx;
     std::vector<std::string> target;    

@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 00:32:58 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/23 06:05:51 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/25 03:24:56 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 Server::Server(char *port, std::string password)
 {
 	_password = password;
-	_srv_skt = create_srv_skt(port); // exit inside the functionhere in case of failing
+	_srv_skt = create_srv_skt(port); // exit inside the function here in case of failing
 	std::cout << "Server constructed on socket " << _srv_skt << std::endl;	
 	add_pfds(STDIN_FILENO, POLLIN); // add std_in en 0	
 	add_pfds(_srv_skt, POLLIN); // server en 1	
@@ -208,7 +208,7 @@ int Server::parse_message(std::string buffer, int clt_idx)
 // /msg #channel Hello, how are you? --> PRIVMSG #channel :Hello, how are you?\r\n
 // /quote PRIVMSG #channel :Hello\nNew line? --> PRIVMSG #channel :Hello New line?\r\n
 
-int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, int tab_idx)
+int Server::get_command(std::vector<std::string>& tab_msg, std::string& cmd, int clt_idx, size_t tab_idx)
 {
 	if (toUpper(cmd) == "PING")
 		ping(tab_msg, clt_idx, tab_idx);
@@ -264,7 +264,7 @@ void Server::client_disconnect(std::string reason, int pfd_idx, int clt_idx)
 {
 	
 	quit_channels(reason, clt_idx);
-	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n";	
+	std::cout << "Socket " << _pfds.at(pfd_idx).fd << " closed the connection\n\n";	
 	close(_pfds.at(pfd_idx).fd);	
 	_pfds.erase(_pfds.begin() + pfd_idx);	
 	_clts.erase(_clts.begin() + clt_idx);	

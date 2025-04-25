@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Mode.cpp                                           :+:      :+:    :+:   */
+/*   Mode copy.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/10 23:19:52 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:22:13 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // MODE #channel by any user (query of the modes of the channel)
 // MODE #channel params only by operators
 // IRC_ops are not channel operator by default (they must use froce to get it)
-void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {       
     int i = tab_idx + 1;
     

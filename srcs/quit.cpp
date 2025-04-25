@@ -6,19 +6,19 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:20:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 15:08:27 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:25:18 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 // QUIT [reason] / [:reason with space]
-void Server::quit(std::vector<std::string>& tab_msg, int clt_idx, int tab_idx)
+void Server::quit(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx)
 {
     std::string reason;
     int pfd_idx = -1;	
 
-    if (tab_idx + 1 < (int)tab_msg.size())
+    if (tab_idx + 1 < tab_msg.size())
 		reason = tab_msg.at(tab_idx + 1);		
 	
     for (size_t i = 2; i < _pfds.size(); i++)
