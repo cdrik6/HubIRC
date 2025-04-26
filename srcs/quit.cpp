@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:20:46 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:25:18 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:22:12 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,10 @@ void Server::quit_channels(std::string reason, int clt_idx)
 			_chnls.at(i).rem_chnlclt(_clts.at(clt_idx).get_clt_skt());
 			msg_replied = ":" + _clts.at(clt_idx).get_nickname() + "!" + _clts.at(clt_idx).get_username() \
 					+ "@" + _clts.at(clt_idx).get_hostname() + " QUIT" + reason;
-			reply_to_all(msg_replied, i);				
+			reply_to_all(msg_replied, i);
 		}			
 	}
+	_replied_clts.clear();
 	rem_empty_chnl();	
 }
 

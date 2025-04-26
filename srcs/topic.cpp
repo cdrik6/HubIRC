@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:50:52 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:24:03 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:48:17 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,5 @@ void Server::update_topic(std::string topic, int chnl_idx, int clt_idx)
                 + "@" + _clts.at(clt_idx).get_hostname() + " TOPIC " + _chnls.at(chnl_idx).get_name() \
                 + topic;
     reply_to_all(msg_replied, chnl_idx);
+    _replied_clts.clear();
 }

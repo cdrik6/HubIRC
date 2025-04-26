@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 23:07:33 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:22:43 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:36:40 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,13 @@ void Server::kick_users(std::vector<std::string> users, std::string reason, int 
 		if (tgt_fd != -1)
 		{			
 			msg_replied = msg_replied + " " + users.at(j) + reason;
-			reply_to_all(msg_replied, chnl_idx);
+			reply_to_all(msg_replied, chnl_idx);			
 			_chnls.at(chnl_idx).rem_operator(tgt_fd);			
 			_chnls.at(chnl_idx).rem_invitee(tgt_fd);			
 			_chnls.at(chnl_idx).rem_chnlclt(tgt_fd);			
 		}
 		else
 			reply(COD_USERNOTINCHANNEL, users.at(j) + " " + _chnls.at(chnl_idx).get_name() + " " + ERR_USERNOTINCHANNEL, clt_idx);		
-	}	
+	}
+	_replied_clts.clear();
 }

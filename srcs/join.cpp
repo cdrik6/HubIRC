@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:53:44 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:41:55 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:22:49 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void Server::reply_join_add(std::string channel, int chnl_idx, int clt_idx)
                 + "@" + _clts.at(clt_idx).get_hostname() + " JOIN " + channel;
     reply(COD_NONE, msg_replied, clt_idx);    
     reply_to_all(msg_replied, chnl_idx);
+    _replied_clts.clear();
     // TOPIC
     if (topic == "") 
         reply(COD_NOTOPIC, channel + " " + RPL_NOTOPIC, clt_idx); // 331 <nickname> <channel> :No topic set

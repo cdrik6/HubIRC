@@ -52,6 +52,8 @@
         "ranges": "cpp",
         "span": "cpp",
         "ctime": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "map": "cpp",
+        "set": "cpp"
     }
 }

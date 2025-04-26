@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 18:17:45 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:23:11 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:39:47 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,19 @@ void Server::part(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx
             if (!is_a_chnl)
                 reply(COD_NOSUCHCHANNEL, channels.at(j) + " " + ERR_NOSUCHCHANNEL, clt_idx);
             rem_empty_chnl();
-        }                
+        }
+        _replied_clts.clear();
     }        
 }
 
 void Server::reply_to_all(std::string msg_replied, int chnl_idx)
-{
+{    
     for (size_t i = 0; i < _chnls.at(chnl_idx).get_chnlclts().size(); i++)
-        reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)));        
+    {
+        if(_replied_clts.find(_chnls.at(chnl_idx).get_chnlclts().at(i)) == _replied_clts.end())
+        {
+            reply(COD_NONE, msg_replied, client_idx(_chnls.at(chnl_idx).get_chnlclts().at(i)));
+            _replied_clts.insert(_chnls.at(chnl_idx).get_chnlclts().at(i));            
+        }        
+    }
 }

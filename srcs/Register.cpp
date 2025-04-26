@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 20:54:37 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/25 03:09:18 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 05:41:42 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,28 +75,37 @@ void Server::nickname(std::vector<std::string>& tab_msg, int clt_idx, size_t tab
         if (check_nick(nick) == KO)        
             reply(COD_ERRONEUSNICKNAME, ERR_ERRONEUSNICKNAME, clt_idx);
         else if (nick_available(nick, clt_idx) == KO)
-            reply(COD_NICKNAMEINUSE, ":" + nick, clt_idx);
+            reply(COD_NICKNAMEINUSE, ":" + nick, clt_idx);        
         else
         {         
             std::string oldnick = _clts.at(clt_idx).get_nickname();
-            _clts.at(clt_idx).set_nickname(nick);
-            reply(COD_NONE, ":" + oldnick + " NICK " + nick, clt_idx);
-            
-            // // inform others in the same channel // :oldnick!user@host NICK newnick
-            // for (size_t i = 0; i < _chnls.size(); i++)
-            // {
-            //     if (in_channel(i, clt_idx) != -1)
-            //     {
-            //         for (size_t j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
-            //         {
-            //             if (client_idx(_chnls.at(i).get_chnlclts().at(j)) != clt_idx)
-            //             {
-            //                 reply(COD_NONE, ":" + oldnick + "!" + _clts.at(clt_idx).get_username() + "@" + _clts.at(clt_idx).get_hostname() + 
-            //                                 " NICK " + nick, client_idx(_chnls.at(i).get_chnlclts().at(j)));                            
-            //             }
-            //         }
-            //     }                
-            // }            
+            if (oldnick != nick)
+            {
+                _clts.at(clt_idx).set_nickname(nick);
+                reply(COD_NONE, ":" + oldnick + " NICK " + nick, clt_idx);
+                
+                // inform others in the same channel except itself // :oldnick!user@host NICK newnick
+                for (size_t i = 0; i < _chnls.size(); i++)
+                {
+                    if (in_channel(i, clt_idx) != -1)
+                    {
+                        std::string msg_replied = ":" + oldnick + "!" + _clts.at(clt_idx).get_username() + "@" + \
+                                                _clts.at(clt_idx).get_hostname() + " NICK " + nick;                        
+                        for (size_t j = 0; j < _chnls.at(i).get_chnlclts().size(); j++)
+                        {
+                            if(_replied_clts.find(_chnls.at(i).get_chnlclts().at(j)) == _replied_clts.end())
+                            {
+                                if (client_idx(_chnls.at(i).get_chnlclts().at(j)) != clt_idx)
+                                {
+                                    reply(COD_NONE, msg_replied, client_idx(_chnls.at(i).get_chnlclts().at(j)));
+                                    _replied_clts.insert(_chnls.at(i).get_chnlclts().at(j));
+                                }
+                            }    
+                        }
+                    }                
+                }
+                _replied_clts.clear();
+            }
         }
     }
 }

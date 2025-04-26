@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/09 22:29:57 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:22:00 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 01:42:59 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include <vector>
+# include <set>
 # include <sstream>
 # include <algorithm>
 # include <string>
@@ -67,6 +68,7 @@ class Server
 		std::vector<struct pollfd> _pfds;
 		std::vector<Channel> _chnls;
 		std::vector<int> _fails;
+		std::set<int> _replied_clts;
 		//		
 		static bool _signal; // static makes _signal shared across all instances
 		//

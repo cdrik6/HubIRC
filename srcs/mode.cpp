@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 02:30:25 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/24 23:32:42 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 02:50:20 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ void Server::mode(std::vector<std::string>& tab_msg, int clt_idx, size_t tab_idx
                     }
                 }
                 if (rpl_modes != "")
+                {
                     reply_to_all(msg_replied + rpl_modes + rpl_args, chnl_idx);
+                    _replied_clts.clear();
+                }
             }
             else if (tab_msg.at(i) != "b") // ban query from irssi out of scope
                 reply(COD_CHANOPRIVSNEEDED, channel + " " + ERR_CHANOPRIVSNEEDED, clt_idx);            
