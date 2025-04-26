@@ -6,37 +6,34 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/24 17:03:33 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/26 23:35:15 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	bot
-
 SRCS		=	main.cpp \
 				Data.cpp \
 				Game.cpp \
-				Bot.cpp
-
-CXX			=	g++
-
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
-
+				Bot.cpp				
 OBJS		=	$(SRCS:.cpp=.o)
 
-%.o:%.cpp		
-			$(CXX) $(CXXFLAGS) -c $< -o $(<:.cpp=.o)
+CXX			=	g++
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
 
-$(NAME):	$(OBJS)			
-			$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
-			
-all:		$(NAME)
+$(NAME): $(OBJS)			
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
+	
+%.o: %.cpp		
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-re: 		fclean all
-			
+all: $(NAME)
+
 clean:			
-			rm -f $(OBJS)
+	rm -f $(OBJS)
 
-fclean: 	clean
-			rm -f $(NAME)
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
 			
-.PHONY: 	all clean fclean re
+.PHONY: all clean fclean re $(NAME)

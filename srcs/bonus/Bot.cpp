@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 15:29:56 by aoberon           #+#    #+#             */
-/*   Updated: 2025/04/21 15:39:59 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:04:07 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void Bot::check_invite(void)
 {		
 	std::string channel_to_join;
 		
-	for (int i = 0; i < _tab_recv.size(); i++)
+	for (size_t i = 0; i < _tab_recv.size(); i++)
 	{			
 		if (_tab_recv.at(i) == "INVITE")			
 			if (i + 2 < _tab_recv.size())
@@ -109,7 +109,7 @@ void Bot::check_join(void)
 {		
 	std::string channel_to_join;	
 	
-	for (int i = 0; i < _tab_recv.size(); i++)
+	for (size_t i = 0; i < _tab_recv.size(); i++)
 	{		
 		if (_tab_recv.at(i) == "JOIN")			
 			if (i + 1 < _tab_recv.size())
@@ -119,7 +119,7 @@ void Bot::check_join(void)
 	{
 		Game botgame(this, channel_to_join);
 		_map_game[channel_to_join] = botgame;		
-		reply("PRIVMSG " + channel_to_join + " :Je suis " + _botnickname + " ton bot ! Invite moi et tape @" + _botnickname + " pour jouer." + "\r\n");
+		reply("PRIVMSG " + channel_to_join + " :Je suis " + _botnickname + " ton bot ! Tape @" + _botnickname + " pour jouer." + "\r\n");
 	}	
 }
 
@@ -128,7 +128,7 @@ void Bot::check_privmsg(Data& data)
 	std::string channel;
 	std::string word;
 	
-	for (int i = 0; i < _tab_recv.size(); i++)
+	for (size_t i = 0; i < _tab_recv.size(); i++)
 	{			
 		if (_tab_recv.at(i) == "PRIVMSG")
 		{

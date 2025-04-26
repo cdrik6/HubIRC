@@ -6,7 +6,7 @@
 /*   By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 02:30:22 by caguillo          #+#    #+#             */
-/*   Updated: 2025/04/20 23:04:13 by caguillo         ###   ########.fr       */
+/*   Updated: 2025/04/26 23:50:54 by caguillo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 int main(int argc, char **argv)
 {    
     if (argc != 4)
-        return(std::cerr << "Usage: ./bot <botname> <port> <password>" << std::endl, OK);       
+    {
+        return(std::cerr << "Usage: ./bot <botname> <port> <password>" << std::endl, OK);
+    }
 	if (strlen(argv[1]) > 0 && strlen(argv[1]) < PASSLEN && check_port(argv[2]) == OK && strlen(argv[3]) > 0 && strlen(argv[3]) < PASSLEN)
     {           
         signal(SIGINT, Bot::handle_signal);
@@ -72,7 +74,7 @@ std::vector<std::string> split(std::string str)
         // check / clean the ":"
         std::string msg = "";
         bool is_msg = false;
-        int i = 0;        
+        size_t i = 0;
         if (!line.empty())
         {
             if (line.at(0) == ':')
