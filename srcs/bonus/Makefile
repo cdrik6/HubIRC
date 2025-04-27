@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/26 23:35:15 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/27 22:54:06 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS		=	main.cpp \
 OBJS		=	$(SRCS:.cpp=.o)
 
 CXX			=	g++
-CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98 -g
+CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
 $(NAME): $(OBJS)			
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
