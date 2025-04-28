@@ -6,7 +6,7 @@
 #    By: caguillo <caguillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/25 23:32:02 by caguillo          #+#    #+#              #
-#    Updated: 2025/04/28 11:19:10 by caguillo         ###   ########.fr        #
+#    Updated: 2025/04/28 11:43:44 by caguillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,4 +36,4 @@ fclean: clean
 
 re: fclean all
 			
-.PHONY: all clean fclean re $(NAME)
+.PHONY: all clean fclean re
